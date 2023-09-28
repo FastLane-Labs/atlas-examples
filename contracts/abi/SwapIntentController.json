@@ -1,0 +1,1159 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_escrow",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "name": "log",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "log_address",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256[]",
+        "name": "val",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "log_array",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "int256[]",
+        "name": "val",
+        "type": "int256[]"
+      }
+    ],
+    "name": "log_array",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address[]",
+        "name": "val",
+        "type": "address[]"
+      }
+    ],
+    "name": "log_array",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "name": "log_bytes",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "name": "log_bytes32",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "int256",
+        "name": "",
+        "type": "int256"
+      }
+    ],
+    "name": "log_int",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "key",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "val",
+        "type": "address"
+      }
+    ],
+    "name": "log_named_address",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "key",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256[]",
+        "name": "val",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "log_named_array",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "key",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "int256[]",
+        "name": "val",
+        "type": "int256[]"
+      }
+    ],
+    "name": "log_named_array",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "key",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "address[]",
+        "name": "val",
+        "type": "address[]"
+      }
+    ],
+    "name": "log_named_array",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "key",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "val",
+        "type": "bytes"
+      }
+    ],
+    "name": "log_named_bytes",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "key",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "val",
+        "type": "bytes32"
+      }
+    ],
+    "name": "log_named_bytes32",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "key",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "int256",
+        "name": "val",
+        "type": "int256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "decimals",
+        "type": "uint256"
+      }
+    ],
+    "name": "log_named_decimal_int",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "key",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "val",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "decimals",
+        "type": "uint256"
+      }
+    ],
+    "name": "log_named_decimal_uint",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "key",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "int256",
+        "name": "val",
+        "type": "int256"
+      }
+    ],
+    "name": "log_named_int",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "key",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "val",
+        "type": "string"
+      }
+    ],
+    "name": "log_named_string",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "key",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "val",
+        "type": "uint256"
+      }
+    ],
+    "name": "log_named_uint",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "name": "log_string",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "log_uint",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "name": "logs",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "EXPECTED_GAS_USAGE_EX_SOLVER",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "IS_TEST",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "MAX_USER_CONDITIONS",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "USER_CONDITION_GAS_LIMIT",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "allocateValueCall",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "atlas",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "callConfig",
+    "outputs": [
+      {
+        "internalType": "uint32",
+        "name": "",
+        "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "control",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "escrow",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "failed",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "deadline",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "gas",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "nonce",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxFeePerGas",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "control",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes",
+            "name": "data",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct UserCall",
+        "name": "uCall",
+        "type": "tuple"
+      }
+    ],
+    "name": "getBidFormat",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "token",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "bidAmount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct BidData[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "from",
+                "type": "address"
+              },
+              {
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "value",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "gas",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "nonce",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "maxFeePerGas",
+                "type": "uint256"
+              },
+              {
+                "internalType": "bytes32",
+                "name": "userOpHash",
+                "type": "bytes32"
+              },
+              {
+                "internalType": "bytes32",
+                "name": "controlCodeHash",
+                "type": "bytes32"
+              },
+              {
+                "internalType": "bytes32",
+                "name": "bidsHash",
+                "type": "bytes32"
+              },
+              {
+                "internalType": "bytes",
+                "name": "data",
+                "type": "bytes"
+              }
+            ],
+            "internalType": "struct SolverCall",
+            "name": "call",
+            "type": "tuple"
+          },
+          {
+            "internalType": "bytes",
+            "name": "signature",
+            "type": "bytes"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "token",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "bidAmount",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct BidData[]",
+            "name": "bids",
+            "type": "tuple[]"
+          }
+        ],
+        "internalType": "struct SolverOperation",
+        "name": "solverOp",
+        "type": "tuple"
+      }
+    ],
+    "name": "getBidValue",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getCallConfig",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "bool",
+            "name": "sequenced",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "requirePreOps",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "trackPreOpsReturnData",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "trackUserReturnData",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "delegateUser",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "localUser",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "preSolver",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "postSolver",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "requirePostOps",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "zeroSolvers",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "reuseUserOp",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "userBundler",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "dAppBundler",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "unknownBundler",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "forwardPreOpsReturnData",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "forwardUserReturnData",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct CallConfig",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getDAppConfig",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "internalType": "uint32",
+            "name": "callConfig",
+            "type": "uint32"
+          }
+        ],
+        "internalType": "struct DAppConfig",
+        "name": "dConfig",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getDAppSignatory",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "governanceAddress",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "name": "getPayeeData",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "token",
+            "type": "address"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "payee",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "payeePercent",
+                "type": "uint256"
+              }
+            ],
+            "internalType": "struct PaymentData[]",
+            "name": "payments",
+            "type": "tuple[]"
+          },
+          {
+            "internalType": "bytes",
+            "name": "data",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct PayeeData[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "governance",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "postOpsCall",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "postSolverCall",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "deadline",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "gas",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "nonce",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxFeePerGas",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "control",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes",
+            "name": "data",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct UserCall",
+        "name": "uCall",
+        "type": "tuple"
+      }
+    ],
+    "name": "preOpsCall",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "preSolverCall",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "requireSequencedNonces",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "isSequenced",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "salt",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "source",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "tokenUserBuys",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountUserBuys",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "tokenUserSells",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountUserSells",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "auctionBaseCurrency",
+            "type": "address"
+          },
+          {
+            "internalType": "bool",
+            "name": "solverMustReimburseGas",
+            "type": "bool"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "antecedent",
+                "type": "address"
+              },
+              {
+                "internalType": "bytes",
+                "name": "context",
+                "type": "bytes"
+              }
+            ],
+            "internalType": "struct Condition[]",
+            "name": "conditions",
+            "type": "tuple[]"
+          }
+        ],
+        "internalType": "struct SwapIntent",
+        "name": "swapIntent",
+        "type": "tuple"
+      }
+    ],
+    "name": "swap",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "tokenUserBuys",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountUserBuys",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "tokenUserSells",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountUserSells",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "auctionBaseCurrency",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "solverGasLiability",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct SwapData",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "userDelegated",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "delegated",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
