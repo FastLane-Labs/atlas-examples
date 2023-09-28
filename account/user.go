@@ -50,8 +50,8 @@ func NewUser(pk string, atlas *Atlas.Atlas, txBuilder *TxBuilder.TxBuilder, addr
 	}
 }
 
-func (u *User) ApproveErc20Atlas(address common.Address, amount *big.Int) {
-	erc20, err := ERC20.NewERC20(address, u.ethClient)
+func (u *User) ApproveErc20Atlas(beneficiary common.Address, amount *big.Int) {
+	erc20, err := ERC20.NewERC20(beneficiary, u.ethClient)
 	if err != nil {
 		log.Fatalf("could not load ERC20 contract: %s", err)
 	}

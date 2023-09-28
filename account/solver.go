@@ -7,6 +7,7 @@ import (
 	"math/big"
 
 	"github.com/FastLane-Labs/atlas-examples/contracts/Atlas"
+	"github.com/FastLane-Labs/atlas-examples/contracts/ERC20"
 	"github.com/FastLane-Labs/atlas-examples/contracts/SimpleRFQSolver"
 	"github.com/FastLane-Labs/atlas-examples/contracts/SwapIntentController"
 	"github.com/FastLane-Labs/atlas-examples/contracts/TxBuilder"
@@ -47,6 +48,23 @@ func NewSolver(pk string, atlas *Atlas.Atlas, txBuilder *TxBuilder.TxBuilder, ad
 		txBuilder:  txBuilder,
 		addresses:  addresses,
 		ethClient:  ethClient,
+	}
+}
+
+func (s *Solver) ApproveErc20(address common.Address, beneficiary common.Address, amount *big.Int) {
+	erc20, err := ERC20.NewERC20(address, s.ethClient)
+	if err != nil {
+		log.Fatalf("could not load ERC20 contract: %s", err)
+	}
+
+	tx, err := erc20.Approve(s.Signer, beneficiary, amount)
+	if err != nil {
+		log.Fatalf("could not approve ERC20: %s", err)
+	}
+
+	_, err = bind.WaitMined(context.Background(), s.ethClient, tx)
+	if err != nil {
+		log.Fatalf("could not wait for ERC20 approval transaction to be mined: %s", err)
 	}
 }
 

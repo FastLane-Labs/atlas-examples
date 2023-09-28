@@ -56,8 +56,26 @@ func main() {
 
 	daiNeeded := new(big.Int).Sub(DAI_AMOUNT_TO_BUY, solverContractDaiBalance)
 	if daiNeeded.Cmp(common.Big0) > 0 {
+		// Solver wraps some ETH if needed
+		solverWethBalance, err := app.Weth.BalanceOf(nil, app.Solver.Signer.From)
+		if err != nil {
+			log.Fatalf("could not get solver's WETH balance: %s", err)
+		}
+
+		wethNeeded = new(big.Int).Sub(big.NewInt(1e18), solverWethBalance)
+		if wethNeeded.Cmp(common.Big0) > 0 {
+			opts := app.Solver.Signer
+			opts.Value = wethNeeded
+			_, err := app.Weth.Deposit(app.Solver.Signer)
+			if err != nil {
+				log.Fatalf("could not get WETH for solver: %s", err)
+			}
+		}
+
+		app.Solver.ApproveErc20(WETH_ADDRESS, UniswapV3Router_ADDRESS, big.NewInt(1e18))
+
 		opts := app.Solver.Signer
-		opts.Value = big.NewInt(1e16)
+		opts.Value = common.Big0
 		_, err = app.UniswapV3Router.ExactOutputSingle(
 			opts,
 			UniswapV3Router.ISwapRouterExactOutputSingleParams{
@@ -67,7 +85,7 @@ func main() {
 				Recipient:         app.Addresses["solverContract"],
 				Deadline:          big.NewInt(time.Now().Unix() + 10),
 				AmountOut:         daiNeeded,
-				AmountInMaximum:   big.NewInt(1e16),
+				AmountInMaximum:   big.NewInt(1e18),
 				SqrtPriceLimitX96: common.Big0,
 			},
 		)
@@ -96,7 +114,7 @@ func main() {
 	executionEnvironment := app.User.GetOrCreateExecutionEnvironment(userOperation, dConfig)
 
 	// User must approve Atlas
-	app.User.ApproveErc20Atlas(app.Addresses["atlas"], WETH_AMOUNT_TO_SELL)
+	app.User.ApproveErc20Atlas(WETH_ADDRESS, WETH_AMOUNT_TO_SELL)
 
 	// Solver deposit to escrow contract
 	app.Solver.DepositToEscrow(big.NewInt(1e18))
