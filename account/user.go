@@ -132,7 +132,7 @@ func (u *User) BuildUserOperation(swapIntent SwapIntentController.SwapIntent) At
 		log.Fatalf("could not sign user operation payload: %s", err)
 	}
 
-	signature[len(signature)-1] += 27 // Transform V from 0/1 to 27/28
+	signature[64] += 27 // Transform V from 0/1 to 27/28
 	userOp.Signature = signature
 
 	return userOp

@@ -86,7 +86,7 @@ func (g *Governance) BuildVerification(dConfig Atlas.DAppConfig, userOperation A
 		log.Fatalf("could not sign verification payload: %s", err)
 	}
 
-	signature[len(signature)-1] += 27 // Transform V from 0/1 to 27/28
+	signature[64] += 27 // Transform V from 0/1 to 27/28
 	verification.Signature = signature
 
 	return verification
