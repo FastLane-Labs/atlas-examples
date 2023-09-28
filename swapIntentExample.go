@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"math/big"
 	"time"
@@ -9,12 +10,13 @@ import (
 	"github.com/FastLane-Labs/atlas-examples/contracts/SwapIntentController"
 	"github.com/FastLane-Labs/atlas-examples/contracts/UniswapV3Router"
 
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 )
 
 const (
-	USER   = "user"
-	SOLVER = "solver"
+	USER            = "user"
+	SOLVER_CONTRACT = "solver contract"
 )
 
 var (
@@ -43,9 +45,14 @@ func main() {
 	if wethNeeded.Cmp(common.Big0) > 0 {
 		opts := app.User.Signer
 		opts.Value = wethNeeded
-		_, err := app.Weth.Deposit(app.User.Signer)
+		tx, err := app.Weth.Deposit(app.User.Signer)
 		if err != nil {
 			log.Fatalf("could not get WETH for user: %s", err)
+		}
+
+		_, err = bind.WaitMined(context.Background(), app.EthClient, tx)
+		if err != nil {
+			log.Fatalf("could not wait for metacall transaction to be mined: %s", err)
 		}
 	}
 
@@ -66,9 +73,14 @@ func main() {
 		if wethNeeded.Cmp(common.Big0) > 0 {
 			opts := app.Solver.Signer
 			opts.Value = wethNeeded
-			_, err := app.Weth.Deposit(app.Solver.Signer)
+			tx, err := app.Weth.Deposit(app.Solver.Signer)
 			if err != nil {
 				log.Fatalf("could not get WETH for solver: %s", err)
+			}
+
+			_, err = bind.WaitMined(context.Background(), app.EthClient, tx)
+			if err != nil {
+				log.Fatalf("could not wait for metacall transaction to be mined: %s", err)
 			}
 		}
 
@@ -76,7 +88,7 @@ func main() {
 
 		opts := app.Solver.Signer
 		opts.Value = common.Big0
-		_, err = app.UniswapV3Router.ExactOutputSingle(
+		tx, err := app.UniswapV3Router.ExactOutputSingle(
 			opts,
 			UniswapV3Router.ISwapRouterExactOutputSingleParams{
 				TokenIn:           WETH_ADDRESS,
@@ -91,6 +103,11 @@ func main() {
 		)
 		if err != nil {
 			log.Fatalf("could not get DAI for solver: %s", err)
+		}
+
+		_, err = bind.WaitMined(context.Background(), app.EthClient, tx)
+		if err != nil {
+			log.Fatalf("could not wait for metacall transaction to be mined: %s", err)
 		}
 	}
 
@@ -128,14 +145,14 @@ func main() {
 
 	log.Println("Before metacall")
 	logBalances(app, app.User.Signer.From, USER)
-	logBalances(app, app.Solver.Signer.From, SOLVER)
+	logBalances(app, app.Addresses["solverContract"], SOLVER_CONTRACT)
 
 	// User calls Atlas's metacall
 	app.User.Metacall(dConfig, userOperation, solverOperations, verification)
 
 	log.Println("After metacall")
 	logBalances(app, app.User.Signer.From, USER)
-	logBalances(app, app.Solver.Signer.From, SOLVER)
+	logBalances(app, app.Addresses["solverContract"], SOLVER_CONTRACT)
 }
 
 // Retrieve onchain and log WETH and DAI balances for account
@@ -148,5 +165,5 @@ func logBalances(app *App, account common.Address, name string) {
 	if err != nil {
 		log.Fatalf("could not get %s's DAI balance: %s", name, err)
 	}
-	log.Printf("%s's balances\t: %s WETH - %s DAI", name, wethBalance.String(), daiBalance.String())
+	log.Printf("%s's balances: %s WETH - %s DAI", name, wethBalance.String(), daiBalance.String())
 }

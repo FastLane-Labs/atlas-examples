@@ -58,7 +58,7 @@ func (u *User) ApproveErc20Atlas(tokenAddress common.Address, amount *big.Int) {
 
 	tx, err := erc20.Approve(u.Signer, u.addresses["atlas"], amount)
 	if err != nil {
-		log.Fatalf("could not approve ERC20: %s", err)
+		log.Fatalf("could not approve ERC20 for user: %s", err)
 	}
 
 	_, err = bind.WaitMined(context.Background(), u.ethClient, tx)
@@ -89,7 +89,6 @@ func (u *User) GetOrCreateExecutionEnvironment(userOperation Atlas.UserOperation
 			log.Fatalf("could not wait for execution environment creation transaction to be mined: %s", err)
 		}
 	}
-
 	return execEnv
 }
 
@@ -105,12 +104,18 @@ func (u *User) BuildUserOperation(swapIntent SwapIntentController.SwapIntent) At
 	}
 	userOpData = append(abi.Methods["swap"].ID, userOpData...)
 
+	currentBlock, err := u.ethClient.BlockNumber(context.Background())
+	if err != nil {
+		log.Fatalf("could not get current block number: %s", err)
+	}
+
 	op, err := u.txBuilder.BuildUserOperation(
 		nil,
 		u.Signer.From,
 		u.addresses["dappController"],
-		big.NewInt(100000000000),
+		big.NewInt(1000000000000),
 		common.Big0,
+		new(big.Int).Add(big.NewInt(int64(currentBlock)), big.NewInt(100)),
 		userOpData,
 	)
 	if err != nil {

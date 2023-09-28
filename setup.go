@@ -37,6 +37,8 @@ type App struct {
 	Dai             *ERC20.ERC20
 	UniswapV3Router *UniswapV3Router.UniswapV3Router
 
+	EthClient *ethclient.Client
+
 	Addresses map[string]common.Address
 }
 
@@ -87,6 +89,8 @@ func setup() *App {
 	// Set basic auth header for all calls
 	ethClient.Client().SetHeader("Authorization", dr.Header.Get("Authorization"))
 
+	app.EthClient = ethClient
+
 	// Load tokens contracts
 	app.Weth, err = WETH9.NewWETH9(WETH_ADDRESS, ethClient)
 	if err != nil {
@@ -121,7 +125,7 @@ func setup() *App {
 	}
 
 	// Load governance account
-	app.Governance = account.NewGovernance(env["GOVERNANCE_PK"], atlas, dAppController, txBuilder)
+	app.Governance = account.NewGovernance(env["GOVERNANCE_PK"], atlas, dAppController, txBuilder, ethClient)
 
 	// Load user account
 	app.User = account.NewUser(env["USER_PK"], atlas, txBuilder, app.Addresses, ethClient)

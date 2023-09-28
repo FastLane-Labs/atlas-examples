@@ -59,7 +59,7 @@ func (s *Solver) ApproveErc20(address common.Address, beneficiary common.Address
 
 	tx, err := erc20.Approve(s.Signer, beneficiary, amount)
 	if err != nil {
-		log.Fatalf("could not approve ERC20: %s", err)
+		log.Fatalf("could not approve ERC20 for solver: %s", err)
 	}
 
 	_, err = bind.WaitMined(context.Background(), s.ethClient, tx)
