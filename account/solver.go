@@ -129,6 +129,7 @@ func (s *Solver) BuildSolverOperation(dConfig Atlas.DAppConfig, swapIntent SwapI
 		log.Fatalf("could not sign solver operation payload: %s", err)
 	}
 
+	signature[len(signature)-1] += 27 // Transform V from 0/1 to 27/28
 	solverOp.Signature = signature
 
 	return solverOp

@@ -50,8 +50,8 @@ func NewUser(pk string, atlas *Atlas.Atlas, txBuilder *TxBuilder.TxBuilder, addr
 	}
 }
 
-func (u *User) ApproveErc20Atlas(beneficiary common.Address, amount *big.Int) {
-	erc20, err := ERC20.NewERC20(beneficiary, u.ethClient)
+func (u *User) ApproveErc20Atlas(tokenAddress common.Address, amount *big.Int) {
+	erc20, err := ERC20.NewERC20(tokenAddress, u.ethClient)
 	if err != nil {
 		log.Fatalf("could not load ERC20 contract: %s", err)
 	}
@@ -132,6 +132,7 @@ func (u *User) BuildUserOperation(swapIntent SwapIntentController.SwapIntent) At
 		log.Fatalf("could not sign user operation payload: %s", err)
 	}
 
+	signature[len(signature)-1] += 27 // Transform V from 0/1 to 27/28
 	userOp.Signature = signature
 
 	return userOp
