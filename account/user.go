@@ -155,8 +155,14 @@ func (u *User) Metacall(dConfig Atlas.DAppConfig, userOperation Atlas.UserOperat
 		log.Fatalf("could not call metacall: %s", err)
 	}
 
-	_, err = bind.WaitMined(context.Background(), u.ethClient, tx)
+	receipt, err := bind.WaitMined(context.Background(), u.ethClient, tx)
 	if err != nil {
 		log.Fatalf("could not wait for metacall transaction to be mined: %s", err)
+	}
+
+	if receipt.Status == 1 {
+		log.Println("<< Metacall successful >>")
+	} else {
+		log.Println("<< Metacall reverted >>")
 	}
 }

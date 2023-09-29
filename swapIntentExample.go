@@ -12,6 +12,7 @@ import (
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/rlp"
 )
 
 const (
@@ -127,6 +128,11 @@ func main() {
 
 	// Build the user operation from the swap intent
 	userOperation := app.User.BuildUserOperation(swapIntent)
+	b, err := rlp.EncodeToBytes(userOperation)
+	if err != nil {
+		log.Fatalf("could not encode user operation: %s", err)
+	}
+	log.Println("User operation data:", common.Bytes2Hex(b))
 
 	// Create the user's execution environment if it does not exist yet
 	executionEnvironment := app.User.GetOrCreateExecutionEnvironment(dConfig)
