@@ -23,6 +23,7 @@ import (
 
 type Config struct {
 	AtlasAddress          common.Address `json:"atlas"`
+	SimulatorAddress      common.Address `json:"simulator"`
 	DAppControllerAddress common.Address `json:"dAppController"`
 	SolverContractAddress common.Address `json:"solverContract"`
 	TxBuilderAddress      common.Address `json:"txBuilder"`
@@ -64,6 +65,7 @@ func setup() *App {
 	}
 
 	app.Addresses["atlas"] = config.AtlasAddress
+	app.Addresses["simulator"] = config.SimulatorAddress
 	app.Addresses["dAppController"] = config.DAppControllerAddress
 	app.Addresses["solverContract"] = config.SolverContractAddress
 
