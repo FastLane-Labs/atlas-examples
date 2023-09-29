@@ -122,6 +122,7 @@ func main() {
 		AmountUserSells:        WETH_AMOUNT_TO_SELL,
 		AuctionBaseCurrency:    ETH_ADDRESS,
 		SolverMustReimburseGas: false,
+		Conditions:             []SwapIntentController.Condition{},
 	}
 
 	// Build the user operation from the swap intent

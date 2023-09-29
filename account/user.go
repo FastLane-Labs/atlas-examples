@@ -111,7 +111,7 @@ func (u *User) BuildUserOperation(swapIntent SwapIntentController.SwapIntent) At
 		u.addresses["dappController"],
 		big.NewInt(1000000000000),
 		common.Big0,
-		new(big.Int).Add(big.NewInt(int64(currentBlock)), big.NewInt(100)),
+		big.NewInt(int64(currentBlock)+100),
 		userOpData,
 	)
 	if err != nil {

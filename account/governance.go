@@ -1,6 +1,7 @@
 package account
 
 import (
+	"context"
 	"crypto/ecdsa"
 	"log"
 
@@ -52,6 +53,37 @@ func (g *Governance) GetDAppConfig() Atlas.DAppConfig {
 		log.Fatalf("could not get DApp config: %s", err)
 	}
 	return Atlas.DAppConfig(dConfig)
+}
+
+func (g *Governance) InitializeGovernance(dappControllerAddress common.Address) {
+	tx, err := g.atlas.InitializeGovernance(
+		g.Signer,
+		dappControllerAddress,
+	)
+	if err != nil {
+		log.Fatalf("could not initialize governance: %s", err)
+	}
+
+	_, err = bind.WaitMined(context.Background(), g.ethClient, tx)
+	if err != nil {
+		log.Fatalf("could not wait for initialize governance transaction to be mined: %s", err)
+	}
+}
+
+func (g *Governance) IntegrateDapp(dappControllerAddress common.Address) {
+	tx, err := g.atlas.IntegrateDApp(
+		g.Signer,
+		dappControllerAddress,
+		dappControllerAddress,
+	)
+	if err != nil {
+		log.Fatalf("could not integrate dApp: %s", err)
+	}
+
+	_, err = bind.WaitMined(context.Background(), g.ethClient, tx)
+	if err != nil {
+		log.Fatalf("could not wait for integrate dApp transaction to be mined: %s", err)
+	}
 }
 
 func (g *Governance) BuildVerification(dConfig Atlas.DAppConfig, userOperation Atlas.UserOperation, solverOperations []Atlas.SolverOperation) Atlas.DAppOperation {
