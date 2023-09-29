@@ -52,7 +52,7 @@ func main() {
 
 		_, err = bind.WaitMined(context.Background(), app.EthClient, tx)
 		if err != nil {
-			log.Fatalf("could not wait for metacall transaction to be mined: %s", err)
+			log.Fatalf("could not wait for deposit transaction to be mined: %s", err)
 		}
 	}
 
@@ -80,7 +80,7 @@ func main() {
 
 			_, err = bind.WaitMined(context.Background(), app.EthClient, tx)
 			if err != nil {
-				log.Fatalf("could not wait for metacall transaction to be mined: %s", err)
+				log.Fatalf("could not wait for deposit transaction to be mined: %s", err)
 			}
 		}
 
@@ -107,7 +107,7 @@ func main() {
 
 		_, err = bind.WaitMined(context.Background(), app.EthClient, tx)
 		if err != nil {
-			log.Fatalf("could not wait for metacall transaction to be mined: %s", err)
+			log.Fatalf("could not wait for exactOutputSingle transaction to be mined: %s", err)
 		}
 	}
 
@@ -120,7 +120,7 @@ func main() {
 		AmountUserBuys:         DAI_AMOUNT_TO_BUY,
 		TokenUserSells:         WETH_ADDRESS,
 		AmountUserSells:        WETH_AMOUNT_TO_SELL,
-		AuctionBaseCurrency:    common.Address{0},
+		AuctionBaseCurrency:    ETH_ADDRESS,
 		SolverMustReimburseGas: false,
 	}
 
