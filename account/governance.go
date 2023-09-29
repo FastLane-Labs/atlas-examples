@@ -1,10 +1,8 @@
 package account
 
 import (
-	"context"
 	"crypto/ecdsa"
 	"log"
-	"math/big"
 
 	"github.com/FastLane-Labs/atlas-examples/contracts/Atlas"
 	"github.com/FastLane-Labs/atlas-examples/contracts/SwapIntentController"
@@ -56,7 +54,7 @@ func (g *Governance) GetDAppConfig() Atlas.DAppConfig {
 	return Atlas.DAppConfig(dConfig)
 }
 
-func (g *Governance) BuildVerification(dConfig Atlas.DAppConfig, userOperation Atlas.UserOperation, solverOperations []Atlas.SolverOperation) Atlas.Verification {
+func (g *Governance) BuildVerification(dConfig Atlas.DAppConfig, userOperation Atlas.UserOperation, solverOperations []Atlas.SolverOperation) Atlas.DAppOperation {
 	solverOps := make([]TxBuilder.SolverOperation, len(solverOperations))
 	for i, op := range solverOperations {
 		bids := make([]TxBuilder.BidData, len(op.Bids))
@@ -66,29 +64,23 @@ func (g *Governance) BuildVerification(dConfig Atlas.DAppConfig, userOperation A
 		solverOps[i] = TxBuilder.SolverOperation{To: op.To, Call: TxBuilder.SolverCall(op.Call), Signature: op.Signature, Bids: bids}
 	}
 
-	currentBlock, err := g.ethClient.BlockNumber(context.Background())
-	if err != nil {
-		log.Fatalf("could not get current block number: %s", err)
-	}
-
-	v, err := g.txBuilder.BuildVerification(
+	v, err := g.txBuilder.BuildDAppOperation(
 		nil,
 		g.Signer.From,
 		TxBuilder.DAppConfig(dConfig),
 		TxBuilder.UserOperation{To: userOperation.To, Call: TxBuilder.UserCall(userOperation.Call), Signature: userOperation.Signature},
 		solverOps,
-		new(big.Int).Add(big.NewInt(int64(currentBlock)), big.NewInt(100)),
 	)
 	if err != nil {
 		log.Fatalf("could not build verification: %s", err)
 	}
 
-	verification := Atlas.Verification{
-		To:    v.To,
-		Proof: Atlas.DAppProof(v.Proof),
+	verification := Atlas.DAppOperation{
+		To:       v.To,
+		Approval: Atlas.DAppApproval(v.Approval),
 	}
 
-	signaturePayload, err := g.atlas.GetVerificationPayload(nil, verification)
+	signaturePayload, err := g.atlas.GetDAppOperationPayload(nil, verification)
 	if err != nil {
 		log.Fatalf("could not get verification payload: %s", err)
 	}

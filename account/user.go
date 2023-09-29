@@ -67,18 +67,13 @@ func (u *User) ApproveErc20Atlas(tokenAddress common.Address, amount *big.Int) {
 	}
 }
 
-func (u *User) GetOrCreateExecutionEnvironment(userOperation Atlas.UserOperation, dConfig Atlas.DAppConfig) common.Address {
-	execEnv, err := u.atlas.GetExecutionEnvironment(nil, userOperation, dConfig.To)
+func (u *User) GetOrCreateExecutionEnvironment(dConfig Atlas.DAppConfig) common.Address {
+	execEnvData, err := u.atlas.GetExecutionEnvironment(nil, u.Signer.From, dConfig.To)
 	if err != nil {
-		log.Fatalf("could not get execution environment: %s", err)
+		log.Fatalf("could not get execution environment data: %s", err)
 	}
 
-	bytecode, err := u.ethClient.CodeAt(context.Background(), execEnv, nil)
-	if err != nil {
-		log.Fatalf("could not get execution environment's bytecode: %s", err)
-	}
-
-	if len(bytecode) == 0 {
+	if !execEnvData.Exists {
 		tx, err := u.atlas.CreateExecutionEnvironment(u.Signer, dConfig)
 		if err != nil {
 			log.Fatalf("could not create execution environment: %s", err)
@@ -89,7 +84,8 @@ func (u *User) GetOrCreateExecutionEnvironment(userOperation Atlas.UserOperation
 			log.Fatalf("could not wait for execution environment creation transaction to be mined: %s", err)
 		}
 	}
-	return execEnv
+
+	return execEnvData.ExecutionEnvironment
 }
 
 func (u *User) BuildUserOperation(swapIntent SwapIntentController.SwapIntent) Atlas.UserOperation {
@@ -143,7 +139,7 @@ func (u *User) BuildUserOperation(swapIntent SwapIntentController.SwapIntent) At
 	return userOp
 }
 
-func (u *User) Metacall(dConfig Atlas.DAppConfig, userOperation Atlas.UserOperation, solverOperations []Atlas.SolverOperation, verification Atlas.Verification) {
+func (u *User) Metacall(dConfig Atlas.DAppConfig, userOperation Atlas.UserOperation, solverOperations []Atlas.SolverOperation, verification Atlas.DAppOperation) {
 	signer := u.Signer
 	signer.Value = common.Big0
 

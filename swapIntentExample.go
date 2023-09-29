@@ -128,7 +128,7 @@ func main() {
 	userOperation := app.User.BuildUserOperation(swapIntent)
 
 	// Create the user's execution environment if it does not exist yet
-	executionEnvironment := app.User.GetOrCreateExecutionEnvironment(userOperation, dConfig)
+	executionEnvironment := app.User.GetOrCreateExecutionEnvironment(dConfig)
 
 	// User must approve Atlas
 	app.User.ApproveErc20Atlas(WETH_ADDRESS, WETH_AMOUNT_TO_SELL)
