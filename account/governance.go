@@ -74,7 +74,6 @@ func (g *Governance) IntegrateDapp(dappControllerAddress common.Address) {
 	tx, err := g.atlas.IntegrateDApp(
 		g.Signer,
 		dappControllerAddress,
-		dappControllerAddress,
 	)
 	if err != nil {
 		log.Fatalf("could not integrate dApp: %s", err)

@@ -142,6 +142,7 @@ func (u *User) BuildUserOperation(swapIntent SwapIntentController.SwapIntent) At
 func (u *User) Metacall(dConfig Atlas.DAppConfig, userOperation Atlas.UserOperation, solverOperations []Atlas.SolverOperation, verification Atlas.DAppOperation) {
 	signer := u.Signer
 	signer.Value = common.Big0
+	signer.GasLimit = 5000000
 
 	tx, err := u.atlas.Metacall(
 		signer,

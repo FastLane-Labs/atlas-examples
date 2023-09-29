@@ -127,6 +127,17 @@
     "type": "error"
   },
   {
+    "inputs": [
+      {
+        "internalType": "enum ValidCallsResult",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "name": "ValidCalls",
+    "type": "error"
+  },
+  {
     "inputs": [],
     "name": "VerificationSimFail",
     "type": "error"
@@ -172,6 +183,37 @@
       }
     ],
     "name": "MEVPaymentFailure",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "controller",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "governance",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "signatory",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "callConfig",
+        "type": "uint32"
+      }
+    ],
+    "name": "NewDAppSignatory",
     "type": "event"
   },
   {
@@ -829,12 +871,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "controller",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "dappControl",
+        "name": "dAppControl",
         "type": "address"
       }
     ],
@@ -1376,6 +1413,44 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "dAppControl",
+        "type": "address"
+      }
+    ],
+    "name": "getGovFromControl",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "governanceAddress",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "signor",
+        "type": "address"
+      }
+    ],
+    "name": "getGovFromSignor",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "governanceAddress",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "components": [
           {
             "internalType": "address",
@@ -1578,12 +1653,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "controller",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "dappControl",
+        "name": "dAppControl",
         "type": "address"
       }
     ],
