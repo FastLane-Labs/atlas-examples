@@ -96,11 +96,10 @@ func (u *User) BuildUserOperation(swapIntent SwapIntentController.SwapIntent) At
 		log.Fatalf("could not get SwapIntentController abi: %s", err)
 	}
 
-	userOpData, err := abi.Methods["swap"].Inputs.Pack(swapIntent)
+	userOpData, err := abi.Pack("swap", swapIntent)
 	if err != nil {
 		log.Fatalf("could not pack swap intent: %s", err)
 	}
-	userOpData = append(abi.Methods["swap"].ID, userOpData...)
 
 	currentBlock, err := u.ethClient.BlockNumber(context.Background())
 	if err != nil {
