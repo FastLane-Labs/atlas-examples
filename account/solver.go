@@ -57,6 +57,7 @@ func (s *Solver) ApproveErc20(address common.Address, beneficiary common.Address
 		log.Fatalf("could not load ERC20 contract: %s", err)
 	}
 
+	s.Signer.Value = new(big.Int).Set(common.Big0)
 	tx, err := erc20.Approve(s.Signer, beneficiary, amount)
 	if err != nil {
 		log.Fatalf("could not approve ERC20 for solver: %s", err)
@@ -69,10 +70,8 @@ func (s *Solver) ApproveErc20(address common.Address, beneficiary common.Address
 }
 
 func (s *Solver) DepositToEscrow(amount *big.Int) {
-	opts := s.Signer
-	opts.Value = amount
-
-	tx, err := s.atlas.Deposit(opts, opts.From)
+	s.Signer.Value = amount
+	tx, err := s.atlas.Deposit(s.Signer, s.Signer.From)
 	if err != nil {
 		log.Fatalf("could not deposit to escrow: %s", err)
 	}

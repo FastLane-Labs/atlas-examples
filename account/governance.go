@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/ecdsa"
 	"log"
+	"math/big"
 
 	"github.com/FastLane-Labs/atlas-examples/contracts/Atlas"
 	"github.com/FastLane-Labs/atlas-examples/contracts/SwapIntentController"
@@ -56,6 +57,7 @@ func (g *Governance) GetDAppConfig() Atlas.DAppConfig {
 }
 
 func (g *Governance) InitializeGovernance(dappControllerAddress common.Address) {
+	g.Signer.Value = new(big.Int).Set(common.Big0)
 	tx, err := g.atlas.InitializeGovernance(
 		g.Signer,
 		dappControllerAddress,
@@ -71,6 +73,7 @@ func (g *Governance) InitializeGovernance(dappControllerAddress common.Address) 
 }
 
 func (g *Governance) IntegrateDapp(dappControllerAddress common.Address) {
+	g.Signer.Value = new(big.Int).Set(common.Big0)
 	tx, err := g.atlas.IntegrateDApp(
 		g.Signer,
 		dappControllerAddress,

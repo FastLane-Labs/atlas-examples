@@ -56,6 +56,7 @@ func (u *User) ApproveErc20Atlas(tokenAddress common.Address, amount *big.Int) {
 		log.Fatalf("could not load ERC20 contract: %s", err)
 	}
 
+	u.Signer.Value = new(big.Int).Set(common.Big0)
 	tx, err := erc20.Approve(u.Signer, u.addresses["atlas"], amount)
 	if err != nil {
 		log.Fatalf("could not approve ERC20 for user: %s", err)
@@ -74,6 +75,7 @@ func (u *User) GetOrCreateExecutionEnvironment(dConfig Atlas.DAppConfig) common.
 	}
 
 	if !execEnvData.Exists {
+		u.Signer.Value = new(big.Int).Set(common.Big0)
 		tx, err := u.atlas.CreateExecutionEnvironment(u.Signer, dConfig)
 		if err != nil {
 			log.Fatalf("could not create execution environment: %s", err)
@@ -108,7 +110,7 @@ func (u *User) BuildUserOperation(swapIntent SwapIntentController.SwapIntent) At
 	op, err := u.txBuilder.BuildUserOperation(
 		nil,
 		u.Signer.From,
-		u.addresses["dappController"],
+		u.addresses["dAppController"],
 		big.NewInt(1000000000000),
 		common.Big0,
 		big.NewInt(int64(currentBlock)+100),

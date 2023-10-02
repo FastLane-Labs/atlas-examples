@@ -12,7 +12,6 @@ import (
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/rlp"
 )
 
 const (
@@ -44,8 +43,7 @@ func main() {
 
 	wethNeeded := new(big.Int).Sub(WETH_AMOUNT_TO_SELL, userWethBalance)
 	if wethNeeded.Cmp(common.Big0) > 0 {
-		opts := app.User.Signer
-		opts.Value = wethNeeded
+		app.User.Signer.Value = wethNeeded
 		tx, err := app.Weth.Deposit(app.User.Signer)
 		if err != nil {
 			log.Fatalf("could not get WETH for user: %s", err)
@@ -72,8 +70,7 @@ func main() {
 
 		wethNeeded = new(big.Int).Sub(big.NewInt(1e18), solverWethBalance)
 		if wethNeeded.Cmp(common.Big0) > 0 {
-			opts := app.Solver.Signer
-			opts.Value = wethNeeded
+			app.Solver.Signer.Value = wethNeeded
 			tx, err := app.Weth.Deposit(app.Solver.Signer)
 			if err != nil {
 				log.Fatalf("could not get WETH for solver: %s", err)
@@ -87,10 +84,9 @@ func main() {
 
 		app.Solver.ApproveErc20(WETH_ADDRESS, UniswapV3Router_ADDRESS, big.NewInt(1e18))
 
-		opts := app.Solver.Signer
-		opts.Value = common.Big0
+		app.Solver.Signer.Value = common.Big0
 		tx, err := app.UniswapV3Router.ExactOutputSingle(
-			opts,
+			app.Solver.Signer,
 			UniswapV3Router.ISwapRouterExactOutputSingleParams{
 				TokenIn:           WETH_ADDRESS,
 				TokenOut:          DAI_ADDRESS,
@@ -128,11 +124,6 @@ func main() {
 
 	// Build the user operation from the swap intent
 	userOperation := app.User.BuildUserOperation(swapIntent)
-	b, err := rlp.EncodeToBytes(userOperation)
-	if err != nil {
-		log.Fatalf("could not encode user operation: %s", err)
-	}
-	log.Println("User operation data:", common.Bytes2Hex(b))
 
 	// Create the user's execution environment if it does not exist yet
 	executionEnvironment := app.User.GetOrCreateExecutionEnvironment(dConfig)
