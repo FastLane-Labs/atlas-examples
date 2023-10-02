@@ -92,7 +92,6 @@ func (s *Solver) BuildSolverOperation(dConfig Atlas.DAppConfig, swapIntent SwapI
 	if err != nil {
 		log.Fatalf("could not pack solver operation data: %s", err)
 	}
-	solverOpData = append(abi.Methods["fulfillRFQ"].ID, solverOpData...)
 
 	op, err := s.txBuilder.BuildSolverOperation(
 		nil,
