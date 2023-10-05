@@ -7,13 +7,13 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/FastLane-Labs/atlas-examples/account"
 	"github.com/FastLane-Labs/atlas-examples/contracts/Atlas"
 	"github.com/FastLane-Labs/atlas-examples/contracts/ERC20"
 	"github.com/FastLane-Labs/atlas-examples/contracts/SwapIntentController"
 	"github.com/FastLane-Labs/atlas-examples/contracts/TxBuilder"
 	"github.com/FastLane-Labs/atlas-examples/contracts/UniswapV3Router"
 	"github.com/FastLane-Labs/atlas-examples/contracts/WETH9"
+	"github.com/FastLane-Labs/atlas-examples/entities"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
@@ -30,9 +30,9 @@ type Config struct {
 }
 
 type App struct {
-	Governance *account.Governance
-	User       *account.User
-	Solver     *account.Solver
+	Atlas          *Atlas.Atlas
+	DAppController *SwapIntentController.SwapIntentController
+	TxBuilder      *TxBuilder.TxBuilder
 
 	Weth            *WETH9.WETH9
 	Dai             *ERC20.ERC20
@@ -40,14 +40,16 @@ type App struct {
 
 	EthClient *ethclient.Client
 
-	Addresses map[string]common.Address
+	PrivateKeys map[string]string
+	Addresses   map[string]common.Address
 }
 
 func setup() *App {
 	log.SetFlags(log.LstdFlags | log.Lmicroseconds)
 
 	app := &App{
-		Addresses: make(map[string]common.Address),
+		PrivateKeys: make(map[string]string),
+		Addresses:   make(map[string]common.Address),
 	}
 
 	// Load config
@@ -93,47 +95,44 @@ func setup() *App {
 
 	app.EthClient = ethClient
 
+	// Load Atlas related contracts
+	app.Atlas, err = Atlas.NewAtlas(config.AtlasAddress, ethClient)
+	if err != nil {
+		log.Fatal("could not initialize Atlas contract")
+	}
+
+	app.DAppController, err = SwapIntentController.NewSwapIntentController(config.DAppControllerAddress, ethClient)
+	if err != nil {
+		log.Fatal("could not initialize DAppController contract")
+	}
+
+	app.TxBuilder, err = TxBuilder.NewTxBuilder(config.TxBuilderAddress, ethClient)
+	if err != nil {
+		log.Fatal("could not initialize Tx builder contract")
+	}
+
 	// Load tokens contracts
-	app.Weth, err = WETH9.NewWETH9(WETH_ADDRESS, ethClient)
+	app.Weth, err = WETH9.NewWETH9(entities.WETH_ADDRESS, ethClient)
 	if err != nil {
 		log.Fatal("could not initialize WETH9 contract")
 	}
 
-	app.Dai, err = ERC20.NewERC20(DAI_ADDRESS, ethClient)
+	app.Dai, err = ERC20.NewERC20(entities.DAI_ADDRESS, ethClient)
 	if err != nil {
 		log.Fatal("could not initialize DAI contract")
 	}
 
 	// Load Uniswap V3 router
-	app.UniswapV3Router, err = UniswapV3Router.NewUniswapV3Router(UniswapV3Router_ADDRESS, ethClient)
+	app.UniswapV3Router, err = UniswapV3Router.NewUniswapV3Router(entities.UniswapV3Router_ADDRESS, ethClient)
 	if err != nil {
 		log.Fatal("could not initialize Uniswap V3 router contract")
 	}
 
-	// Load Atlas related contracts
-	atlas, err := Atlas.NewAtlas(config.AtlasAddress, ethClient)
-	if err != nil {
-		log.Fatal("could not initialize Atlas contract")
-	}
-
-	dAppController, err := SwapIntentController.NewSwapIntentController(config.DAppControllerAddress, ethClient)
-	if err != nil {
-		log.Fatal("could not initialize DAppController contract")
-	}
-
-	txBuilder, err := TxBuilder.NewTxBuilder(config.TxBuilderAddress, ethClient)
-	if err != nil {
-		log.Fatal("could not initialize Tx builder contract")
-	}
-
-	// Load governance account
-	app.Governance = account.NewGovernance(env["GOVERNANCE_PK"], atlas, dAppController, txBuilder, ethClient)
-
-	// Load user account
-	app.User = account.NewUser(env["USER_PK"], atlas, txBuilder, app.Addresses, ethClient)
-
-	// Load solver account
-	app.Solver = account.NewSolver(env["SOLVER_PK"], atlas, txBuilder, app.Addresses, ethClient)
+	// Private keys
+	app.PrivateKeys["bundler"] = env["BUNDLER_PK"]
+	app.PrivateKeys["governance"] = env["GOVERNANCE_PK"]
+	app.PrivateKeys["user"] = env["USER_PK"]
+	app.PrivateKeys["solver"] = env["SOLVER_PK"]
 
 	return app
 }
