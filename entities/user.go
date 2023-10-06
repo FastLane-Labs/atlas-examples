@@ -123,6 +123,7 @@ func (u *User) getWethAndApproveAtlas(amount *big.Int) {
 	}
 
 	// Approve those WETH for Atlas
+	// Q: approve must be done? if there is weth balance, you still need to approve?
 	approve(WETH_ADDRESS, u.addresses["atlas"], wethNeeded, u.ethClient, u.signer)
 }
 
