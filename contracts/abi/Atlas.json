@@ -756,17 +756,46 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "asyncNonceBitIndex",
+    "outputs": [
+      {
+        "internalType": "uint128",
+        "name": "LowestEmptyBitmap",
+        "type": "uint128"
+      },
+      {
+        "internalType": "uint128",
+        "name": "HighestFullBitmap",
+        "type": "uint128"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "bytes32",
         "name": "",
         "type": "bytes32"
       }
     ],
-    "name": "asyncNonceFills",
+    "name": "asyncNonceBitmap",
     "outputs": [
       {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
+        "internalType": "uint8",
+        "name": "highestUsedNonce",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint240",
+        "name": "bitmap",
+        "type": "uint240"
       }
     ],
     "stateMutability": "view",
@@ -1504,16 +1533,16 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "signor",
+        "name": "account",
         "type": "address"
       }
     ],
-    "name": "getGovFromSignor",
+    "name": "getNextNonce",
     "outputs": [
       {
-        "internalType": "address",
-        "name": "governanceAddress",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "nextNonce",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -2073,49 +2102,11 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "governanceSignatory",
-        "type": "address"
-      }
-    ],
-    "name": "nextGovernanceNonce",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "nextNonce",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
         "name": "solverSigner",
         "type": "address"
       }
     ],
     "name": "nextSolverNonce",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "nextNonce",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      }
-    ],
-    "name": "nextUserNonce",
     "outputs": [
       {
         "internalType": "uint256",
@@ -2160,27 +2151,17 @@
   {
     "inputs": [
       {
-        "internalType": "address",
+        "internalType": "bytes32",
         "name": "",
-        "type": "address"
+        "type": "bytes32"
       }
     ],
     "name": "signatories",
     "outputs": [
       {
-        "internalType": "address",
-        "name": "governance",
-        "type": "address"
-      },
-      {
         "internalType": "bool",
-        "name": "enabled",
+        "name": "",
         "type": "bool"
-      },
-      {
-        "internalType": "uint64",
-        "name": "nonce",
-        "type": "uint64"
       }
     ],
     "stateMutability": "view",
@@ -2340,25 +2321,6 @@
     "name": "transferUserERC20",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "userNonces",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
