@@ -8,6 +8,8 @@ import (
 	"os"
 
 	"github.com/FastLane-Labs/atlas-examples/contracts/Atlas"
+	"github.com/FastLane-Labs/atlas-examples/contracts/AtlasFactory"
+	"github.com/FastLane-Labs/atlas-examples/contracts/AtlasVerification"
 	"github.com/FastLane-Labs/atlas-examples/contracts/ERC20"
 	"github.com/FastLane-Labs/atlas-examples/contracts/SwapIntentController"
 	"github.com/FastLane-Labs/atlas-examples/contracts/TxBuilder"
@@ -23,6 +25,8 @@ import (
 
 type Config struct {
 	AtlasAddress          common.Address `json:"atlas"`
+	AtlasFactoryAddress   common.Address `json:"atlasFactory"`
+	AtlasVerification     common.Address `json:"atlasVerification"`
 	SimulatorAddress      common.Address `json:"simulator"`
 	DAppControllerAddress common.Address `json:"dAppController"`
 	SolverContractAddress common.Address `json:"solverContract"`
@@ -30,9 +34,11 @@ type Config struct {
 }
 
 type App struct {
-	Atlas          *Atlas.Atlas
-	DAppController *SwapIntentController.SwapIntentController
-	TxBuilder      *TxBuilder.TxBuilder
+	Atlas             *Atlas.Atlas
+	AtlasFactory      *AtlasFactory.AtlasFactory
+	AtlasVerification *AtlasVerification.AtlasVerification
+	DAppController    *SwapIntentController.SwapIntentController
+	TxBuilder         *TxBuilder.TxBuilder
 
 	Weth            *WETH9.WETH9
 	Dai             *ERC20.ERC20
@@ -67,6 +73,8 @@ func setup() *App {
 	}
 
 	app.Addresses["atlas"] = config.AtlasAddress
+	app.Addresses["atlasFactory"] = config.AtlasFactoryAddress
+	app.Addresses["atlasVerification"] = config.AtlasVerification
 	app.Addresses["simulator"] = config.SimulatorAddress
 	app.Addresses["dAppController"] = config.DAppControllerAddress
 	app.Addresses["solverContract"] = config.SolverContractAddress
@@ -81,49 +89,50 @@ func setup() *App {
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
 	// Init eth client
-	ethClient, err := ethclient.Dial(env["TESTNET_URL"])
+	app.EthClient, err = ethclient.Dial(env["RPC_URL"])
 	if err != nil {
 		log.Fatalf("could not initialize eth client: %s", err)
 	}
 
-	// Dummy request to generate basic auth header
-	dr, _ := http.NewRequest("", "", nil)
-	dr.SetBasicAuth(env["TESTNET_USERNAME"], env["TESTNET_PASSWORD"])
-
-	// Set basic auth header for all calls
-	ethClient.Client().SetHeader("Authorization", dr.Header.Get("Authorization"))
-
-	app.EthClient = ethClient
-
 	// Load Atlas related contracts
-	app.Atlas, err = Atlas.NewAtlas(config.AtlasAddress, ethClient)
+	app.Atlas, err = Atlas.NewAtlas(config.AtlasAddress, app.EthClient)
 	if err != nil {
 		log.Fatal("could not initialize Atlas contract")
 	}
 
-	app.DAppController, err = SwapIntentController.NewSwapIntentController(config.DAppControllerAddress, ethClient)
+	app.AtlasFactory, err = AtlasFactory.NewAtlasFactory(config.AtlasFactoryAddress, app.EthClient)
+	if err != nil {
+		log.Fatal("could not initialize AtlasFactory contract")
+	}
+
+	app.AtlasVerification, err = AtlasVerification.NewAtlasVerification(config.AtlasVerification, app.EthClient)
+	if err != nil {
+		log.Fatal("could not initialize AtlasVerification contract")
+	}
+
+	app.DAppController, err = SwapIntentController.NewSwapIntentController(config.DAppControllerAddress, app.EthClient)
 	if err != nil {
 		log.Fatal("could not initialize DAppController contract")
 	}
 
-	app.TxBuilder, err = TxBuilder.NewTxBuilder(config.TxBuilderAddress, ethClient)
+	app.TxBuilder, err = TxBuilder.NewTxBuilder(config.TxBuilderAddress, app.EthClient)
 	if err != nil {
 		log.Fatal("could not initialize Tx builder contract")
 	}
 
 	// Load tokens contracts
-	app.Weth, err = WETH9.NewWETH9(entities.WETH_ADDRESS, ethClient)
+	app.Weth, err = WETH9.NewWETH9(entities.WETH_ADDRESS, app.EthClient)
 	if err != nil {
 		log.Fatal("could not initialize WETH9 contract")
 	}
 
-	app.Dai, err = ERC20.NewERC20(entities.DAI_ADDRESS, ethClient)
+	app.Dai, err = ERC20.NewERC20(entities.DAI_ADDRESS, app.EthClient)
 	if err != nil {
 		log.Fatal("could not initialize DAI contract")
 	}
 
 	// Load Uniswap V3 router
-	app.UniswapV3Router, err = UniswapV3Router.NewUniswapV3Router(entities.UniswapV3Router_ADDRESS, ethClient)
+	app.UniswapV3Router, err = UniswapV3Router.NewUniswapV3Router(entities.UniswapV3Router_ADDRESS, app.EthClient)
 	if err != nil {
 		log.Fatal("could not initialize Uniswap V3 router contract")
 	}

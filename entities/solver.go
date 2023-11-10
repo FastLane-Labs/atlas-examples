@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/FastLane-Labs/atlas-examples/contracts/Atlas"
+	"github.com/FastLane-Labs/atlas-examples/contracts/AtlasVerification"
 	"github.com/FastLane-Labs/atlas-examples/contracts/ERC20"
 	"github.com/FastLane-Labs/atlas-examples/contracts/SimpleRFQSolver"
 	"github.com/FastLane-Labs/atlas-examples/contracts/SwapIntentController"
@@ -28,9 +29,10 @@ type Solver struct {
 
 	ethClient *ethclient.Client
 
-	atlas          *Atlas.Atlas
-	dappController *SwapIntentController.SwapIntentController
-	txBuilder      *TxBuilder.TxBuilder
+	atlas             *Atlas.Atlas
+	atlasVerification *AtlasVerification.AtlasVerification
+	dappController    *SwapIntentController.SwapIntentController
+	txBuilder         *TxBuilder.TxBuilder
 
 	weth *WETH9.WETH9
 	dai  *ERC20.ERC20
@@ -50,7 +52,7 @@ type Solver struct {
 	log *log.Logger
 }
 
-func NewSolver(pk string, ethClient *ethclient.Client, atlas *Atlas.Atlas, dappController *SwapIntentController.SwapIntentController,
+func NewSolver(pk string, ethClient *ethclient.Client, atlas *Atlas.Atlas, atlasVerification *AtlasVerification.AtlasVerification, dappController *SwapIntentController.SwapIntentController,
 	txBuilder *TxBuilder.TxBuilder, weth *WETH9.WETH9, dai *ERC20.ERC20, addresses map[string]common.Address, uniswapV3Router *UniswapV3Router.UniswapV3Router,
 	newSwapIntentOperationChan chan *SwapIntentOperation, solverOperationSubmitChan chan *Atlas.SolverOperation, shutdownChan chan struct{}) *Solver {
 	logger := log.New(os.Stdout, "[SOLVER]\t", log.LstdFlags|log.Lmsgprefix|log.Lmicroseconds)
@@ -70,6 +72,7 @@ func NewSolver(pk string, ethClient *ethclient.Client, atlas *Atlas.Atlas, dappC
 		privateKey:                 privateKey,
 		ethClient:                  ethClient,
 		atlas:                      atlas,
+		atlasVerification:          atlasVerification,
 		dappController:             dappController,
 		txBuilder:                  txBuilder,
 		weth:                       weth,
@@ -92,7 +95,7 @@ func (s *Solver) run() {
 			s.log.Println("Received a new swap intent")
 			s.getDaiForSolverContract(swapIntentOperation.SwapIntent.AmountUserBuys)
 
-			dConfig, err := s.dappController.GetDAppConfig(nil)
+			dConfig, err := s.dappController.GetDAppConfig(nil, SwapIntentController.UserOperation(*swapIntentOperation.UserOperation))
 			if err != nil {
 				s.log.Fatalf("could not get dApp config: %s", err)
 			}
@@ -183,8 +186,7 @@ func (s *Solver) buildSolverOperation(dConfig Atlas.DAppConfig, swapIntent SwapI
 
 	op, err := s.txBuilder.BuildSolverOperation(
 		nil,
-		TxBuilder.UserOperation{To: userOperation.To, Call: TxBuilder.UserCall(userOperation.Call), Signature: userOperation.Signature},
-		TxBuilder.DAppConfig(dConfig),
+		TxBuilder.UserOperation(userOperation),
 		solverOpData,
 		s.signer.From,
 		s.addresses["solverContract"],
@@ -194,18 +196,8 @@ func (s *Solver) buildSolverOperation(dConfig Atlas.DAppConfig, swapIntent SwapI
 		s.log.Fatalf("could not build solver operation: %s", err)
 	}
 
-	bids := make([]Atlas.BidData, len(op.Bids))
-	for i, bid := range op.Bids {
-		bids[i] = Atlas.BidData(bid)
-	}
-
-	solverOp := Atlas.SolverOperation{
-		To:   op.To,
-		Call: Atlas.SolverCall(op.Call),
-		Bids: bids,
-	}
-
-	solverOpPayload, err := s.atlas.GetSolverPayload(nil, solverOp.Call)
+	solverOp := Atlas.SolverOperation(op)
+	solverOpPayload, err := s.atlasVerification.GetSolverPayload(nil, AtlasVerification.SolverOperation(solverOp))
 	if err != nil {
 		s.log.Fatalf("could not get solver operation payload: %s", err)
 	}

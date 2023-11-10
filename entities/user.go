@@ -8,6 +8,8 @@ import (
 	"os"
 
 	"github.com/FastLane-Labs/atlas-examples/contracts/Atlas"
+	"github.com/FastLane-Labs/atlas-examples/contracts/AtlasFactory"
+	"github.com/FastLane-Labs/atlas-examples/contracts/AtlasVerification"
 	"github.com/FastLane-Labs/atlas-examples/contracts/SwapIntentController"
 	"github.com/FastLane-Labs/atlas-examples/contracts/TxBuilder"
 	"github.com/FastLane-Labs/atlas-examples/contracts/WETH9"
@@ -29,9 +31,11 @@ type User struct {
 
 	ethClient *ethclient.Client
 
-	atlas          *Atlas.Atlas
-	dappController *SwapIntentController.SwapIntentController
-	txBuilder      *TxBuilder.TxBuilder
+	atlas             *Atlas.Atlas
+	atlasFactory      *AtlasFactory.AtlasFactory
+	atlasVerification *AtlasVerification.AtlasVerification
+	dappController    *SwapIntentController.SwapIntentController
+	txBuilder         *TxBuilder.TxBuilder
 
 	weth *WETH9.WETH9
 
@@ -43,7 +47,7 @@ type User struct {
 	log *log.Logger
 }
 
-func NewUser(pk string, ethClient *ethclient.Client, atlas *Atlas.Atlas, dappController *SwapIntentController.SwapIntentController,
+func NewUser(pk string, ethClient *ethclient.Client, atlas *Atlas.Atlas, atlasFactory *AtlasFactory.AtlasFactory, atlasVerification *AtlasVerification.AtlasVerification, dappController *SwapIntentController.SwapIntentController,
 	txBuilder *TxBuilder.TxBuilder, weth *WETH9.WETH9, addresses map[string]common.Address, swapIntentOperationSubmitChan chan *SwapIntentOperation) *User {
 	logger := log.New(os.Stdout, "[USER]\t", log.LstdFlags|log.Lmsgprefix|log.Lmicroseconds)
 
@@ -62,6 +66,8 @@ func NewUser(pk string, ethClient *ethclient.Client, atlas *Atlas.Atlas, dappCon
 		privateKey:                    privateKey,
 		ethClient:                     ethClient,
 		atlas:                         atlas,
+		atlasFactory:                  atlasFactory,
+		atlasVerification:             atlasVerification,
 		dappController:                dappController,
 		txBuilder:                     txBuilder,
 		weth:                          weth,
@@ -82,15 +88,10 @@ func (u *User) StartSwapIntent() {
 		Conditions:             []SwapIntentController.Condition{},
 	}
 
-	u.getWethAndApproveAtlas(WETH_AMOUNT_TO_SELL)
-
-	dConfig, err := u.dappController.GetDAppConfig(nil)
-	if err != nil {
-		u.log.Fatalf("could not get dApp config: %s", err)
-	}
-
-	executionEnvironment := u.getOrCreateExecutionEnvironment(Atlas.DAppConfig(dConfig))
 	userOperation := u.buildUserOperation(swapIntent)
+	executionEnvironment := u.getOrCreateExecutionEnvironment(userOperation.Dapp)
+
+	u.getWethAndApproveAtlas(WETH_AMOUNT_TO_SELL)
 
 	// Submit the intent to the backend
 	u.log.Println("submits swap intent to the backend")
@@ -126,15 +127,15 @@ func (u *User) getWethAndApproveAtlas(amount *big.Int) {
 	approve(WETH_ADDRESS, u.addresses["atlas"], wethNeeded, u.ethClient, u.signer)
 }
 
-func (u *User) getOrCreateExecutionEnvironment(dConfig Atlas.DAppConfig) common.Address {
-	execEnvData, err := u.atlas.GetExecutionEnvironment(nil, u.signer.From, dConfig.To)
+func (u *User) getOrCreateExecutionEnvironment(dAppControl common.Address) common.Address {
+	execEnvData, err := u.atlasFactory.GetExecutionEnvironment(nil, u.signer.From, dAppControl)
 	if err != nil {
 		u.log.Fatalf("could not get execution environment data: %s", err)
 	}
 
 	if !execEnvData.Exists {
 		u.signer.Value = new(big.Int).Set(common.Big0)
-		tx, err := u.atlas.CreateExecutionEnvironment(u.signer, dConfig)
+		tx, err := u.atlas.CreateExecutionEnvironment(u.signer, dAppControl)
 		if err != nil {
 			u.log.Fatalf("could not create execution environment: %s", err)
 		}
@@ -177,12 +178,8 @@ func (u *User) buildUserOperation(swapIntent SwapIntentController.SwapIntent) At
 		u.log.Fatalf("could not build user operation: %s", err)
 	}
 
-	userOp := Atlas.UserOperation{
-		To:   op.To,
-		Call: Atlas.UserCall(op.Call),
-	}
-
-	userOpPayload, err := u.atlas.GetUserOperationPayload(nil, userOp)
+	userOp := Atlas.UserOperation(op)
+	userOpPayload, err := u.atlasVerification.GetUserOperationPayload(nil, AtlasVerification.UserOperation(userOp))
 	if err != nil {
 		u.log.Fatalf("could not get user operation payload: %s", err)
 	}

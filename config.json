@@ -1,7 +1,9 @@
 {
-  "atlas": "0x38c76A767d45Fc390160449948aF80569E2C4217",
-  "simulator": "0x721d8077771Ebf9B931733986d619aceea412a1C",
-  "dAppController": "0xDC57724Ea354ec925BaFfCA0cCf8A1248a8E5CF1",
-  "solverContract": "0xEb63D671653489B91E653c52a018B63D5095223B",
-  "txBuilder": "0xa8d297D643a11cE83b432e87eEBce6bee0fd2bAb"
+  "atlas": "0xF6A9eD78A9dbe919A9aAAF2aB6A6Abba8856Bc88",
+  "atlasFactory": "0x48201501aeCD974cc350cF27aBB5eCD9b7076581",
+  "atlasVerification": "0x03C5C3658caC2c518Fd09E114293afC83e56BF94",
+  "simulator": "0xf05a353DB6C59c1812cae83C919bb4d09e98a303",
+  "dAppController": "0xa16555AA3Ac77b501e5C9171dac9df28ad321aAb",
+  "solverContract": "",
+  "txBuilder": ""
 }

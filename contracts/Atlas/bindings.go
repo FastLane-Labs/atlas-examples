@@ -28,64 +28,30 @@ var (
 	_ = event.NewSubscription
 )
 
-// BidData is an auto generated low-level Go binding around an user-defined struct.
-type BidData struct {
-	Token     common.Address
-	BidAmount *big.Int
-}
-
-// DAppApproval is an auto generated low-level Go binding around an user-defined struct.
-type DAppApproval struct {
-	From            common.Address
-	To              common.Address
-	Value           *big.Int
-	Gas             *big.Int
-	MaxFeePerGas    *big.Int
-	Nonce           *big.Int
-	Deadline        *big.Int
-	ControlCodeHash [32]byte
-	UserOpHash      [32]byte
-	CallChainHash   [32]byte
-}
-
 // DAppConfig is an auto generated low-level Go binding around an user-defined struct.
 type DAppConfig struct {
 	To         common.Address
 	CallConfig uint32
+	BidToken   common.Address
 }
 
 // DAppOperation is an auto generated low-level Go binding around an user-defined struct.
 type DAppOperation struct {
-	To        common.Address
-	Approval  DAppApproval
-	Signature []byte
-}
-
-// SolverCall is an auto generated low-level Go binding around an user-defined struct.
-type SolverCall struct {
-	From            common.Address
-	To              common.Address
-	Value           *big.Int
-	Gas             *big.Int
-	MaxFeePerGas    *big.Int
-	Nonce           *big.Int
-	Deadline        *big.Int
-	ControlCodeHash [32]byte
-	UserOpHash      [32]byte
-	BidsHash        [32]byte
-	Data            []byte
+	From          common.Address
+	To            common.Address
+	Value         *big.Int
+	Gas           *big.Int
+	MaxFeePerGas  *big.Int
+	Nonce         *big.Int
+	Deadline      *big.Int
+	Control       common.Address
+	UserOpHash    [32]byte
+	CallChainHash [32]byte
+	Signature     []byte
 }
 
 // SolverOperation is an auto generated low-level Go binding around an user-defined struct.
 type SolverOperation struct {
-	To        common.Address
-	Call      SolverCall
-	Signature []byte
-	Bids      []BidData
-}
-
-// UserCall is an auto generated low-level Go binding around an user-defined struct.
-type UserCall struct {
 	From         common.Address
 	To           common.Address
 	Value        *big.Int
@@ -93,20 +59,33 @@ type UserCall struct {
 	MaxFeePerGas *big.Int
 	Nonce        *big.Int
 	Deadline     *big.Int
+	Solver       common.Address
 	Control      common.Address
+	UserOpHash   [32]byte
+	BidToken     common.Address
+	BidAmount    *big.Int
 	Data         []byte
+	Signature    []byte
 }
 
 // UserOperation is an auto generated low-level Go binding around an user-defined struct.
 type UserOperation struct {
-	To        common.Address
-	Call      UserCall
-	Signature []byte
+	From         common.Address
+	To           common.Address
+	Value        *big.Int
+	Gas          *big.Int
+	MaxFeePerGas *big.Int
+	Nonce        *big.Int
+	Deadline     *big.Int
+	Dapp         common.Address
+	Control      common.Address
+	Data         []byte
+	Signature    []byte
 }
 
 // AtlasMetaData contains all meta data concerning the Atlas contract.
 var AtlasMetaData = &bind.MetaData{
-	ABI: "[{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"_escrowDuration\",\"type\":\"uint32\"},{\"internalType\":\"address\",\"name\":\"_simulator\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"AlteredControlHash\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"AlteredUserHash\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"HashChainBroken\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"IntentUnfulfilled\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidShortString\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidSolverHash\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NoAuctionWinner\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"PostOpsSimFail\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"PostSolverFailed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"PreOpsSimFail\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"PreSolverFailed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"SimulationPassed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"SolverBidUnpaid\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"SolverEVMError\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"SolverFailedCallback\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"SolverMsgValueUnpaid\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"SolverOperationReverted\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"SolverSimFail\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"str\",\"type\":\"string\"}],\"name\":\"StringTooLong\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"UserNotFulfilled\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"UserOpSimFail\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"enumValidCallsResult\",\"name\":\"\",\"type\":\"uint8\"}],\"name\":\"ValidCalls\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"VerificationSimFail\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[],\"name\":\"EIP712DomainChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"controller\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint32\",\"name\":\"callConfig\",\"type\":\"uint32\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"bidAmount\",\"type\":\"uint256\"}],\"indexed\":false,\"internalType\":\"structBidData[]\",\"name\":\"winningBids\",\"type\":\"tuple[]\"}],\"name\":\"MEVPaymentFailure\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"controller\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"governance\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"signatory\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint32\",\"name\":\"callConfig\",\"type\":\"uint32\"}],\"name\":\"NewDAppSignatory\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"environment\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"controller\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint32\",\"name\":\"callConfig\",\"type\":\"uint32\"}],\"name\":\"NewExecutionEnvironment\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"solverTo\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"solverFrom\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"executed\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"success\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"result\",\"type\":\"uint256\"}],\"name\":\"SolverTxResult\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"valueReturned\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"gasRefunded\",\"type\":\"uint256\"}],\"name\":\"UserTxResult\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"name\":\"log\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"log_address\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"val\",\"type\":\"uint256[]\"}],\"name\":\"log_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"int256[]\",\"name\":\"val\",\"type\":\"int256[]\"}],\"name\":\"log_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address[]\",\"name\":\"val\",\"type\":\"address[]\"}],\"name\":\"log_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"name\":\"log_bytes\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"name\":\"log_bytes32\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"int256\",\"name\":\"\",\"type\":\"int256\"}],\"name\":\"log_int\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"val\",\"type\":\"address\"}],\"name\":\"log_named_address\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"val\",\"type\":\"uint256[]\"}],\"name\":\"log_named_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"int256[]\",\"name\":\"val\",\"type\":\"int256[]\"}],\"name\":\"log_named_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address[]\",\"name\":\"val\",\"type\":\"address[]\"}],\"name\":\"log_named_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"val\",\"type\":\"bytes\"}],\"name\":\"log_named_bytes\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"val\",\"type\":\"bytes32\"}],\"name\":\"log_named_bytes32\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"int256\",\"name\":\"val\",\"type\":\"int256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"decimals\",\"type\":\"uint256\"}],\"name\":\"log_named_decimal_int\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"val\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"decimals\",\"type\":\"uint256\"}],\"name\":\"log_named_decimal_uint\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"int256\",\"name\":\"val\",\"type\":\"int256\"}],\"name\":\"log_named_int\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"val\",\"type\":\"string\"}],\"name\":\"log_named_string\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"val\",\"type\":\"uint256\"}],\"name\":\"log_named_uint\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"name\":\"log_string\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"log_uint\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"name\":\"logs\",\"type\":\"event\"},{\"stateMutability\":\"payable\",\"type\":\"fallback\"},{\"inputs\":[],\"name\":\"BUNDLER_BASE\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"BUNDLER_PREMIUM\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"IS_TEST\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"activeEnvironment\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"controller\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"signatory\",\"type\":\"address\"}],\"name\":\"addSignatory\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"asyncNonceBitIndex\",\"outputs\":[{\"internalType\":\"uint128\",\"name\":\"LowestEmptyBitmap\",\"type\":\"uint128\"},{\"internalType\":\"uint128\",\"name\":\"HighestFullBitmap\",\"type\":\"uint128\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"name\":\"asyncNonceBitmap\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"highestUsedNonce\",\"type\":\"uint8\"},{\"internalType\":\"uint240\",\"name\":\"bitmap\",\"type\":\"uint240\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"atlas\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint32\",\"name\":\"callConfig\",\"type\":\"uint32\"}],\"internalType\":\"structDAppConfig\",\"name\":\"dConfig\",\"type\":\"tuple\"}],\"name\":\"createExecutionEnvironment\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"executionEnvironment\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"cumulativeDonations\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"name\":\"dapps\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"solverSigner\",\"type\":\"address\"}],\"name\":\"deposit\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"newBalance\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"dAppControl\",\"type\":\"address\"}],\"name\":\"disableDApp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"surplusRecipient\",\"type\":\"address\"}],\"name\":\"donateToBundler\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"eip712Domain\",\"outputs\":[{\"internalType\":\"bytes1\",\"name\":\"fields\",\"type\":\"bytes1\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"version\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"chainId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"verifyingContract\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"salt\",\"type\":\"bytes32\"},{\"internalType\":\"uint256[]\",\"name\":\"extensions\",\"type\":\"uint256[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"environment\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"_environment\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"escrowDuration\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint32\",\"name\":\"callConfig\",\"type\":\"uint32\"}],\"internalType\":\"structDAppConfig\",\"name\":\"dConfig\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structUserCall\",\"name\":\"uCall\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"controlCodeHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"userOpHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"bidsHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structSolverCall\",\"name\":\"call\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"bidAmount\",\"type\":\"uint256\"}],\"internalType\":\"structBidData[]\",\"name\":\"bids\",\"type\":\"tuple[]\"}],\"internalType\":\"structSolverOperation[]\",\"name\":\"solverOps\",\"type\":\"tuple[]\"},{\"internalType\":\"address\",\"name\":\"executionEnvironment\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"callChainHash\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"isSimulation\",\"type\":\"bool\"}],\"name\":\"execute\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"auctionWon\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"accruedGasRebate\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"execution\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"failed\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"controlCodeHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"userOpHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"callChainHash\",\"type\":\"bytes32\"}],\"internalType\":\"structDAppApproval\",\"name\":\"dAppApproval\",\"type\":\"tuple\"}],\"name\":\"getDAppApprovalPayload\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"payload\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"controlCodeHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"userOpHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"callChainHash\",\"type\":\"bytes32\"}],\"internalType\":\"structDAppApproval\",\"name\":\"approval\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structDAppOperation\",\"name\":\"dAppOp\",\"type\":\"tuple\"}],\"name\":\"getDAppOperationPayload\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"payload\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getEscrowAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"escrowAddress\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"dAppControl\",\"type\":\"address\"}],\"name\":\"getExecutionEnvironment\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"executionEnvironment\",\"type\":\"address\"},{\"internalType\":\"uint32\",\"name\":\"callConfig\",\"type\":\"uint32\"},{\"internalType\":\"bool\",\"name\":\"exists\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structUserCall\",\"name\":\"call\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structUserOperation\",\"name\":\"userOp\",\"type\":\"tuple\"},{\"internalType\":\"address\",\"name\":\"controller\",\"type\":\"address\"}],\"name\":\"getExecutionEnvironment\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"executionEnvironment\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"dAppControl\",\"type\":\"address\"}],\"name\":\"getGovFromControl\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"governanceAddress\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"getNextNonce\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"nextNonce\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"controlCodeHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"userOpHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"bidsHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structSolverCall\",\"name\":\"sCall\",\"type\":\"tuple\"}],\"name\":\"getSolverPayload\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"payload\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structUserCall\",\"name\":\"userCall\",\"type\":\"tuple\"}],\"name\":\"getUserCallPayload\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"payload\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structUserCall\",\"name\":\"call\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structUserOperation\",\"name\":\"userOp\",\"type\":\"tuple\"}],\"name\":\"getUserOperationPayload\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"payload\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"governance\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"governance\",\"type\":\"address\"},{\"internalType\":\"uint32\",\"name\":\"callConfig\",\"type\":\"uint32\"},{\"internalType\":\"uint64\",\"name\":\"lastUpdate\",\"type\":\"uint64\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"controller\",\"type\":\"address\"}],\"name\":\"initializeGovernance\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"dAppControl\",\"type\":\"address\"}],\"name\":\"integrateDApp\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint32\",\"name\":\"callConfig\",\"type\":\"uint32\"}],\"internalType\":\"structDAppConfig\",\"name\":\"dConfig\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structUserCall\",\"name\":\"call\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structUserOperation\",\"name\":\"userOp\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"controlCodeHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"userOpHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"bidsHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structSolverCall\",\"name\":\"call\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"bidAmount\",\"type\":\"uint256\"}],\"internalType\":\"structBidData[]\",\"name\":\"bids\",\"type\":\"tuple[]\"}],\"internalType\":\"structSolverOperation[]\",\"name\":\"solverOps\",\"type\":\"tuple[]\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"controlCodeHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"userOpHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"callChainHash\",\"type\":\"bytes32\"}],\"internalType\":\"structDAppApproval\",\"name\":\"approval\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structDAppOperation\",\"name\":\"dAppOp\",\"type\":\"tuple\"}],\"name\":\"metacall\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"auctionWon\",\"type\":\"bool\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"solverSigner\",\"type\":\"address\"}],\"name\":\"nextSolverNonce\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"nextNonce\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"controller\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"signatory\",\"type\":\"address\"}],\"name\":\"removeSignatory\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"salt\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"name\":\"signatories\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"simulator\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"solverSigner\",\"type\":\"address\"}],\"name\":\"solverEscrowBalance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"balance\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"solverSigner\",\"type\":\"address\"}],\"name\":\"solverLastActiveBlock\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"lastBlock\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"msgSender\",\"type\":\"address\"}],\"name\":\"solverSafetyCallback\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isSafe\",\"type\":\"bool\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"destination\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"controller\",\"type\":\"address\"},{\"internalType\":\"uint32\",\"name\":\"callConfig\",\"type\":\"uint32\"},{\"internalType\":\"uint16\",\"name\":\"lockState\",\"type\":\"uint16\"}],\"name\":\"transferDAppERC20\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"destination\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"controller\",\"type\":\"address\"},{\"internalType\":\"uint32\",\"name\":\"callConfig\",\"type\":\"uint32\"},{\"internalType\":\"uint16\",\"name\":\"lockState\",\"type\":\"uint16\"}],\"name\":\"transferUserERC20\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}]",
+	ABI: "[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_escrowDuration\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_factory\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_verification\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_gasAccLib\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_safetyLocksLib\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_simulator\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"AlreadyInitialized\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"AlteredControlHash\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"AlteredUserHash\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"DAppNotEnabled\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"EnvironmentMismatch\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"EscrowLockActive\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"GasAccountingLibError\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"HashChainBroken\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InsufficientBalance\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InsufficientFunds\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"IntentUnfulfilled\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidAccess\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidCaller\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidDAppControl\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidEnvironment\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidLockState\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidSigner\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidSolverHash\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint8\",\"name\":\"id\",\"type\":\"uint8\"}],\"name\":\"LedgerBalancing\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint8\",\"name\":\"id\",\"type\":\"uint8\"}],\"name\":\"LedgerFinalized\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint8\",\"name\":\"id\",\"type\":\"uint8\"}],\"name\":\"MissingFunds\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NoAuctionWinner\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NoUnfilledRequests\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NotInitialized\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"OnlyGovernance\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"OwnerActive\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"PermitDeadlineExpired\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"PostOpsFail\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"PostOpsSimFail\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"PostSolverFailed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"PreOpsFail\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"PreOpsSimFail\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"PreSolverFailed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"RevertToReuse\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"SafetyLocksLibError\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"SignatoryActive\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"SimulationPassed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"SolverBidUnpaid\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"SolverEVMError\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"SolverFailedCallback\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"SolverMsgValueUnpaid\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"SolverMustReconcile\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"SolverOperationReverted\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"SolverSimFail\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"UncoveredResult\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"UserNotFulfilled\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"UserOpFail\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"UserOpSimFail\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"enumValidCallsResult\",\"name\":\"\",\"type\":\"uint8\"}],\"name\":\"ValidCalls\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"VerificationSimFail\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"controller\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint32\",\"name\":\"callConfig\",\"type\":\"uint32\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"bidToken\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"bidAmount\",\"type\":\"uint256\"}],\"name\":\"MEVPaymentFailure\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"environment\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"controller\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint32\",\"name\":\"callConfig\",\"type\":\"uint32\"}],\"name\":\"NewExecutionEnvironment\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"solverTo\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"solverFrom\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"executed\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"success\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"result\",\"type\":\"uint256\"}],\"name\":\"SolverTxResult\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"valueReturned\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"gasRefunded\",\"type\":\"uint256\"}],\"name\":\"UserTxResult\",\"type\":\"event\"},{\"stateMutability\":\"payable\",\"type\":\"fallback\"},{\"inputs\":[],\"name\":\"DOMAIN_SEPARATOR\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"ESCROW_DURATION\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"FACTORY\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"GAS_ACC_LIB\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"SAFETY_LOCKS_LIB\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"SIMULATOR\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"VERIFICATION\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"accountLastActiveBlock\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"activeEnvironment\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"enumParty\",\"name\":\"recipient\",\"type\":\"uint8\"}],\"name\":\"contribute\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"enumParty\",\"name\":\"donor\",\"type\":\"uint8\"},{\"internalType\":\"enumParty\",\"name\":\"recipient\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"amt\",\"type\":\"uint256\"},{\"internalType\":\"uint16\",\"name\":\"lockState\",\"type\":\"uint16\"}],\"name\":\"contributeGasTo\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"enumParty\",\"name\":\"donor\",\"type\":\"uint8\"},{\"internalType\":\"enumParty\",\"name\":\"recipient\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"amt\",\"type\":\"uint256\"}],\"name\":\"contributeTo\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"dAppControl\",\"type\":\"address\"}],\"name\":\"createExecutionEnvironment\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"executionEnvironment\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"decimals\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"deposit\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"enumParty\",\"name\":\"party\",\"type\":\"uint8\"}],\"name\":\"deposit\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint32\",\"name\":\"callConfig\",\"type\":\"uint32\"},{\"internalType\":\"address\",\"name\":\"bidToken\",\"type\":\"address\"}],\"internalType\":\"structDAppConfig\",\"name\":\"dConfig\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"dapp\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structUserOperation\",\"name\":\"userOp\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"solver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"userOpHash\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"bidToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"bidAmount\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structSolverOperation[]\",\"name\":\"solverOps\",\"type\":\"tuple[]\"},{\"internalType\":\"address\",\"name\":\"executionEnvironment\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"bundler\",\"type\":\"address\"}],\"name\":\"execute\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"auctionWon\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"accruedGasRebate\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"winningSearcherIndex\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"enumParty\",\"name\":\"party\",\"type\":\"uint8\"},{\"internalType\":\"address\",\"name\":\"partyAddress\",\"type\":\"address\"}],\"name\":\"finalize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"ledgers\",\"outputs\":[{\"internalType\":\"int64\",\"name\":\"balance\",\"type\":\"int64\"},{\"internalType\":\"int64\",\"name\":\"contributed\",\"type\":\"int64\"},{\"internalType\":\"int64\",\"name\":\"requested\",\"type\":\"int64\"},{\"internalType\":\"enumLedgerStatus\",\"name\":\"status\",\"type\":\"uint8\"},{\"internalType\":\"enumParty\",\"name\":\"proxy\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"lock\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"activeEnvironment\",\"type\":\"address\"},{\"internalType\":\"uint16\",\"name\":\"activeParties\",\"type\":\"uint16\"},{\"internalType\":\"uint64\",\"name\":\"startingBalance\",\"type\":\"uint64\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"dapp\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structUserOperation\",\"name\":\"userOp\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"solver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"userOpHash\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"bidToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"bidAmount\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structSolverOperation[]\",\"name\":\"solverOps\",\"type\":\"tuple[]\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"userOpHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"callChainHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structDAppOperation\",\"name\":\"dAppOp\",\"type\":\"tuple\"}],\"name\":\"metacall\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"auctionWon\",\"type\":\"bool\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"name\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"nextAccountNonce\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"nonces\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"uint8\",\"name\":\"v\",\"type\":\"uint8\"},{\"internalType\":\"bytes32\",\"name\":\"r\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"s\",\"type\":\"bytes32\"}],\"name\":\"permit\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"environment\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"searcherFrom\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"maxApprovedGasSpend\",\"type\":\"uint256\"}],\"name\":\"reconcile\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"enumParty\",\"name\":\"donor\",\"type\":\"uint8\"},{\"internalType\":\"enumParty\",\"name\":\"recipient\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"amt\",\"type\":\"uint256\"}],\"name\":\"requestFrom\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"enumParty\",\"name\":\"donor\",\"type\":\"uint8\"},{\"internalType\":\"enumParty\",\"name\":\"recipient\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"amt\",\"type\":\"uint256\"},{\"internalType\":\"uint16\",\"name\":\"lockState\",\"type\":\"uint16\"}],\"name\":\"requestGasFrom\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"symbol\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"destination\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"controller\",\"type\":\"address\"},{\"internalType\":\"uint32\",\"name\":\"callConfig\",\"type\":\"uint32\"},{\"internalType\":\"uint16\",\"name\":\"lockState\",\"type\":\"uint16\"}],\"name\":\"transferDAppERC20\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"destination\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"controller\",\"type\":\"address\"},{\"internalType\":\"uint32\",\"name\":\"callConfig\",\"type\":\"uint32\"},{\"internalType\":\"uint16\",\"name\":\"lockState\",\"type\":\"uint16\"}],\"name\":\"transferUserERC20\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"validateBalances\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"valid\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"withdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}]",
 }
 
 // AtlasABI is the input ABI used to generate the binding from.
@@ -255,12 +234,43 @@ func (_Atlas *AtlasTransactorRaw) Transact(opts *bind.TransactOpts, method strin
 	return _Atlas.Contract.contract.Transact(opts, method, params...)
 }
 
-// BUNDLERBASE is a free data retrieval call binding the contract method 0x5152f50f.
+// DOMAINSEPARATOR is a free data retrieval call binding the contract method 0x3644e515.
 //
-// Solidity: function BUNDLER_BASE() view returns(uint256)
-func (_Atlas *AtlasCaller) BUNDLERBASE(opts *bind.CallOpts) (*big.Int, error) {
+// Solidity: function DOMAIN_SEPARATOR() view returns(bytes32)
+func (_Atlas *AtlasCaller) DOMAINSEPARATOR(opts *bind.CallOpts) ([32]byte, error) {
 	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "BUNDLER_BASE")
+	err := _Atlas.contract.Call(opts, &out, "DOMAIN_SEPARATOR")
+
+	if err != nil {
+		return *new([32]byte), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new([32]byte)).(*[32]byte)
+
+	return out0, err
+
+}
+
+// DOMAINSEPARATOR is a free data retrieval call binding the contract method 0x3644e515.
+//
+// Solidity: function DOMAIN_SEPARATOR() view returns(bytes32)
+func (_Atlas *AtlasSession) DOMAINSEPARATOR() ([32]byte, error) {
+	return _Atlas.Contract.DOMAINSEPARATOR(&_Atlas.CallOpts)
+}
+
+// DOMAINSEPARATOR is a free data retrieval call binding the contract method 0x3644e515.
+//
+// Solidity: function DOMAIN_SEPARATOR() view returns(bytes32)
+func (_Atlas *AtlasCallerSession) DOMAINSEPARATOR() ([32]byte, error) {
+	return _Atlas.Contract.DOMAINSEPARATOR(&_Atlas.CallOpts)
+}
+
+// ESCROWDURATION is a free data retrieval call binding the contract method 0xa6efccf9.
+//
+// Solidity: function ESCROW_DURATION() view returns(uint256)
+func (_Atlas *AtlasCaller) ESCROWDURATION(opts *bind.CallOpts) (*big.Int, error) {
+	var out []interface{}
+	err := _Atlas.contract.Call(opts, &out, "ESCROW_DURATION")
 
 	if err != nil {
 		return *new(*big.Int), err
@@ -272,26 +282,181 @@ func (_Atlas *AtlasCaller) BUNDLERBASE(opts *bind.CallOpts) (*big.Int, error) {
 
 }
 
-// BUNDLERBASE is a free data retrieval call binding the contract method 0x5152f50f.
+// ESCROWDURATION is a free data retrieval call binding the contract method 0xa6efccf9.
 //
-// Solidity: function BUNDLER_BASE() view returns(uint256)
-func (_Atlas *AtlasSession) BUNDLERBASE() (*big.Int, error) {
-	return _Atlas.Contract.BUNDLERBASE(&_Atlas.CallOpts)
+// Solidity: function ESCROW_DURATION() view returns(uint256)
+func (_Atlas *AtlasSession) ESCROWDURATION() (*big.Int, error) {
+	return _Atlas.Contract.ESCROWDURATION(&_Atlas.CallOpts)
 }
 
-// BUNDLERBASE is a free data retrieval call binding the contract method 0x5152f50f.
+// ESCROWDURATION is a free data retrieval call binding the contract method 0xa6efccf9.
 //
-// Solidity: function BUNDLER_BASE() view returns(uint256)
-func (_Atlas *AtlasCallerSession) BUNDLERBASE() (*big.Int, error) {
-	return _Atlas.Contract.BUNDLERBASE(&_Atlas.CallOpts)
+// Solidity: function ESCROW_DURATION() view returns(uint256)
+func (_Atlas *AtlasCallerSession) ESCROWDURATION() (*big.Int, error) {
+	return _Atlas.Contract.ESCROWDURATION(&_Atlas.CallOpts)
 }
 
-// BUNDLERPREMIUM is a free data retrieval call binding the contract method 0x191338b4.
+// FACTORY is a free data retrieval call binding the contract method 0x2dd31000.
 //
-// Solidity: function BUNDLER_PREMIUM() view returns(uint256)
-func (_Atlas *AtlasCaller) BUNDLERPREMIUM(opts *bind.CallOpts) (*big.Int, error) {
+// Solidity: function FACTORY() view returns(address)
+func (_Atlas *AtlasCaller) FACTORY(opts *bind.CallOpts) (common.Address, error) {
 	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "BUNDLER_PREMIUM")
+	err := _Atlas.contract.Call(opts, &out, "FACTORY")
+
+	if err != nil {
+		return *new(common.Address), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+
+	return out0, err
+
+}
+
+// FACTORY is a free data retrieval call binding the contract method 0x2dd31000.
+//
+// Solidity: function FACTORY() view returns(address)
+func (_Atlas *AtlasSession) FACTORY() (common.Address, error) {
+	return _Atlas.Contract.FACTORY(&_Atlas.CallOpts)
+}
+
+// FACTORY is a free data retrieval call binding the contract method 0x2dd31000.
+//
+// Solidity: function FACTORY() view returns(address)
+func (_Atlas *AtlasCallerSession) FACTORY() (common.Address, error) {
+	return _Atlas.Contract.FACTORY(&_Atlas.CallOpts)
+}
+
+// GASACCLIB is a free data retrieval call binding the contract method 0x5986ce00.
+//
+// Solidity: function GAS_ACC_LIB() view returns(address)
+func (_Atlas *AtlasCaller) GASACCLIB(opts *bind.CallOpts) (common.Address, error) {
+	var out []interface{}
+	err := _Atlas.contract.Call(opts, &out, "GAS_ACC_LIB")
+
+	if err != nil {
+		return *new(common.Address), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+
+	return out0, err
+
+}
+
+// GASACCLIB is a free data retrieval call binding the contract method 0x5986ce00.
+//
+// Solidity: function GAS_ACC_LIB() view returns(address)
+func (_Atlas *AtlasSession) GASACCLIB() (common.Address, error) {
+	return _Atlas.Contract.GASACCLIB(&_Atlas.CallOpts)
+}
+
+// GASACCLIB is a free data retrieval call binding the contract method 0x5986ce00.
+//
+// Solidity: function GAS_ACC_LIB() view returns(address)
+func (_Atlas *AtlasCallerSession) GASACCLIB() (common.Address, error) {
+	return _Atlas.Contract.GASACCLIB(&_Atlas.CallOpts)
+}
+
+// SAFETYLOCKSLIB is a free data retrieval call binding the contract method 0xa89f0fc1.
+//
+// Solidity: function SAFETY_LOCKS_LIB() view returns(address)
+func (_Atlas *AtlasCaller) SAFETYLOCKSLIB(opts *bind.CallOpts) (common.Address, error) {
+	var out []interface{}
+	err := _Atlas.contract.Call(opts, &out, "SAFETY_LOCKS_LIB")
+
+	if err != nil {
+		return *new(common.Address), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+
+	return out0, err
+
+}
+
+// SAFETYLOCKSLIB is a free data retrieval call binding the contract method 0xa89f0fc1.
+//
+// Solidity: function SAFETY_LOCKS_LIB() view returns(address)
+func (_Atlas *AtlasSession) SAFETYLOCKSLIB() (common.Address, error) {
+	return _Atlas.Contract.SAFETYLOCKSLIB(&_Atlas.CallOpts)
+}
+
+// SAFETYLOCKSLIB is a free data retrieval call binding the contract method 0xa89f0fc1.
+//
+// Solidity: function SAFETY_LOCKS_LIB() view returns(address)
+func (_Atlas *AtlasCallerSession) SAFETYLOCKSLIB() (common.Address, error) {
+	return _Atlas.Contract.SAFETYLOCKSLIB(&_Atlas.CallOpts)
+}
+
+// SIMULATOR is a free data retrieval call binding the contract method 0x79b79765.
+//
+// Solidity: function SIMULATOR() view returns(address)
+func (_Atlas *AtlasCaller) SIMULATOR(opts *bind.CallOpts) (common.Address, error) {
+	var out []interface{}
+	err := _Atlas.contract.Call(opts, &out, "SIMULATOR")
+
+	if err != nil {
+		return *new(common.Address), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+
+	return out0, err
+
+}
+
+// SIMULATOR is a free data retrieval call binding the contract method 0x79b79765.
+//
+// Solidity: function SIMULATOR() view returns(address)
+func (_Atlas *AtlasSession) SIMULATOR() (common.Address, error) {
+	return _Atlas.Contract.SIMULATOR(&_Atlas.CallOpts)
+}
+
+// SIMULATOR is a free data retrieval call binding the contract method 0x79b79765.
+//
+// Solidity: function SIMULATOR() view returns(address)
+func (_Atlas *AtlasCallerSession) SIMULATOR() (common.Address, error) {
+	return _Atlas.Contract.SIMULATOR(&_Atlas.CallOpts)
+}
+
+// VERIFICATION is a free data retrieval call binding the contract method 0x791ae748.
+//
+// Solidity: function VERIFICATION() view returns(address)
+func (_Atlas *AtlasCaller) VERIFICATION(opts *bind.CallOpts) (common.Address, error) {
+	var out []interface{}
+	err := _Atlas.contract.Call(opts, &out, "VERIFICATION")
+
+	if err != nil {
+		return *new(common.Address), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+
+	return out0, err
+
+}
+
+// VERIFICATION is a free data retrieval call binding the contract method 0x791ae748.
+//
+// Solidity: function VERIFICATION() view returns(address)
+func (_Atlas *AtlasSession) VERIFICATION() (common.Address, error) {
+	return _Atlas.Contract.VERIFICATION(&_Atlas.CallOpts)
+}
+
+// VERIFICATION is a free data retrieval call binding the contract method 0x791ae748.
+//
+// Solidity: function VERIFICATION() view returns(address)
+func (_Atlas *AtlasCallerSession) VERIFICATION() (common.Address, error) {
+	return _Atlas.Contract.VERIFICATION(&_Atlas.CallOpts)
+}
+
+// AccountLastActiveBlock is a free data retrieval call binding the contract method 0x7c20857a.
+//
+// Solidity: function accountLastActiveBlock(address account) view returns(uint256)
+func (_Atlas *AtlasCaller) AccountLastActiveBlock(opts *bind.CallOpts, account common.Address) (*big.Int, error) {
+	var out []interface{}
+	err := _Atlas.contract.Call(opts, &out, "accountLastActiveBlock", account)
 
 	if err != nil {
 		return *new(*big.Int), err
@@ -303,49 +468,18 @@ func (_Atlas *AtlasCaller) BUNDLERPREMIUM(opts *bind.CallOpts) (*big.Int, error)
 
 }
 
-// BUNDLERPREMIUM is a free data retrieval call binding the contract method 0x191338b4.
+// AccountLastActiveBlock is a free data retrieval call binding the contract method 0x7c20857a.
 //
-// Solidity: function BUNDLER_PREMIUM() view returns(uint256)
-func (_Atlas *AtlasSession) BUNDLERPREMIUM() (*big.Int, error) {
-	return _Atlas.Contract.BUNDLERPREMIUM(&_Atlas.CallOpts)
+// Solidity: function accountLastActiveBlock(address account) view returns(uint256)
+func (_Atlas *AtlasSession) AccountLastActiveBlock(account common.Address) (*big.Int, error) {
+	return _Atlas.Contract.AccountLastActiveBlock(&_Atlas.CallOpts, account)
 }
 
-// BUNDLERPREMIUM is a free data retrieval call binding the contract method 0x191338b4.
+// AccountLastActiveBlock is a free data retrieval call binding the contract method 0x7c20857a.
 //
-// Solidity: function BUNDLER_PREMIUM() view returns(uint256)
-func (_Atlas *AtlasCallerSession) BUNDLERPREMIUM() (*big.Int, error) {
-	return _Atlas.Contract.BUNDLERPREMIUM(&_Atlas.CallOpts)
-}
-
-// ISTEST is a free data retrieval call binding the contract method 0xfa7626d4.
-//
-// Solidity: function IS_TEST() view returns(bool)
-func (_Atlas *AtlasCaller) ISTEST(opts *bind.CallOpts) (bool, error) {
-	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "IS_TEST")
-
-	if err != nil {
-		return *new(bool), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
-
-	return out0, err
-
-}
-
-// ISTEST is a free data retrieval call binding the contract method 0xfa7626d4.
-//
-// Solidity: function IS_TEST() view returns(bool)
-func (_Atlas *AtlasSession) ISTEST() (bool, error) {
-	return _Atlas.Contract.ISTEST(&_Atlas.CallOpts)
-}
-
-// ISTEST is a free data retrieval call binding the contract method 0xfa7626d4.
-//
-// Solidity: function IS_TEST() view returns(bool)
-func (_Atlas *AtlasCallerSession) ISTEST() (bool, error) {
-	return _Atlas.Contract.ISTEST(&_Atlas.CallOpts)
+// Solidity: function accountLastActiveBlock(address account) view returns(uint256)
+func (_Atlas *AtlasCallerSession) AccountLastActiveBlock(account common.Address) (*big.Int, error) {
+	return _Atlas.Contract.AccountLastActiveBlock(&_Atlas.CallOpts, account)
 }
 
 // ActiveEnvironment is a free data retrieval call binding the contract method 0x6ea43423.
@@ -379,133 +513,12 @@ func (_Atlas *AtlasCallerSession) ActiveEnvironment() (common.Address, error) {
 	return _Atlas.Contract.ActiveEnvironment(&_Atlas.CallOpts)
 }
 
-// AsyncNonceBitIndex is a free data retrieval call binding the contract method 0xfeba8496.
+// Allowance is a free data retrieval call binding the contract method 0xdd62ed3e.
 //
-// Solidity: function asyncNonceBitIndex(address ) view returns(uint128 LowestEmptyBitmap, uint128 HighestFullBitmap)
-func (_Atlas *AtlasCaller) AsyncNonceBitIndex(opts *bind.CallOpts, arg0 common.Address) (struct {
-	LowestEmptyBitmap *big.Int
-	HighestFullBitmap *big.Int
-}, error) {
+// Solidity: function allowance(address , address ) view returns(uint256)
+func (_Atlas *AtlasCaller) Allowance(opts *bind.CallOpts, arg0 common.Address, arg1 common.Address) (*big.Int, error) {
 	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "asyncNonceBitIndex", arg0)
-
-	outstruct := new(struct {
-		LowestEmptyBitmap *big.Int
-		HighestFullBitmap *big.Int
-	})
-	if err != nil {
-		return *outstruct, err
-	}
-
-	outstruct.LowestEmptyBitmap = *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-	outstruct.HighestFullBitmap = *abi.ConvertType(out[1], new(*big.Int)).(**big.Int)
-
-	return *outstruct, err
-
-}
-
-// AsyncNonceBitIndex is a free data retrieval call binding the contract method 0xfeba8496.
-//
-// Solidity: function asyncNonceBitIndex(address ) view returns(uint128 LowestEmptyBitmap, uint128 HighestFullBitmap)
-func (_Atlas *AtlasSession) AsyncNonceBitIndex(arg0 common.Address) (struct {
-	LowestEmptyBitmap *big.Int
-	HighestFullBitmap *big.Int
-}, error) {
-	return _Atlas.Contract.AsyncNonceBitIndex(&_Atlas.CallOpts, arg0)
-}
-
-// AsyncNonceBitIndex is a free data retrieval call binding the contract method 0xfeba8496.
-//
-// Solidity: function asyncNonceBitIndex(address ) view returns(uint128 LowestEmptyBitmap, uint128 HighestFullBitmap)
-func (_Atlas *AtlasCallerSession) AsyncNonceBitIndex(arg0 common.Address) (struct {
-	LowestEmptyBitmap *big.Int
-	HighestFullBitmap *big.Int
-}, error) {
-	return _Atlas.Contract.AsyncNonceBitIndex(&_Atlas.CallOpts, arg0)
-}
-
-// AsyncNonceBitmap is a free data retrieval call binding the contract method 0x5c21ce00.
-//
-// Solidity: function asyncNonceBitmap(bytes32 ) view returns(uint8 highestUsedNonce, uint240 bitmap)
-func (_Atlas *AtlasCaller) AsyncNonceBitmap(opts *bind.CallOpts, arg0 [32]byte) (struct {
-	HighestUsedNonce uint8
-	Bitmap           *big.Int
-}, error) {
-	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "asyncNonceBitmap", arg0)
-
-	outstruct := new(struct {
-		HighestUsedNonce uint8
-		Bitmap           *big.Int
-	})
-	if err != nil {
-		return *outstruct, err
-	}
-
-	outstruct.HighestUsedNonce = *abi.ConvertType(out[0], new(uint8)).(*uint8)
-	outstruct.Bitmap = *abi.ConvertType(out[1], new(*big.Int)).(**big.Int)
-
-	return *outstruct, err
-
-}
-
-// AsyncNonceBitmap is a free data retrieval call binding the contract method 0x5c21ce00.
-//
-// Solidity: function asyncNonceBitmap(bytes32 ) view returns(uint8 highestUsedNonce, uint240 bitmap)
-func (_Atlas *AtlasSession) AsyncNonceBitmap(arg0 [32]byte) (struct {
-	HighestUsedNonce uint8
-	Bitmap           *big.Int
-}, error) {
-	return _Atlas.Contract.AsyncNonceBitmap(&_Atlas.CallOpts, arg0)
-}
-
-// AsyncNonceBitmap is a free data retrieval call binding the contract method 0x5c21ce00.
-//
-// Solidity: function asyncNonceBitmap(bytes32 ) view returns(uint8 highestUsedNonce, uint240 bitmap)
-func (_Atlas *AtlasCallerSession) AsyncNonceBitmap(arg0 [32]byte) (struct {
-	HighestUsedNonce uint8
-	Bitmap           *big.Int
-}, error) {
-	return _Atlas.Contract.AsyncNonceBitmap(&_Atlas.CallOpts, arg0)
-}
-
-// Atlas is a free data retrieval call binding the contract method 0x127f1b7d.
-//
-// Solidity: function atlas() view returns(address)
-func (_Atlas *AtlasCaller) Atlas(opts *bind.CallOpts) (common.Address, error) {
-	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "atlas")
-
-	if err != nil {
-		return *new(common.Address), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
-
-	return out0, err
-
-}
-
-// Atlas is a free data retrieval call binding the contract method 0x127f1b7d.
-//
-// Solidity: function atlas() view returns(address)
-func (_Atlas *AtlasSession) Atlas() (common.Address, error) {
-	return _Atlas.Contract.Atlas(&_Atlas.CallOpts)
-}
-
-// Atlas is a free data retrieval call binding the contract method 0x127f1b7d.
-//
-// Solidity: function atlas() view returns(address)
-func (_Atlas *AtlasCallerSession) Atlas() (common.Address, error) {
-	return _Atlas.Contract.Atlas(&_Atlas.CallOpts)
-}
-
-// CumulativeDonations is a free data retrieval call binding the contract method 0x5e437f58.
-//
-// Solidity: function cumulativeDonations() view returns(uint256)
-func (_Atlas *AtlasCaller) CumulativeDonations(opts *bind.CallOpts) (*big.Int, error) {
-	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "cumulativeDonations")
+	err := _Atlas.contract.Call(opts, &out, "allowance", arg0, arg1)
 
 	if err != nil {
 		return *new(*big.Int), err
@@ -517,425 +530,229 @@ func (_Atlas *AtlasCaller) CumulativeDonations(opts *bind.CallOpts) (*big.Int, e
 
 }
 
-// CumulativeDonations is a free data retrieval call binding the contract method 0x5e437f58.
+// Allowance is a free data retrieval call binding the contract method 0xdd62ed3e.
 //
-// Solidity: function cumulativeDonations() view returns(uint256)
-func (_Atlas *AtlasSession) CumulativeDonations() (*big.Int, error) {
-	return _Atlas.Contract.CumulativeDonations(&_Atlas.CallOpts)
+// Solidity: function allowance(address , address ) view returns(uint256)
+func (_Atlas *AtlasSession) Allowance(arg0 common.Address, arg1 common.Address) (*big.Int, error) {
+	return _Atlas.Contract.Allowance(&_Atlas.CallOpts, arg0, arg1)
 }
 
-// CumulativeDonations is a free data retrieval call binding the contract method 0x5e437f58.
+// Allowance is a free data retrieval call binding the contract method 0xdd62ed3e.
 //
-// Solidity: function cumulativeDonations() view returns(uint256)
-func (_Atlas *AtlasCallerSession) CumulativeDonations() (*big.Int, error) {
-	return _Atlas.Contract.CumulativeDonations(&_Atlas.CallOpts)
+// Solidity: function allowance(address , address ) view returns(uint256)
+func (_Atlas *AtlasCallerSession) Allowance(arg0 common.Address, arg1 common.Address) (*big.Int, error) {
+	return _Atlas.Contract.Allowance(&_Atlas.CallOpts, arg0, arg1)
 }
 
-// Dapps is a free data retrieval call binding the contract method 0xb6453318.
+// BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
 //
-// Solidity: function dapps(bytes32 ) view returns(bytes32)
-func (_Atlas *AtlasCaller) Dapps(opts *bind.CallOpts, arg0 [32]byte) ([32]byte, error) {
+// Solidity: function balanceOf(address account) view returns(uint256)
+func (_Atlas *AtlasCaller) BalanceOf(opts *bind.CallOpts, account common.Address) (*big.Int, error) {
 	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "dapps", arg0)
+	err := _Atlas.contract.Call(opts, &out, "balanceOf", account)
 
 	if err != nil {
-		return *new([32]byte), err
+		return *new(*big.Int), err
 	}
 
-	out0 := *abi.ConvertType(out[0], new([32]byte)).(*[32]byte)
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
 
 	return out0, err
 
 }
 
-// Dapps is a free data retrieval call binding the contract method 0xb6453318.
+// BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
 //
-// Solidity: function dapps(bytes32 ) view returns(bytes32)
-func (_Atlas *AtlasSession) Dapps(arg0 [32]byte) ([32]byte, error) {
-	return _Atlas.Contract.Dapps(&_Atlas.CallOpts, arg0)
+// Solidity: function balanceOf(address account) view returns(uint256)
+func (_Atlas *AtlasSession) BalanceOf(account common.Address) (*big.Int, error) {
+	return _Atlas.Contract.BalanceOf(&_Atlas.CallOpts, account)
 }
 
-// Dapps is a free data retrieval call binding the contract method 0xb6453318.
+// BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
 //
-// Solidity: function dapps(bytes32 ) view returns(bytes32)
-func (_Atlas *AtlasCallerSession) Dapps(arg0 [32]byte) ([32]byte, error) {
-	return _Atlas.Contract.Dapps(&_Atlas.CallOpts, arg0)
+// Solidity: function balanceOf(address account) view returns(uint256)
+func (_Atlas *AtlasCallerSession) BalanceOf(account common.Address) (*big.Int, error) {
+	return _Atlas.Contract.BalanceOf(&_Atlas.CallOpts, account)
 }
 
-// Eip712Domain is a free data retrieval call binding the contract method 0x84b0196e.
+// Decimals is a free data retrieval call binding the contract method 0x313ce567.
 //
-// Solidity: function eip712Domain() view returns(bytes1 fields, string name, string version, uint256 chainId, address verifyingContract, bytes32 salt, uint256[] extensions)
-func (_Atlas *AtlasCaller) Eip712Domain(opts *bind.CallOpts) (struct {
-	Fields            [1]byte
-	Name              string
-	Version           string
-	ChainId           *big.Int
-	VerifyingContract common.Address
-	Salt              [32]byte
-	Extensions        []*big.Int
+// Solidity: function decimals() view returns(uint8)
+func (_Atlas *AtlasCaller) Decimals(opts *bind.CallOpts) (uint8, error) {
+	var out []interface{}
+	err := _Atlas.contract.Call(opts, &out, "decimals")
+
+	if err != nil {
+		return *new(uint8), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(uint8)).(*uint8)
+
+	return out0, err
+
+}
+
+// Decimals is a free data retrieval call binding the contract method 0x313ce567.
+//
+// Solidity: function decimals() view returns(uint8)
+func (_Atlas *AtlasSession) Decimals() (uint8, error) {
+	return _Atlas.Contract.Decimals(&_Atlas.CallOpts)
+}
+
+// Decimals is a free data retrieval call binding the contract method 0x313ce567.
+//
+// Solidity: function decimals() view returns(uint8)
+func (_Atlas *AtlasCallerSession) Decimals() (uint8, error) {
+	return _Atlas.Contract.Decimals(&_Atlas.CallOpts)
+}
+
+// Ledgers is a free data retrieval call binding the contract method 0xe9789190.
+//
+// Solidity: function ledgers(uint256 ) view returns(int64 balance, int64 contributed, int64 requested, uint8 status, uint8 proxy)
+func (_Atlas *AtlasCaller) Ledgers(opts *bind.CallOpts, arg0 *big.Int) (struct {
+	Balance     int64
+	Contributed int64
+	Requested   int64
+	Status      uint8
+	Proxy       uint8
 }, error) {
 	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "eip712Domain")
+	err := _Atlas.contract.Call(opts, &out, "ledgers", arg0)
 
 	outstruct := new(struct {
-		Fields            [1]byte
-		Name              string
-		Version           string
-		ChainId           *big.Int
-		VerifyingContract common.Address
-		Salt              [32]byte
-		Extensions        []*big.Int
+		Balance     int64
+		Contributed int64
+		Requested   int64
+		Status      uint8
+		Proxy       uint8
 	})
 	if err != nil {
 		return *outstruct, err
 	}
 
-	outstruct.Fields = *abi.ConvertType(out[0], new([1]byte)).(*[1]byte)
-	outstruct.Name = *abi.ConvertType(out[1], new(string)).(*string)
-	outstruct.Version = *abi.ConvertType(out[2], new(string)).(*string)
-	outstruct.ChainId = *abi.ConvertType(out[3], new(*big.Int)).(**big.Int)
-	outstruct.VerifyingContract = *abi.ConvertType(out[4], new(common.Address)).(*common.Address)
-	outstruct.Salt = *abi.ConvertType(out[5], new([32]byte)).(*[32]byte)
-	outstruct.Extensions = *abi.ConvertType(out[6], new([]*big.Int)).(*[]*big.Int)
+	outstruct.Balance = *abi.ConvertType(out[0], new(int64)).(*int64)
+	outstruct.Contributed = *abi.ConvertType(out[1], new(int64)).(*int64)
+	outstruct.Requested = *abi.ConvertType(out[2], new(int64)).(*int64)
+	outstruct.Status = *abi.ConvertType(out[3], new(uint8)).(*uint8)
+	outstruct.Proxy = *abi.ConvertType(out[4], new(uint8)).(*uint8)
 
 	return *outstruct, err
 
 }
 
-// Eip712Domain is a free data retrieval call binding the contract method 0x84b0196e.
+// Ledgers is a free data retrieval call binding the contract method 0xe9789190.
 //
-// Solidity: function eip712Domain() view returns(bytes1 fields, string name, string version, uint256 chainId, address verifyingContract, bytes32 salt, uint256[] extensions)
-func (_Atlas *AtlasSession) Eip712Domain() (struct {
-	Fields            [1]byte
-	Name              string
-	Version           string
-	ChainId           *big.Int
-	VerifyingContract common.Address
-	Salt              [32]byte
-	Extensions        []*big.Int
+// Solidity: function ledgers(uint256 ) view returns(int64 balance, int64 contributed, int64 requested, uint8 status, uint8 proxy)
+func (_Atlas *AtlasSession) Ledgers(arg0 *big.Int) (struct {
+	Balance     int64
+	Contributed int64
+	Requested   int64
+	Status      uint8
+	Proxy       uint8
 }, error) {
-	return _Atlas.Contract.Eip712Domain(&_Atlas.CallOpts)
+	return _Atlas.Contract.Ledgers(&_Atlas.CallOpts, arg0)
 }
 
-// Eip712Domain is a free data retrieval call binding the contract method 0x84b0196e.
+// Ledgers is a free data retrieval call binding the contract method 0xe9789190.
 //
-// Solidity: function eip712Domain() view returns(bytes1 fields, string name, string version, uint256 chainId, address verifyingContract, bytes32 salt, uint256[] extensions)
-func (_Atlas *AtlasCallerSession) Eip712Domain() (struct {
-	Fields            [1]byte
-	Name              string
-	Version           string
-	ChainId           *big.Int
-	VerifyingContract common.Address
-	Salt              [32]byte
-	Extensions        []*big.Int
+// Solidity: function ledgers(uint256 ) view returns(int64 balance, int64 contributed, int64 requested, uint8 status, uint8 proxy)
+func (_Atlas *AtlasCallerSession) Ledgers(arg0 *big.Int) (struct {
+	Balance     int64
+	Contributed int64
+	Requested   int64
+	Status      uint8
+	Proxy       uint8
 }, error) {
-	return _Atlas.Contract.Eip712Domain(&_Atlas.CallOpts)
+	return _Atlas.Contract.Ledgers(&_Atlas.CallOpts, arg0)
 }
 
-// Environment is a free data retrieval call binding the contract method 0x74e2b63c.
+// Lock is a free data retrieval call binding the contract method 0xf83d08ba.
 //
-// Solidity: function environment() view returns(address _environment)
-func (_Atlas *AtlasCaller) Environment(opts *bind.CallOpts) (common.Address, error) {
-	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "environment")
-
-	if err != nil {
-		return *new(common.Address), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
-
-	return out0, err
-
-}
-
-// Environment is a free data retrieval call binding the contract method 0x74e2b63c.
-//
-// Solidity: function environment() view returns(address _environment)
-func (_Atlas *AtlasSession) Environment() (common.Address, error) {
-	return _Atlas.Contract.Environment(&_Atlas.CallOpts)
-}
-
-// Environment is a free data retrieval call binding the contract method 0x74e2b63c.
-//
-// Solidity: function environment() view returns(address _environment)
-func (_Atlas *AtlasCallerSession) Environment() (common.Address, error) {
-	return _Atlas.Contract.Environment(&_Atlas.CallOpts)
-}
-
-// EscrowDuration is a free data retrieval call binding the contract method 0x57c2c2ba.
-//
-// Solidity: function escrowDuration() view returns(uint32)
-func (_Atlas *AtlasCaller) EscrowDuration(opts *bind.CallOpts) (uint32, error) {
-	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "escrowDuration")
-
-	if err != nil {
-		return *new(uint32), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(uint32)).(*uint32)
-
-	return out0, err
-
-}
-
-// EscrowDuration is a free data retrieval call binding the contract method 0x57c2c2ba.
-//
-// Solidity: function escrowDuration() view returns(uint32)
-func (_Atlas *AtlasSession) EscrowDuration() (uint32, error) {
-	return _Atlas.Contract.EscrowDuration(&_Atlas.CallOpts)
-}
-
-// EscrowDuration is a free data retrieval call binding the contract method 0x57c2c2ba.
-//
-// Solidity: function escrowDuration() view returns(uint32)
-func (_Atlas *AtlasCallerSession) EscrowDuration() (uint32, error) {
-	return _Atlas.Contract.EscrowDuration(&_Atlas.CallOpts)
-}
-
-// Execution is a free data retrieval call binding the contract method 0x4918f569.
-//
-// Solidity: function execution() view returns(address)
-func (_Atlas *AtlasCaller) Execution(opts *bind.CallOpts) (common.Address, error) {
-	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "execution")
-
-	if err != nil {
-		return *new(common.Address), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
-
-	return out0, err
-
-}
-
-// Execution is a free data retrieval call binding the contract method 0x4918f569.
-//
-// Solidity: function execution() view returns(address)
-func (_Atlas *AtlasSession) Execution() (common.Address, error) {
-	return _Atlas.Contract.Execution(&_Atlas.CallOpts)
-}
-
-// Execution is a free data retrieval call binding the contract method 0x4918f569.
-//
-// Solidity: function execution() view returns(address)
-func (_Atlas *AtlasCallerSession) Execution() (common.Address, error) {
-	return _Atlas.Contract.Execution(&_Atlas.CallOpts)
-}
-
-// GetDAppApprovalPayload is a free data retrieval call binding the contract method 0xf5510d59.
-//
-// Solidity: function getDAppApprovalPayload((address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32) dAppApproval) view returns(bytes32 payload)
-func (_Atlas *AtlasCaller) GetDAppApprovalPayload(opts *bind.CallOpts, dAppApproval DAppApproval) ([32]byte, error) {
-	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "getDAppApprovalPayload", dAppApproval)
-
-	if err != nil {
-		return *new([32]byte), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new([32]byte)).(*[32]byte)
-
-	return out0, err
-
-}
-
-// GetDAppApprovalPayload is a free data retrieval call binding the contract method 0xf5510d59.
-//
-// Solidity: function getDAppApprovalPayload((address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32) dAppApproval) view returns(bytes32 payload)
-func (_Atlas *AtlasSession) GetDAppApprovalPayload(dAppApproval DAppApproval) ([32]byte, error) {
-	return _Atlas.Contract.GetDAppApprovalPayload(&_Atlas.CallOpts, dAppApproval)
-}
-
-// GetDAppApprovalPayload is a free data retrieval call binding the contract method 0xf5510d59.
-//
-// Solidity: function getDAppApprovalPayload((address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32) dAppApproval) view returns(bytes32 payload)
-func (_Atlas *AtlasCallerSession) GetDAppApprovalPayload(dAppApproval DAppApproval) ([32]byte, error) {
-	return _Atlas.Contract.GetDAppApprovalPayload(&_Atlas.CallOpts, dAppApproval)
-}
-
-// GetDAppOperationPayload is a free data retrieval call binding the contract method 0x38a5576a.
-//
-// Solidity: function getDAppOperationPayload((address,(address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32),bytes) dAppOp) view returns(bytes32 payload)
-func (_Atlas *AtlasCaller) GetDAppOperationPayload(opts *bind.CallOpts, dAppOp DAppOperation) ([32]byte, error) {
-	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "getDAppOperationPayload", dAppOp)
-
-	if err != nil {
-		return *new([32]byte), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new([32]byte)).(*[32]byte)
-
-	return out0, err
-
-}
-
-// GetDAppOperationPayload is a free data retrieval call binding the contract method 0x38a5576a.
-//
-// Solidity: function getDAppOperationPayload((address,(address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32),bytes) dAppOp) view returns(bytes32 payload)
-func (_Atlas *AtlasSession) GetDAppOperationPayload(dAppOp DAppOperation) ([32]byte, error) {
-	return _Atlas.Contract.GetDAppOperationPayload(&_Atlas.CallOpts, dAppOp)
-}
-
-// GetDAppOperationPayload is a free data retrieval call binding the contract method 0x38a5576a.
-//
-// Solidity: function getDAppOperationPayload((address,(address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32),bytes) dAppOp) view returns(bytes32 payload)
-func (_Atlas *AtlasCallerSession) GetDAppOperationPayload(dAppOp DAppOperation) ([32]byte, error) {
-	return _Atlas.Contract.GetDAppOperationPayload(&_Atlas.CallOpts, dAppOp)
-}
-
-// GetEscrowAddress is a free data retrieval call binding the contract method 0x122fd48a.
-//
-// Solidity: function getEscrowAddress() view returns(address escrowAddress)
-func (_Atlas *AtlasCaller) GetEscrowAddress(opts *bind.CallOpts) (common.Address, error) {
-	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "getEscrowAddress")
-
-	if err != nil {
-		return *new(common.Address), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
-
-	return out0, err
-
-}
-
-// GetEscrowAddress is a free data retrieval call binding the contract method 0x122fd48a.
-//
-// Solidity: function getEscrowAddress() view returns(address escrowAddress)
-func (_Atlas *AtlasSession) GetEscrowAddress() (common.Address, error) {
-	return _Atlas.Contract.GetEscrowAddress(&_Atlas.CallOpts)
-}
-
-// GetEscrowAddress is a free data retrieval call binding the contract method 0x122fd48a.
-//
-// Solidity: function getEscrowAddress() view returns(address escrowAddress)
-func (_Atlas *AtlasCallerSession) GetEscrowAddress() (common.Address, error) {
-	return _Atlas.Contract.GetEscrowAddress(&_Atlas.CallOpts)
-}
-
-// GetExecutionEnvironment is a free data retrieval call binding the contract method 0x45112906.
-//
-// Solidity: function getExecutionEnvironment(address user, address dAppControl) view returns(address executionEnvironment, uint32 callConfig, bool exists)
-func (_Atlas *AtlasCaller) GetExecutionEnvironment(opts *bind.CallOpts, user common.Address, dAppControl common.Address) (struct {
-	ExecutionEnvironment common.Address
-	CallConfig           uint32
-	Exists               bool
+// Solidity: function lock() view returns(address activeEnvironment, uint16 activeParties, uint64 startingBalance)
+func (_Atlas *AtlasCaller) Lock(opts *bind.CallOpts) (struct {
+	ActiveEnvironment common.Address
+	ActiveParties     uint16
+	StartingBalance   uint64
 }, error) {
 	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "getExecutionEnvironment", user, dAppControl)
+	err := _Atlas.contract.Call(opts, &out, "lock")
 
 	outstruct := new(struct {
-		ExecutionEnvironment common.Address
-		CallConfig           uint32
-		Exists               bool
+		ActiveEnvironment common.Address
+		ActiveParties     uint16
+		StartingBalance   uint64
 	})
 	if err != nil {
 		return *outstruct, err
 	}
 
-	outstruct.ExecutionEnvironment = *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
-	outstruct.CallConfig = *abi.ConvertType(out[1], new(uint32)).(*uint32)
-	outstruct.Exists = *abi.ConvertType(out[2], new(bool)).(*bool)
+	outstruct.ActiveEnvironment = *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+	outstruct.ActiveParties = *abi.ConvertType(out[1], new(uint16)).(*uint16)
+	outstruct.StartingBalance = *abi.ConvertType(out[2], new(uint64)).(*uint64)
 
 	return *outstruct, err
 
 }
 
-// GetExecutionEnvironment is a free data retrieval call binding the contract method 0x45112906.
+// Lock is a free data retrieval call binding the contract method 0xf83d08ba.
 //
-// Solidity: function getExecutionEnvironment(address user, address dAppControl) view returns(address executionEnvironment, uint32 callConfig, bool exists)
-func (_Atlas *AtlasSession) GetExecutionEnvironment(user common.Address, dAppControl common.Address) (struct {
-	ExecutionEnvironment common.Address
-	CallConfig           uint32
-	Exists               bool
+// Solidity: function lock() view returns(address activeEnvironment, uint16 activeParties, uint64 startingBalance)
+func (_Atlas *AtlasSession) Lock() (struct {
+	ActiveEnvironment common.Address
+	ActiveParties     uint16
+	StartingBalance   uint64
 }, error) {
-	return _Atlas.Contract.GetExecutionEnvironment(&_Atlas.CallOpts, user, dAppControl)
+	return _Atlas.Contract.Lock(&_Atlas.CallOpts)
 }
 
-// GetExecutionEnvironment is a free data retrieval call binding the contract method 0x45112906.
+// Lock is a free data retrieval call binding the contract method 0xf83d08ba.
 //
-// Solidity: function getExecutionEnvironment(address user, address dAppControl) view returns(address executionEnvironment, uint32 callConfig, bool exists)
-func (_Atlas *AtlasCallerSession) GetExecutionEnvironment(user common.Address, dAppControl common.Address) (struct {
-	ExecutionEnvironment common.Address
-	CallConfig           uint32
-	Exists               bool
+// Solidity: function lock() view returns(address activeEnvironment, uint16 activeParties, uint64 startingBalance)
+func (_Atlas *AtlasCallerSession) Lock() (struct {
+	ActiveEnvironment common.Address
+	ActiveParties     uint16
+	StartingBalance   uint64
 }, error) {
-	return _Atlas.Contract.GetExecutionEnvironment(&_Atlas.CallOpts, user, dAppControl)
+	return _Atlas.Contract.Lock(&_Atlas.CallOpts)
 }
 
-// GetExecutionEnvironment0 is a free data retrieval call binding the contract method 0x71ed2766.
+// Name is a free data retrieval call binding the contract method 0x06fdde03.
 //
-// Solidity: function getExecutionEnvironment((address,(address,address,uint256,uint256,uint256,uint256,uint256,address,bytes),bytes) userOp, address controller) view returns(address executionEnvironment)
-func (_Atlas *AtlasCaller) GetExecutionEnvironment0(opts *bind.CallOpts, userOp UserOperation, controller common.Address) (common.Address, error) {
+// Solidity: function name() view returns(string)
+func (_Atlas *AtlasCaller) Name(opts *bind.CallOpts) (string, error) {
 	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "getExecutionEnvironment0", userOp, controller)
+	err := _Atlas.contract.Call(opts, &out, "name")
 
 	if err != nil {
-		return *new(common.Address), err
+		return *new(string), err
 	}
 
-	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+	out0 := *abi.ConvertType(out[0], new(string)).(*string)
 
 	return out0, err
 
 }
 
-// GetExecutionEnvironment0 is a free data retrieval call binding the contract method 0x71ed2766.
+// Name is a free data retrieval call binding the contract method 0x06fdde03.
 //
-// Solidity: function getExecutionEnvironment((address,(address,address,uint256,uint256,uint256,uint256,uint256,address,bytes),bytes) userOp, address controller) view returns(address executionEnvironment)
-func (_Atlas *AtlasSession) GetExecutionEnvironment0(userOp UserOperation, controller common.Address) (common.Address, error) {
-	return _Atlas.Contract.GetExecutionEnvironment0(&_Atlas.CallOpts, userOp, controller)
+// Solidity: function name() view returns(string)
+func (_Atlas *AtlasSession) Name() (string, error) {
+	return _Atlas.Contract.Name(&_Atlas.CallOpts)
 }
 
-// GetExecutionEnvironment0 is a free data retrieval call binding the contract method 0x71ed2766.
+// Name is a free data retrieval call binding the contract method 0x06fdde03.
 //
-// Solidity: function getExecutionEnvironment((address,(address,address,uint256,uint256,uint256,uint256,uint256,address,bytes),bytes) userOp, address controller) view returns(address executionEnvironment)
-func (_Atlas *AtlasCallerSession) GetExecutionEnvironment0(userOp UserOperation, controller common.Address) (common.Address, error) {
-	return _Atlas.Contract.GetExecutionEnvironment0(&_Atlas.CallOpts, userOp, controller)
+// Solidity: function name() view returns(string)
+func (_Atlas *AtlasCallerSession) Name() (string, error) {
+	return _Atlas.Contract.Name(&_Atlas.CallOpts)
 }
 
-// GetGovFromControl is a free data retrieval call binding the contract method 0xa55660da.
+// NextAccountNonce is a free data retrieval call binding the contract method 0x061d3ac6.
 //
-// Solidity: function getGovFromControl(address dAppControl) view returns(address governanceAddress)
-func (_Atlas *AtlasCaller) GetGovFromControl(opts *bind.CallOpts, dAppControl common.Address) (common.Address, error) {
+// Solidity: function nextAccountNonce(address account) view returns(uint256)
+func (_Atlas *AtlasCaller) NextAccountNonce(opts *bind.CallOpts, account common.Address) (*big.Int, error) {
 	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "getGovFromControl", dAppControl)
-
-	if err != nil {
-		return *new(common.Address), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
-
-	return out0, err
-
-}
-
-// GetGovFromControl is a free data retrieval call binding the contract method 0xa55660da.
-//
-// Solidity: function getGovFromControl(address dAppControl) view returns(address governanceAddress)
-func (_Atlas *AtlasSession) GetGovFromControl(dAppControl common.Address) (common.Address, error) {
-	return _Atlas.Contract.GetGovFromControl(&_Atlas.CallOpts, dAppControl)
-}
-
-// GetGovFromControl is a free data retrieval call binding the contract method 0xa55660da.
-//
-// Solidity: function getGovFromControl(address dAppControl) view returns(address governanceAddress)
-func (_Atlas *AtlasCallerSession) GetGovFromControl(dAppControl common.Address) (common.Address, error) {
-	return _Atlas.Contract.GetGovFromControl(&_Atlas.CallOpts, dAppControl)
-}
-
-// GetNextNonce is a free data retrieval call binding the contract method 0x90193b7c.
-//
-// Solidity: function getNextNonce(address account) view returns(uint256 nextNonce)
-func (_Atlas *AtlasCaller) GetNextNonce(opts *bind.CallOpts, account common.Address) (*big.Int, error) {
-	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "getNextNonce", account)
+	err := _Atlas.contract.Call(opts, &out, "nextAccountNonce", account)
 
 	if err != nil {
 		return *new(*big.Int), err
@@ -947,169 +764,26 @@ func (_Atlas *AtlasCaller) GetNextNonce(opts *bind.CallOpts, account common.Addr
 
 }
 
-// GetNextNonce is a free data retrieval call binding the contract method 0x90193b7c.
+// NextAccountNonce is a free data retrieval call binding the contract method 0x061d3ac6.
 //
-// Solidity: function getNextNonce(address account) view returns(uint256 nextNonce)
-func (_Atlas *AtlasSession) GetNextNonce(account common.Address) (*big.Int, error) {
-	return _Atlas.Contract.GetNextNonce(&_Atlas.CallOpts, account)
+// Solidity: function nextAccountNonce(address account) view returns(uint256)
+func (_Atlas *AtlasSession) NextAccountNonce(account common.Address) (*big.Int, error) {
+	return _Atlas.Contract.NextAccountNonce(&_Atlas.CallOpts, account)
 }
 
-// GetNextNonce is a free data retrieval call binding the contract method 0x90193b7c.
+// NextAccountNonce is a free data retrieval call binding the contract method 0x061d3ac6.
 //
-// Solidity: function getNextNonce(address account) view returns(uint256 nextNonce)
-func (_Atlas *AtlasCallerSession) GetNextNonce(account common.Address) (*big.Int, error) {
-	return _Atlas.Contract.GetNextNonce(&_Atlas.CallOpts, account)
+// Solidity: function nextAccountNonce(address account) view returns(uint256)
+func (_Atlas *AtlasCallerSession) NextAccountNonce(account common.Address) (*big.Int, error) {
+	return _Atlas.Contract.NextAccountNonce(&_Atlas.CallOpts, account)
 }
 
-// GetSolverPayload is a free data retrieval call binding the contract method 0xcdf54718.
+// Nonces is a free data retrieval call binding the contract method 0x7ecebe00.
 //
-// Solidity: function getSolverPayload((address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32,bytes) sCall) view returns(bytes32 payload)
-func (_Atlas *AtlasCaller) GetSolverPayload(opts *bind.CallOpts, sCall SolverCall) ([32]byte, error) {
+// Solidity: function nonces(address ) view returns(uint256)
+func (_Atlas *AtlasCaller) Nonces(opts *bind.CallOpts, arg0 common.Address) (*big.Int, error) {
 	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "getSolverPayload", sCall)
-
-	if err != nil {
-		return *new([32]byte), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new([32]byte)).(*[32]byte)
-
-	return out0, err
-
-}
-
-// GetSolverPayload is a free data retrieval call binding the contract method 0xcdf54718.
-//
-// Solidity: function getSolverPayload((address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32,bytes) sCall) view returns(bytes32 payload)
-func (_Atlas *AtlasSession) GetSolverPayload(sCall SolverCall) ([32]byte, error) {
-	return _Atlas.Contract.GetSolverPayload(&_Atlas.CallOpts, sCall)
-}
-
-// GetSolverPayload is a free data retrieval call binding the contract method 0xcdf54718.
-//
-// Solidity: function getSolverPayload((address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32,bytes) sCall) view returns(bytes32 payload)
-func (_Atlas *AtlasCallerSession) GetSolverPayload(sCall SolverCall) ([32]byte, error) {
-	return _Atlas.Contract.GetSolverPayload(&_Atlas.CallOpts, sCall)
-}
-
-// GetUserCallPayload is a free data retrieval call binding the contract method 0x091a3fe8.
-//
-// Solidity: function getUserCallPayload((address,address,uint256,uint256,uint256,uint256,uint256,address,bytes) userCall) view returns(bytes32 payload)
-func (_Atlas *AtlasCaller) GetUserCallPayload(opts *bind.CallOpts, userCall UserCall) ([32]byte, error) {
-	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "getUserCallPayload", userCall)
-
-	if err != nil {
-		return *new([32]byte), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new([32]byte)).(*[32]byte)
-
-	return out0, err
-
-}
-
-// GetUserCallPayload is a free data retrieval call binding the contract method 0x091a3fe8.
-//
-// Solidity: function getUserCallPayload((address,address,uint256,uint256,uint256,uint256,uint256,address,bytes) userCall) view returns(bytes32 payload)
-func (_Atlas *AtlasSession) GetUserCallPayload(userCall UserCall) ([32]byte, error) {
-	return _Atlas.Contract.GetUserCallPayload(&_Atlas.CallOpts, userCall)
-}
-
-// GetUserCallPayload is a free data retrieval call binding the contract method 0x091a3fe8.
-//
-// Solidity: function getUserCallPayload((address,address,uint256,uint256,uint256,uint256,uint256,address,bytes) userCall) view returns(bytes32 payload)
-func (_Atlas *AtlasCallerSession) GetUserCallPayload(userCall UserCall) ([32]byte, error) {
-	return _Atlas.Contract.GetUserCallPayload(&_Atlas.CallOpts, userCall)
-}
-
-// GetUserOperationPayload is a free data retrieval call binding the contract method 0x58e65507.
-//
-// Solidity: function getUserOperationPayload((address,(address,address,uint256,uint256,uint256,uint256,uint256,address,bytes),bytes) userOp) view returns(bytes32 payload)
-func (_Atlas *AtlasCaller) GetUserOperationPayload(opts *bind.CallOpts, userOp UserOperation) ([32]byte, error) {
-	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "getUserOperationPayload", userOp)
-
-	if err != nil {
-		return *new([32]byte), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new([32]byte)).(*[32]byte)
-
-	return out0, err
-
-}
-
-// GetUserOperationPayload is a free data retrieval call binding the contract method 0x58e65507.
-//
-// Solidity: function getUserOperationPayload((address,(address,address,uint256,uint256,uint256,uint256,uint256,address,bytes),bytes) userOp) view returns(bytes32 payload)
-func (_Atlas *AtlasSession) GetUserOperationPayload(userOp UserOperation) ([32]byte, error) {
-	return _Atlas.Contract.GetUserOperationPayload(&_Atlas.CallOpts, userOp)
-}
-
-// GetUserOperationPayload is a free data retrieval call binding the contract method 0x58e65507.
-//
-// Solidity: function getUserOperationPayload((address,(address,address,uint256,uint256,uint256,uint256,uint256,address,bytes),bytes) userOp) view returns(bytes32 payload)
-func (_Atlas *AtlasCallerSession) GetUserOperationPayload(userOp UserOperation) ([32]byte, error) {
-	return _Atlas.Contract.GetUserOperationPayload(&_Atlas.CallOpts, userOp)
-}
-
-// Governance is a free data retrieval call binding the contract method 0x8426e6c1.
-//
-// Solidity: function governance(address ) view returns(address governance, uint32 callConfig, uint64 lastUpdate)
-func (_Atlas *AtlasCaller) Governance(opts *bind.CallOpts, arg0 common.Address) (struct {
-	Governance common.Address
-	CallConfig uint32
-	LastUpdate uint64
-}, error) {
-	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "governance", arg0)
-
-	outstruct := new(struct {
-		Governance common.Address
-		CallConfig uint32
-		LastUpdate uint64
-	})
-	if err != nil {
-		return *outstruct, err
-	}
-
-	outstruct.Governance = *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
-	outstruct.CallConfig = *abi.ConvertType(out[1], new(uint32)).(*uint32)
-	outstruct.LastUpdate = *abi.ConvertType(out[2], new(uint64)).(*uint64)
-
-	return *outstruct, err
-
-}
-
-// Governance is a free data retrieval call binding the contract method 0x8426e6c1.
-//
-// Solidity: function governance(address ) view returns(address governance, uint32 callConfig, uint64 lastUpdate)
-func (_Atlas *AtlasSession) Governance(arg0 common.Address) (struct {
-	Governance common.Address
-	CallConfig uint32
-	LastUpdate uint64
-}, error) {
-	return _Atlas.Contract.Governance(&_Atlas.CallOpts, arg0)
-}
-
-// Governance is a free data retrieval call binding the contract method 0x8426e6c1.
-//
-// Solidity: function governance(address ) view returns(address governance, uint32 callConfig, uint64 lastUpdate)
-func (_Atlas *AtlasCallerSession) Governance(arg0 common.Address) (struct {
-	Governance common.Address
-	CallConfig uint32
-	LastUpdate uint64
-}, error) {
-	return _Atlas.Contract.Governance(&_Atlas.CallOpts, arg0)
-}
-
-// NextSolverNonce is a free data retrieval call binding the contract method 0xcebf5a5c.
-//
-// Solidity: function nextSolverNonce(address solverSigner) view returns(uint256 nextNonce)
-func (_Atlas *AtlasCaller) NextSolverNonce(opts *bind.CallOpts, solverSigner common.Address) (*big.Int, error) {
-	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "nextSolverNonce", solverSigner)
+	err := _Atlas.contract.Call(opts, &out, "nonces", arg0)
 
 	if err != nil {
 		return *new(*big.Int), err
@@ -1121,119 +795,57 @@ func (_Atlas *AtlasCaller) NextSolverNonce(opts *bind.CallOpts, solverSigner com
 
 }
 
-// NextSolverNonce is a free data retrieval call binding the contract method 0xcebf5a5c.
+// Nonces is a free data retrieval call binding the contract method 0x7ecebe00.
 //
-// Solidity: function nextSolverNonce(address solverSigner) view returns(uint256 nextNonce)
-func (_Atlas *AtlasSession) NextSolverNonce(solverSigner common.Address) (*big.Int, error) {
-	return _Atlas.Contract.NextSolverNonce(&_Atlas.CallOpts, solverSigner)
+// Solidity: function nonces(address ) view returns(uint256)
+func (_Atlas *AtlasSession) Nonces(arg0 common.Address) (*big.Int, error) {
+	return _Atlas.Contract.Nonces(&_Atlas.CallOpts, arg0)
 }
 
-// NextSolverNonce is a free data retrieval call binding the contract method 0xcebf5a5c.
+// Nonces is a free data retrieval call binding the contract method 0x7ecebe00.
 //
-// Solidity: function nextSolverNonce(address solverSigner) view returns(uint256 nextNonce)
-func (_Atlas *AtlasCallerSession) NextSolverNonce(solverSigner common.Address) (*big.Int, error) {
-	return _Atlas.Contract.NextSolverNonce(&_Atlas.CallOpts, solverSigner)
+// Solidity: function nonces(address ) view returns(uint256)
+func (_Atlas *AtlasCallerSession) Nonces(arg0 common.Address) (*big.Int, error) {
+	return _Atlas.Contract.Nonces(&_Atlas.CallOpts, arg0)
 }
 
-// Salt is a free data retrieval call binding the contract method 0xbfa0b133.
+// Symbol is a free data retrieval call binding the contract method 0x95d89b41.
 //
-// Solidity: function salt() view returns(bytes32)
-func (_Atlas *AtlasCaller) Salt(opts *bind.CallOpts) ([32]byte, error) {
+// Solidity: function symbol() view returns(string)
+func (_Atlas *AtlasCaller) Symbol(opts *bind.CallOpts) (string, error) {
 	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "salt")
+	err := _Atlas.contract.Call(opts, &out, "symbol")
 
 	if err != nil {
-		return *new([32]byte), err
+		return *new(string), err
 	}
 
-	out0 := *abi.ConvertType(out[0], new([32]byte)).(*[32]byte)
+	out0 := *abi.ConvertType(out[0], new(string)).(*string)
 
 	return out0, err
 
 }
 
-// Salt is a free data retrieval call binding the contract method 0xbfa0b133.
+// Symbol is a free data retrieval call binding the contract method 0x95d89b41.
 //
-// Solidity: function salt() view returns(bytes32)
-func (_Atlas *AtlasSession) Salt() ([32]byte, error) {
-	return _Atlas.Contract.Salt(&_Atlas.CallOpts)
+// Solidity: function symbol() view returns(string)
+func (_Atlas *AtlasSession) Symbol() (string, error) {
+	return _Atlas.Contract.Symbol(&_Atlas.CallOpts)
 }
 
-// Salt is a free data retrieval call binding the contract method 0xbfa0b133.
+// Symbol is a free data retrieval call binding the contract method 0x95d89b41.
 //
-// Solidity: function salt() view returns(bytes32)
-func (_Atlas *AtlasCallerSession) Salt() ([32]byte, error) {
-	return _Atlas.Contract.Salt(&_Atlas.CallOpts)
+// Solidity: function symbol() view returns(string)
+func (_Atlas *AtlasCallerSession) Symbol() (string, error) {
+	return _Atlas.Contract.Symbol(&_Atlas.CallOpts)
 }
 
-// Signatories is a free data retrieval call binding the contract method 0xbfcf51ec.
+// TotalSupply is a free data retrieval call binding the contract method 0x18160ddd.
 //
-// Solidity: function signatories(bytes32 ) view returns(bool)
-func (_Atlas *AtlasCaller) Signatories(opts *bind.CallOpts, arg0 [32]byte) (bool, error) {
+// Solidity: function totalSupply() view returns(uint256)
+func (_Atlas *AtlasCaller) TotalSupply(opts *bind.CallOpts) (*big.Int, error) {
 	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "signatories", arg0)
-
-	if err != nil {
-		return *new(bool), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
-
-	return out0, err
-
-}
-
-// Signatories is a free data retrieval call binding the contract method 0xbfcf51ec.
-//
-// Solidity: function signatories(bytes32 ) view returns(bool)
-func (_Atlas *AtlasSession) Signatories(arg0 [32]byte) (bool, error) {
-	return _Atlas.Contract.Signatories(&_Atlas.CallOpts, arg0)
-}
-
-// Signatories is a free data retrieval call binding the contract method 0xbfcf51ec.
-//
-// Solidity: function signatories(bytes32 ) view returns(bool)
-func (_Atlas *AtlasCallerSession) Signatories(arg0 [32]byte) (bool, error) {
-	return _Atlas.Contract.Signatories(&_Atlas.CallOpts, arg0)
-}
-
-// Simulator is a free data retrieval call binding the contract method 0xbf7b5d7a.
-//
-// Solidity: function simulator() view returns(address)
-func (_Atlas *AtlasCaller) Simulator(opts *bind.CallOpts) (common.Address, error) {
-	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "simulator")
-
-	if err != nil {
-		return *new(common.Address), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
-
-	return out0, err
-
-}
-
-// Simulator is a free data retrieval call binding the contract method 0xbf7b5d7a.
-//
-// Solidity: function simulator() view returns(address)
-func (_Atlas *AtlasSession) Simulator() (common.Address, error) {
-	return _Atlas.Contract.Simulator(&_Atlas.CallOpts)
-}
-
-// Simulator is a free data retrieval call binding the contract method 0xbf7b5d7a.
-//
-// Solidity: function simulator() view returns(address)
-func (_Atlas *AtlasCallerSession) Simulator() (common.Address, error) {
-	return _Atlas.Contract.Simulator(&_Atlas.CallOpts)
-}
-
-// SolverEscrowBalance is a free data retrieval call binding the contract method 0xe055cf3d.
-//
-// Solidity: function solverEscrowBalance(address solverSigner) view returns(uint256 balance)
-func (_Atlas *AtlasCaller) SolverEscrowBalance(opts *bind.CallOpts, solverSigner common.Address) (*big.Int, error) {
-	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "solverEscrowBalance", solverSigner)
+	err := _Atlas.contract.Call(opts, &out, "totalSupply")
 
 	if err != nil {
 		return *new(*big.Int), err
@@ -1245,301 +857,333 @@ func (_Atlas *AtlasCaller) SolverEscrowBalance(opts *bind.CallOpts, solverSigner
 
 }
 
-// SolverEscrowBalance is a free data retrieval call binding the contract method 0xe055cf3d.
+// TotalSupply is a free data retrieval call binding the contract method 0x18160ddd.
 //
-// Solidity: function solverEscrowBalance(address solverSigner) view returns(uint256 balance)
-func (_Atlas *AtlasSession) SolverEscrowBalance(solverSigner common.Address) (*big.Int, error) {
-	return _Atlas.Contract.SolverEscrowBalance(&_Atlas.CallOpts, solverSigner)
+// Solidity: function totalSupply() view returns(uint256)
+func (_Atlas *AtlasSession) TotalSupply() (*big.Int, error) {
+	return _Atlas.Contract.TotalSupply(&_Atlas.CallOpts)
 }
 
-// SolverEscrowBalance is a free data retrieval call binding the contract method 0xe055cf3d.
+// TotalSupply is a free data retrieval call binding the contract method 0x18160ddd.
 //
-// Solidity: function solverEscrowBalance(address solverSigner) view returns(uint256 balance)
-func (_Atlas *AtlasCallerSession) SolverEscrowBalance(solverSigner common.Address) (*big.Int, error) {
-	return _Atlas.Contract.SolverEscrowBalance(&_Atlas.CallOpts, solverSigner)
+// Solidity: function totalSupply() view returns(uint256)
+func (_Atlas *AtlasCallerSession) TotalSupply() (*big.Int, error) {
+	return _Atlas.Contract.TotalSupply(&_Atlas.CallOpts)
 }
 
-// SolverLastActiveBlock is a free data retrieval call binding the contract method 0x8deeab9d.
+// Approve is a paid mutator transaction binding the contract method 0x095ea7b3.
 //
-// Solidity: function solverLastActiveBlock(address solverSigner) view returns(uint256 lastBlock)
-func (_Atlas *AtlasCaller) SolverLastActiveBlock(opts *bind.CallOpts, solverSigner common.Address) (*big.Int, error) {
-	var out []interface{}
-	err := _Atlas.contract.Call(opts, &out, "solverLastActiveBlock", solverSigner)
-
-	if err != nil {
-		return *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-
-	return out0, err
-
+// Solidity: function approve(address spender, uint256 amount) returns(bool)
+func (_Atlas *AtlasTransactor) Approve(opts *bind.TransactOpts, spender common.Address, amount *big.Int) (*types.Transaction, error) {
+	return _Atlas.contract.Transact(opts, "approve", spender, amount)
 }
 
-// SolverLastActiveBlock is a free data retrieval call binding the contract method 0x8deeab9d.
+// Approve is a paid mutator transaction binding the contract method 0x095ea7b3.
 //
-// Solidity: function solverLastActiveBlock(address solverSigner) view returns(uint256 lastBlock)
-func (_Atlas *AtlasSession) SolverLastActiveBlock(solverSigner common.Address) (*big.Int, error) {
-	return _Atlas.Contract.SolverLastActiveBlock(&_Atlas.CallOpts, solverSigner)
+// Solidity: function approve(address spender, uint256 amount) returns(bool)
+func (_Atlas *AtlasSession) Approve(spender common.Address, amount *big.Int) (*types.Transaction, error) {
+	return _Atlas.Contract.Approve(&_Atlas.TransactOpts, spender, amount)
 }
 
-// SolverLastActiveBlock is a free data retrieval call binding the contract method 0x8deeab9d.
+// Approve is a paid mutator transaction binding the contract method 0x095ea7b3.
 //
-// Solidity: function solverLastActiveBlock(address solverSigner) view returns(uint256 lastBlock)
-func (_Atlas *AtlasCallerSession) SolverLastActiveBlock(solverSigner common.Address) (*big.Int, error) {
-	return _Atlas.Contract.SolverLastActiveBlock(&_Atlas.CallOpts, solverSigner)
+// Solidity: function approve(address spender, uint256 amount) returns(bool)
+func (_Atlas *AtlasTransactorSession) Approve(spender common.Address, amount *big.Int) (*types.Transaction, error) {
+	return _Atlas.Contract.Approve(&_Atlas.TransactOpts, spender, amount)
 }
 
-// AddSignatory is a paid mutator transaction binding the contract method 0x1170a503.
+// Contribute is a paid mutator transaction binding the contract method 0x64c2c3ee.
 //
-// Solidity: function addSignatory(address controller, address signatory) returns()
-func (_Atlas *AtlasTransactor) AddSignatory(opts *bind.TransactOpts, controller common.Address, signatory common.Address) (*types.Transaction, error) {
-	return _Atlas.contract.Transact(opts, "addSignatory", controller, signatory)
+// Solidity: function contribute(uint8 recipient) payable returns()
+func (_Atlas *AtlasTransactor) Contribute(opts *bind.TransactOpts, recipient uint8) (*types.Transaction, error) {
+	return _Atlas.contract.Transact(opts, "contribute", recipient)
 }
 
-// AddSignatory is a paid mutator transaction binding the contract method 0x1170a503.
+// Contribute is a paid mutator transaction binding the contract method 0x64c2c3ee.
 //
-// Solidity: function addSignatory(address controller, address signatory) returns()
-func (_Atlas *AtlasSession) AddSignatory(controller common.Address, signatory common.Address) (*types.Transaction, error) {
-	return _Atlas.Contract.AddSignatory(&_Atlas.TransactOpts, controller, signatory)
+// Solidity: function contribute(uint8 recipient) payable returns()
+func (_Atlas *AtlasSession) Contribute(recipient uint8) (*types.Transaction, error) {
+	return _Atlas.Contract.Contribute(&_Atlas.TransactOpts, recipient)
 }
 
-// AddSignatory is a paid mutator transaction binding the contract method 0x1170a503.
+// Contribute is a paid mutator transaction binding the contract method 0x64c2c3ee.
 //
-// Solidity: function addSignatory(address controller, address signatory) returns()
-func (_Atlas *AtlasTransactorSession) AddSignatory(controller common.Address, signatory common.Address) (*types.Transaction, error) {
-	return _Atlas.Contract.AddSignatory(&_Atlas.TransactOpts, controller, signatory)
+// Solidity: function contribute(uint8 recipient) payable returns()
+func (_Atlas *AtlasTransactorSession) Contribute(recipient uint8) (*types.Transaction, error) {
+	return _Atlas.Contract.Contribute(&_Atlas.TransactOpts, recipient)
 }
 
-// CreateExecutionEnvironment is a paid mutator transaction binding the contract method 0x0e1bc033.
+// ContributeGasTo is a paid mutator transaction binding the contract method 0x6f22cf99.
 //
-// Solidity: function createExecutionEnvironment((address,uint32) dConfig) returns(address executionEnvironment)
-func (_Atlas *AtlasTransactor) CreateExecutionEnvironment(opts *bind.TransactOpts, dConfig DAppConfig) (*types.Transaction, error) {
-	return _Atlas.contract.Transact(opts, "createExecutionEnvironment", dConfig)
+// Solidity: function contributeGasTo(uint8 donor, uint8 recipient, uint256 amt, uint16 lockState) returns()
+func (_Atlas *AtlasTransactor) ContributeGasTo(opts *bind.TransactOpts, donor uint8, recipient uint8, amt *big.Int, lockState uint16) (*types.Transaction, error) {
+	return _Atlas.contract.Transact(opts, "contributeGasTo", donor, recipient, amt, lockState)
 }
 
-// CreateExecutionEnvironment is a paid mutator transaction binding the contract method 0x0e1bc033.
+// ContributeGasTo is a paid mutator transaction binding the contract method 0x6f22cf99.
 //
-// Solidity: function createExecutionEnvironment((address,uint32) dConfig) returns(address executionEnvironment)
-func (_Atlas *AtlasSession) CreateExecutionEnvironment(dConfig DAppConfig) (*types.Transaction, error) {
-	return _Atlas.Contract.CreateExecutionEnvironment(&_Atlas.TransactOpts, dConfig)
+// Solidity: function contributeGasTo(uint8 donor, uint8 recipient, uint256 amt, uint16 lockState) returns()
+func (_Atlas *AtlasSession) ContributeGasTo(donor uint8, recipient uint8, amt *big.Int, lockState uint16) (*types.Transaction, error) {
+	return _Atlas.Contract.ContributeGasTo(&_Atlas.TransactOpts, donor, recipient, amt, lockState)
 }
 
-// CreateExecutionEnvironment is a paid mutator transaction binding the contract method 0x0e1bc033.
+// ContributeGasTo is a paid mutator transaction binding the contract method 0x6f22cf99.
 //
-// Solidity: function createExecutionEnvironment((address,uint32) dConfig) returns(address executionEnvironment)
-func (_Atlas *AtlasTransactorSession) CreateExecutionEnvironment(dConfig DAppConfig) (*types.Transaction, error) {
-	return _Atlas.Contract.CreateExecutionEnvironment(&_Atlas.TransactOpts, dConfig)
+// Solidity: function contributeGasTo(uint8 donor, uint8 recipient, uint256 amt, uint16 lockState) returns()
+func (_Atlas *AtlasTransactorSession) ContributeGasTo(donor uint8, recipient uint8, amt *big.Int, lockState uint16) (*types.Transaction, error) {
+	return _Atlas.Contract.ContributeGasTo(&_Atlas.TransactOpts, donor, recipient, amt, lockState)
 }
 
-// Deposit is a paid mutator transaction binding the contract method 0xf340fa01.
+// ContributeTo is a paid mutator transaction binding the contract method 0x7a031c6c.
 //
-// Solidity: function deposit(address solverSigner) payable returns(uint256 newBalance)
-func (_Atlas *AtlasTransactor) Deposit(opts *bind.TransactOpts, solverSigner common.Address) (*types.Transaction, error) {
-	return _Atlas.contract.Transact(opts, "deposit", solverSigner)
+// Solidity: function contributeTo(uint8 donor, uint8 recipient, uint256 amt) returns()
+func (_Atlas *AtlasTransactor) ContributeTo(opts *bind.TransactOpts, donor uint8, recipient uint8, amt *big.Int) (*types.Transaction, error) {
+	return _Atlas.contract.Transact(opts, "contributeTo", donor, recipient, amt)
 }
 
-// Deposit is a paid mutator transaction binding the contract method 0xf340fa01.
+// ContributeTo is a paid mutator transaction binding the contract method 0x7a031c6c.
 //
-// Solidity: function deposit(address solverSigner) payable returns(uint256 newBalance)
-func (_Atlas *AtlasSession) Deposit(solverSigner common.Address) (*types.Transaction, error) {
-	return _Atlas.Contract.Deposit(&_Atlas.TransactOpts, solverSigner)
+// Solidity: function contributeTo(uint8 donor, uint8 recipient, uint256 amt) returns()
+func (_Atlas *AtlasSession) ContributeTo(donor uint8, recipient uint8, amt *big.Int) (*types.Transaction, error) {
+	return _Atlas.Contract.ContributeTo(&_Atlas.TransactOpts, donor, recipient, amt)
 }
 
-// Deposit is a paid mutator transaction binding the contract method 0xf340fa01.
+// ContributeTo is a paid mutator transaction binding the contract method 0x7a031c6c.
 //
-// Solidity: function deposit(address solverSigner) payable returns(uint256 newBalance)
-func (_Atlas *AtlasTransactorSession) Deposit(solverSigner common.Address) (*types.Transaction, error) {
-	return _Atlas.Contract.Deposit(&_Atlas.TransactOpts, solverSigner)
+// Solidity: function contributeTo(uint8 donor, uint8 recipient, uint256 amt) returns()
+func (_Atlas *AtlasTransactorSession) ContributeTo(donor uint8, recipient uint8, amt *big.Int) (*types.Transaction, error) {
+	return _Atlas.Contract.ContributeTo(&_Atlas.TransactOpts, donor, recipient, amt)
 }
 
-// DisableDApp is a paid mutator transaction binding the contract method 0x9bcf79b7.
+// CreateExecutionEnvironment is a paid mutator transaction binding the contract method 0x4626e4a2.
 //
-// Solidity: function disableDApp(address dAppControl) returns()
-func (_Atlas *AtlasTransactor) DisableDApp(opts *bind.TransactOpts, dAppControl common.Address) (*types.Transaction, error) {
-	return _Atlas.contract.Transact(opts, "disableDApp", dAppControl)
+// Solidity: function createExecutionEnvironment(address dAppControl) returns(address executionEnvironment)
+func (_Atlas *AtlasTransactor) CreateExecutionEnvironment(opts *bind.TransactOpts, dAppControl common.Address) (*types.Transaction, error) {
+	return _Atlas.contract.Transact(opts, "createExecutionEnvironment", dAppControl)
 }
 
-// DisableDApp is a paid mutator transaction binding the contract method 0x9bcf79b7.
+// CreateExecutionEnvironment is a paid mutator transaction binding the contract method 0x4626e4a2.
 //
-// Solidity: function disableDApp(address dAppControl) returns()
-func (_Atlas *AtlasSession) DisableDApp(dAppControl common.Address) (*types.Transaction, error) {
-	return _Atlas.Contract.DisableDApp(&_Atlas.TransactOpts, dAppControl)
+// Solidity: function createExecutionEnvironment(address dAppControl) returns(address executionEnvironment)
+func (_Atlas *AtlasSession) CreateExecutionEnvironment(dAppControl common.Address) (*types.Transaction, error) {
+	return _Atlas.Contract.CreateExecutionEnvironment(&_Atlas.TransactOpts, dAppControl)
 }
 
-// DisableDApp is a paid mutator transaction binding the contract method 0x9bcf79b7.
+// CreateExecutionEnvironment is a paid mutator transaction binding the contract method 0x4626e4a2.
 //
-// Solidity: function disableDApp(address dAppControl) returns()
-func (_Atlas *AtlasTransactorSession) DisableDApp(dAppControl common.Address) (*types.Transaction, error) {
-	return _Atlas.Contract.DisableDApp(&_Atlas.TransactOpts, dAppControl)
+// Solidity: function createExecutionEnvironment(address dAppControl) returns(address executionEnvironment)
+func (_Atlas *AtlasTransactorSession) CreateExecutionEnvironment(dAppControl common.Address) (*types.Transaction, error) {
+	return _Atlas.Contract.CreateExecutionEnvironment(&_Atlas.TransactOpts, dAppControl)
 }
 
-// DonateToBundler is a paid mutator transaction binding the contract method 0x8b2b6f6e.
+// Deposit is a paid mutator transaction binding the contract method 0xd0e30db0.
 //
-// Solidity: function donateToBundler(address surplusRecipient) payable returns()
-func (_Atlas *AtlasTransactor) DonateToBundler(opts *bind.TransactOpts, surplusRecipient common.Address) (*types.Transaction, error) {
-	return _Atlas.contract.Transact(opts, "donateToBundler", surplusRecipient)
+// Solidity: function deposit() payable returns()
+func (_Atlas *AtlasTransactor) Deposit(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _Atlas.contract.Transact(opts, "deposit")
 }
 
-// DonateToBundler is a paid mutator transaction binding the contract method 0x8b2b6f6e.
+// Deposit is a paid mutator transaction binding the contract method 0xd0e30db0.
 //
-// Solidity: function donateToBundler(address surplusRecipient) payable returns()
-func (_Atlas *AtlasSession) DonateToBundler(surplusRecipient common.Address) (*types.Transaction, error) {
-	return _Atlas.Contract.DonateToBundler(&_Atlas.TransactOpts, surplusRecipient)
+// Solidity: function deposit() payable returns()
+func (_Atlas *AtlasSession) Deposit() (*types.Transaction, error) {
+	return _Atlas.Contract.Deposit(&_Atlas.TransactOpts)
 }
 
-// DonateToBundler is a paid mutator transaction binding the contract method 0x8b2b6f6e.
+// Deposit is a paid mutator transaction binding the contract method 0xd0e30db0.
 //
-// Solidity: function donateToBundler(address surplusRecipient) payable returns()
-func (_Atlas *AtlasTransactorSession) DonateToBundler(surplusRecipient common.Address) (*types.Transaction, error) {
-	return _Atlas.Contract.DonateToBundler(&_Atlas.TransactOpts, surplusRecipient)
+// Solidity: function deposit() payable returns()
+func (_Atlas *AtlasTransactorSession) Deposit() (*types.Transaction, error) {
+	return _Atlas.Contract.Deposit(&_Atlas.TransactOpts)
 }
 
-// Execute is a paid mutator transaction binding the contract method 0xfbd84f2c.
+// Deposit0 is a paid mutator transaction binding the contract method 0xebe41b73.
 //
-// Solidity: function execute((address,uint32) dConfig, (address,address,uint256,uint256,uint256,uint256,uint256,address,bytes) uCall, (address,(address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32,bytes),bytes,(address,uint256)[])[] solverOps, address executionEnvironment, bytes32 callChainHash, bool isSimulation) payable returns(bool auctionWon, uint256 accruedGasRebate)
-func (_Atlas *AtlasTransactor) Execute(opts *bind.TransactOpts, dConfig DAppConfig, uCall UserCall, solverOps []SolverOperation, executionEnvironment common.Address, callChainHash [32]byte, isSimulation bool) (*types.Transaction, error) {
-	return _Atlas.contract.Transact(opts, "execute", dConfig, uCall, solverOps, executionEnvironment, callChainHash, isSimulation)
+// Solidity: function deposit(uint8 party) payable returns()
+func (_Atlas *AtlasTransactor) Deposit0(opts *bind.TransactOpts, party uint8) (*types.Transaction, error) {
+	return _Atlas.contract.Transact(opts, "deposit0", party)
 }
 
-// Execute is a paid mutator transaction binding the contract method 0xfbd84f2c.
+// Deposit0 is a paid mutator transaction binding the contract method 0xebe41b73.
 //
-// Solidity: function execute((address,uint32) dConfig, (address,address,uint256,uint256,uint256,uint256,uint256,address,bytes) uCall, (address,(address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32,bytes),bytes,(address,uint256)[])[] solverOps, address executionEnvironment, bytes32 callChainHash, bool isSimulation) payable returns(bool auctionWon, uint256 accruedGasRebate)
-func (_Atlas *AtlasSession) Execute(dConfig DAppConfig, uCall UserCall, solverOps []SolverOperation, executionEnvironment common.Address, callChainHash [32]byte, isSimulation bool) (*types.Transaction, error) {
-	return _Atlas.Contract.Execute(&_Atlas.TransactOpts, dConfig, uCall, solverOps, executionEnvironment, callChainHash, isSimulation)
+// Solidity: function deposit(uint8 party) payable returns()
+func (_Atlas *AtlasSession) Deposit0(party uint8) (*types.Transaction, error) {
+	return _Atlas.Contract.Deposit0(&_Atlas.TransactOpts, party)
 }
 
-// Execute is a paid mutator transaction binding the contract method 0xfbd84f2c.
+// Deposit0 is a paid mutator transaction binding the contract method 0xebe41b73.
 //
-// Solidity: function execute((address,uint32) dConfig, (address,address,uint256,uint256,uint256,uint256,uint256,address,bytes) uCall, (address,(address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32,bytes),bytes,(address,uint256)[])[] solverOps, address executionEnvironment, bytes32 callChainHash, bool isSimulation) payable returns(bool auctionWon, uint256 accruedGasRebate)
-func (_Atlas *AtlasTransactorSession) Execute(dConfig DAppConfig, uCall UserCall, solverOps []SolverOperation, executionEnvironment common.Address, callChainHash [32]byte, isSimulation bool) (*types.Transaction, error) {
-	return _Atlas.Contract.Execute(&_Atlas.TransactOpts, dConfig, uCall, solverOps, executionEnvironment, callChainHash, isSimulation)
+// Solidity: function deposit(uint8 party) payable returns()
+func (_Atlas *AtlasTransactorSession) Deposit0(party uint8) (*types.Transaction, error) {
+	return _Atlas.Contract.Deposit0(&_Atlas.TransactOpts, party)
 }
 
-// Failed is a paid mutator transaction binding the contract method 0xba414fa6.
+// Execute is a paid mutator transaction binding the contract method 0x06df7940.
 //
-// Solidity: function failed() returns(bool)
-func (_Atlas *AtlasTransactor) Failed(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _Atlas.contract.Transact(opts, "failed")
+// Solidity: function execute((address,uint32,address) dConfig, (address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes,bytes) userOp, (address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes32,address,uint256,bytes,bytes)[] solverOps, address executionEnvironment, address bundler) payable returns(bool auctionWon, uint256 accruedGasRebate, uint256 winningSearcherIndex)
+func (_Atlas *AtlasTransactor) Execute(opts *bind.TransactOpts, dConfig DAppConfig, userOp UserOperation, solverOps []SolverOperation, executionEnvironment common.Address, bundler common.Address) (*types.Transaction, error) {
+	return _Atlas.contract.Transact(opts, "execute", dConfig, userOp, solverOps, executionEnvironment, bundler)
 }
 
-// Failed is a paid mutator transaction binding the contract method 0xba414fa6.
+// Execute is a paid mutator transaction binding the contract method 0x06df7940.
 //
-// Solidity: function failed() returns(bool)
-func (_Atlas *AtlasSession) Failed() (*types.Transaction, error) {
-	return _Atlas.Contract.Failed(&_Atlas.TransactOpts)
+// Solidity: function execute((address,uint32,address) dConfig, (address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes,bytes) userOp, (address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes32,address,uint256,bytes,bytes)[] solverOps, address executionEnvironment, address bundler) payable returns(bool auctionWon, uint256 accruedGasRebate, uint256 winningSearcherIndex)
+func (_Atlas *AtlasSession) Execute(dConfig DAppConfig, userOp UserOperation, solverOps []SolverOperation, executionEnvironment common.Address, bundler common.Address) (*types.Transaction, error) {
+	return _Atlas.Contract.Execute(&_Atlas.TransactOpts, dConfig, userOp, solverOps, executionEnvironment, bundler)
 }
 
-// Failed is a paid mutator transaction binding the contract method 0xba414fa6.
+// Execute is a paid mutator transaction binding the contract method 0x06df7940.
 //
-// Solidity: function failed() returns(bool)
-func (_Atlas *AtlasTransactorSession) Failed() (*types.Transaction, error) {
-	return _Atlas.Contract.Failed(&_Atlas.TransactOpts)
+// Solidity: function execute((address,uint32,address) dConfig, (address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes,bytes) userOp, (address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes32,address,uint256,bytes,bytes)[] solverOps, address executionEnvironment, address bundler) payable returns(bool auctionWon, uint256 accruedGasRebate, uint256 winningSearcherIndex)
+func (_Atlas *AtlasTransactorSession) Execute(dConfig DAppConfig, userOp UserOperation, solverOps []SolverOperation, executionEnvironment common.Address, bundler common.Address) (*types.Transaction, error) {
+	return _Atlas.Contract.Execute(&_Atlas.TransactOpts, dConfig, userOp, solverOps, executionEnvironment, bundler)
 }
 
-// InitializeGovernance is a paid mutator transaction binding the contract method 0x55d202a6.
+// Finalize is a paid mutator transaction binding the contract method 0xcd960226.
 //
-// Solidity: function initializeGovernance(address controller) returns()
-func (_Atlas *AtlasTransactor) InitializeGovernance(opts *bind.TransactOpts, controller common.Address) (*types.Transaction, error) {
-	return _Atlas.contract.Transact(opts, "initializeGovernance", controller)
+// Solidity: function finalize(uint8 party, address partyAddress) returns()
+func (_Atlas *AtlasTransactor) Finalize(opts *bind.TransactOpts, party uint8, partyAddress common.Address) (*types.Transaction, error) {
+	return _Atlas.contract.Transact(opts, "finalize", party, partyAddress)
 }
 
-// InitializeGovernance is a paid mutator transaction binding the contract method 0x55d202a6.
+// Finalize is a paid mutator transaction binding the contract method 0xcd960226.
 //
-// Solidity: function initializeGovernance(address controller) returns()
-func (_Atlas *AtlasSession) InitializeGovernance(controller common.Address) (*types.Transaction, error) {
-	return _Atlas.Contract.InitializeGovernance(&_Atlas.TransactOpts, controller)
+// Solidity: function finalize(uint8 party, address partyAddress) returns()
+func (_Atlas *AtlasSession) Finalize(party uint8, partyAddress common.Address) (*types.Transaction, error) {
+	return _Atlas.Contract.Finalize(&_Atlas.TransactOpts, party, partyAddress)
 }
 
-// InitializeGovernance is a paid mutator transaction binding the contract method 0x55d202a6.
+// Finalize is a paid mutator transaction binding the contract method 0xcd960226.
 //
-// Solidity: function initializeGovernance(address controller) returns()
-func (_Atlas *AtlasTransactorSession) InitializeGovernance(controller common.Address) (*types.Transaction, error) {
-	return _Atlas.Contract.InitializeGovernance(&_Atlas.TransactOpts, controller)
+// Solidity: function finalize(uint8 party, address partyAddress) returns()
+func (_Atlas *AtlasTransactorSession) Finalize(party uint8, partyAddress common.Address) (*types.Transaction, error) {
+	return _Atlas.Contract.Finalize(&_Atlas.TransactOpts, party, partyAddress)
 }
 
-// IntegrateDApp is a paid mutator transaction binding the contract method 0x86ebbbdf.
+// Metacall is a paid mutator transaction binding the contract method 0xceb3e79b.
 //
-// Solidity: function integrateDApp(address dAppControl) returns()
-func (_Atlas *AtlasTransactor) IntegrateDApp(opts *bind.TransactOpts, dAppControl common.Address) (*types.Transaction, error) {
-	return _Atlas.contract.Transact(opts, "integrateDApp", dAppControl)
+// Solidity: function metacall((address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes,bytes) userOp, (address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes32,address,uint256,bytes,bytes)[] solverOps, (address,address,uint256,uint256,uint256,uint256,uint256,address,bytes32,bytes32,bytes) dAppOp) payable returns(bool auctionWon)
+func (_Atlas *AtlasTransactor) Metacall(opts *bind.TransactOpts, userOp UserOperation, solverOps []SolverOperation, dAppOp DAppOperation) (*types.Transaction, error) {
+	return _Atlas.contract.Transact(opts, "metacall", userOp, solverOps, dAppOp)
 }
 
-// IntegrateDApp is a paid mutator transaction binding the contract method 0x86ebbbdf.
+// Metacall is a paid mutator transaction binding the contract method 0xceb3e79b.
 //
-// Solidity: function integrateDApp(address dAppControl) returns()
-func (_Atlas *AtlasSession) IntegrateDApp(dAppControl common.Address) (*types.Transaction, error) {
-	return _Atlas.Contract.IntegrateDApp(&_Atlas.TransactOpts, dAppControl)
+// Solidity: function metacall((address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes,bytes) userOp, (address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes32,address,uint256,bytes,bytes)[] solverOps, (address,address,uint256,uint256,uint256,uint256,uint256,address,bytes32,bytes32,bytes) dAppOp) payable returns(bool auctionWon)
+func (_Atlas *AtlasSession) Metacall(userOp UserOperation, solverOps []SolverOperation, dAppOp DAppOperation) (*types.Transaction, error) {
+	return _Atlas.Contract.Metacall(&_Atlas.TransactOpts, userOp, solverOps, dAppOp)
 }
 
-// IntegrateDApp is a paid mutator transaction binding the contract method 0x86ebbbdf.
+// Metacall is a paid mutator transaction binding the contract method 0xceb3e79b.
 //
-// Solidity: function integrateDApp(address dAppControl) returns()
-func (_Atlas *AtlasTransactorSession) IntegrateDApp(dAppControl common.Address) (*types.Transaction, error) {
-	return _Atlas.Contract.IntegrateDApp(&_Atlas.TransactOpts, dAppControl)
+// Solidity: function metacall((address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes,bytes) userOp, (address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes32,address,uint256,bytes,bytes)[] solverOps, (address,address,uint256,uint256,uint256,uint256,uint256,address,bytes32,bytes32,bytes) dAppOp) payable returns(bool auctionWon)
+func (_Atlas *AtlasTransactorSession) Metacall(userOp UserOperation, solverOps []SolverOperation, dAppOp DAppOperation) (*types.Transaction, error) {
+	return _Atlas.Contract.Metacall(&_Atlas.TransactOpts, userOp, solverOps, dAppOp)
 }
 
-// Metacall is a paid mutator transaction binding the contract method 0x2f789826.
+// Permit is a paid mutator transaction binding the contract method 0xd505accf.
 //
-// Solidity: function metacall((address,uint32) dConfig, (address,(address,address,uint256,uint256,uint256,uint256,uint256,address,bytes),bytes) userOp, (address,(address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32,bytes),bytes,(address,uint256)[])[] solverOps, (address,(address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32),bytes) dAppOp) payable returns(bool auctionWon)
-func (_Atlas *AtlasTransactor) Metacall(opts *bind.TransactOpts, dConfig DAppConfig, userOp UserOperation, solverOps []SolverOperation, dAppOp DAppOperation) (*types.Transaction, error) {
-	return _Atlas.contract.Transact(opts, "metacall", dConfig, userOp, solverOps, dAppOp)
+// Solidity: function permit(address owner, address spender, uint256 value, uint256 deadline, uint8 v, bytes32 r, bytes32 s) returns()
+func (_Atlas *AtlasTransactor) Permit(opts *bind.TransactOpts, owner common.Address, spender common.Address, value *big.Int, deadline *big.Int, v uint8, r [32]byte, s [32]byte) (*types.Transaction, error) {
+	return _Atlas.contract.Transact(opts, "permit", owner, spender, value, deadline, v, r, s)
 }
 
-// Metacall is a paid mutator transaction binding the contract method 0x2f789826.
+// Permit is a paid mutator transaction binding the contract method 0xd505accf.
 //
-// Solidity: function metacall((address,uint32) dConfig, (address,(address,address,uint256,uint256,uint256,uint256,uint256,address,bytes),bytes) userOp, (address,(address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32,bytes),bytes,(address,uint256)[])[] solverOps, (address,(address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32),bytes) dAppOp) payable returns(bool auctionWon)
-func (_Atlas *AtlasSession) Metacall(dConfig DAppConfig, userOp UserOperation, solverOps []SolverOperation, dAppOp DAppOperation) (*types.Transaction, error) {
-	return _Atlas.Contract.Metacall(&_Atlas.TransactOpts, dConfig, userOp, solverOps, dAppOp)
+// Solidity: function permit(address owner, address spender, uint256 value, uint256 deadline, uint8 v, bytes32 r, bytes32 s) returns()
+func (_Atlas *AtlasSession) Permit(owner common.Address, spender common.Address, value *big.Int, deadline *big.Int, v uint8, r [32]byte, s [32]byte) (*types.Transaction, error) {
+	return _Atlas.Contract.Permit(&_Atlas.TransactOpts, owner, spender, value, deadline, v, r, s)
 }
 
-// Metacall is a paid mutator transaction binding the contract method 0x2f789826.
+// Permit is a paid mutator transaction binding the contract method 0xd505accf.
 //
-// Solidity: function metacall((address,uint32) dConfig, (address,(address,address,uint256,uint256,uint256,uint256,uint256,address,bytes),bytes) userOp, (address,(address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32,bytes),bytes,(address,uint256)[])[] solverOps, (address,(address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32),bytes) dAppOp) payable returns(bool auctionWon)
-func (_Atlas *AtlasTransactorSession) Metacall(dConfig DAppConfig, userOp UserOperation, solverOps []SolverOperation, dAppOp DAppOperation) (*types.Transaction, error) {
-	return _Atlas.Contract.Metacall(&_Atlas.TransactOpts, dConfig, userOp, solverOps, dAppOp)
+// Solidity: function permit(address owner, address spender, uint256 value, uint256 deadline, uint8 v, bytes32 r, bytes32 s) returns()
+func (_Atlas *AtlasTransactorSession) Permit(owner common.Address, spender common.Address, value *big.Int, deadline *big.Int, v uint8, r [32]byte, s [32]byte) (*types.Transaction, error) {
+	return _Atlas.Contract.Permit(&_Atlas.TransactOpts, owner, spender, value, deadline, v, r, s)
 }
 
-// RemoveSignatory is a paid mutator transaction binding the contract method 0xe2e439ea.
+// Reconcile is a paid mutator transaction binding the contract method 0xc6490cc2.
 //
-// Solidity: function removeSignatory(address controller, address signatory) returns()
-func (_Atlas *AtlasTransactor) RemoveSignatory(opts *bind.TransactOpts, controller common.Address, signatory common.Address) (*types.Transaction, error) {
-	return _Atlas.contract.Transact(opts, "removeSignatory", controller, signatory)
+// Solidity: function reconcile(address environment, address searcherFrom, uint256 maxApprovedGasSpend) payable returns(bool)
+func (_Atlas *AtlasTransactor) Reconcile(opts *bind.TransactOpts, environment common.Address, searcherFrom common.Address, maxApprovedGasSpend *big.Int) (*types.Transaction, error) {
+	return _Atlas.contract.Transact(opts, "reconcile", environment, searcherFrom, maxApprovedGasSpend)
 }
 
-// RemoveSignatory is a paid mutator transaction binding the contract method 0xe2e439ea.
+// Reconcile is a paid mutator transaction binding the contract method 0xc6490cc2.
 //
-// Solidity: function removeSignatory(address controller, address signatory) returns()
-func (_Atlas *AtlasSession) RemoveSignatory(controller common.Address, signatory common.Address) (*types.Transaction, error) {
-	return _Atlas.Contract.RemoveSignatory(&_Atlas.TransactOpts, controller, signatory)
+// Solidity: function reconcile(address environment, address searcherFrom, uint256 maxApprovedGasSpend) payable returns(bool)
+func (_Atlas *AtlasSession) Reconcile(environment common.Address, searcherFrom common.Address, maxApprovedGasSpend *big.Int) (*types.Transaction, error) {
+	return _Atlas.Contract.Reconcile(&_Atlas.TransactOpts, environment, searcherFrom, maxApprovedGasSpend)
 }
 
-// RemoveSignatory is a paid mutator transaction binding the contract method 0xe2e439ea.
+// Reconcile is a paid mutator transaction binding the contract method 0xc6490cc2.
 //
-// Solidity: function removeSignatory(address controller, address signatory) returns()
-func (_Atlas *AtlasTransactorSession) RemoveSignatory(controller common.Address, signatory common.Address) (*types.Transaction, error) {
-	return _Atlas.Contract.RemoveSignatory(&_Atlas.TransactOpts, controller, signatory)
+// Solidity: function reconcile(address environment, address searcherFrom, uint256 maxApprovedGasSpend) payable returns(bool)
+func (_Atlas *AtlasTransactorSession) Reconcile(environment common.Address, searcherFrom common.Address, maxApprovedGasSpend *big.Int) (*types.Transaction, error) {
+	return _Atlas.Contract.Reconcile(&_Atlas.TransactOpts, environment, searcherFrom, maxApprovedGasSpend)
 }
 
-// SolverSafetyCallback is a paid mutator transaction binding the contract method 0x0340c6c5.
+// RequestFrom is a paid mutator transaction binding the contract method 0x0baf06e5.
 //
-// Solidity: function solverSafetyCallback(address msgSender) payable returns(bool isSafe)
-func (_Atlas *AtlasTransactor) SolverSafetyCallback(opts *bind.TransactOpts, msgSender common.Address) (*types.Transaction, error) {
-	return _Atlas.contract.Transact(opts, "solverSafetyCallback", msgSender)
+// Solidity: function requestFrom(uint8 donor, uint8 recipient, uint256 amt) returns()
+func (_Atlas *AtlasTransactor) RequestFrom(opts *bind.TransactOpts, donor uint8, recipient uint8, amt *big.Int) (*types.Transaction, error) {
+	return _Atlas.contract.Transact(opts, "requestFrom", donor, recipient, amt)
 }
 
-// SolverSafetyCallback is a paid mutator transaction binding the contract method 0x0340c6c5.
+// RequestFrom is a paid mutator transaction binding the contract method 0x0baf06e5.
 //
-// Solidity: function solverSafetyCallback(address msgSender) payable returns(bool isSafe)
-func (_Atlas *AtlasSession) SolverSafetyCallback(msgSender common.Address) (*types.Transaction, error) {
-	return _Atlas.Contract.SolverSafetyCallback(&_Atlas.TransactOpts, msgSender)
+// Solidity: function requestFrom(uint8 donor, uint8 recipient, uint256 amt) returns()
+func (_Atlas *AtlasSession) RequestFrom(donor uint8, recipient uint8, amt *big.Int) (*types.Transaction, error) {
+	return _Atlas.Contract.RequestFrom(&_Atlas.TransactOpts, donor, recipient, amt)
 }
 
-// SolverSafetyCallback is a paid mutator transaction binding the contract method 0x0340c6c5.
+// RequestFrom is a paid mutator transaction binding the contract method 0x0baf06e5.
 //
-// Solidity: function solverSafetyCallback(address msgSender) payable returns(bool isSafe)
-func (_Atlas *AtlasTransactorSession) SolverSafetyCallback(msgSender common.Address) (*types.Transaction, error) {
-	return _Atlas.Contract.SolverSafetyCallback(&_Atlas.TransactOpts, msgSender)
+// Solidity: function requestFrom(uint8 donor, uint8 recipient, uint256 amt) returns()
+func (_Atlas *AtlasTransactorSession) RequestFrom(donor uint8, recipient uint8, amt *big.Int) (*types.Transaction, error) {
+	return _Atlas.Contract.RequestFrom(&_Atlas.TransactOpts, donor, recipient, amt)
+}
+
+// RequestGasFrom is a paid mutator transaction binding the contract method 0xe293db5e.
+//
+// Solidity: function requestGasFrom(uint8 donor, uint8 recipient, uint256 amt, uint16 lockState) returns()
+func (_Atlas *AtlasTransactor) RequestGasFrom(opts *bind.TransactOpts, donor uint8, recipient uint8, amt *big.Int, lockState uint16) (*types.Transaction, error) {
+	return _Atlas.contract.Transact(opts, "requestGasFrom", donor, recipient, amt, lockState)
+}
+
+// RequestGasFrom is a paid mutator transaction binding the contract method 0xe293db5e.
+//
+// Solidity: function requestGasFrom(uint8 donor, uint8 recipient, uint256 amt, uint16 lockState) returns()
+func (_Atlas *AtlasSession) RequestGasFrom(donor uint8, recipient uint8, amt *big.Int, lockState uint16) (*types.Transaction, error) {
+	return _Atlas.Contract.RequestGasFrom(&_Atlas.TransactOpts, donor, recipient, amt, lockState)
+}
+
+// RequestGasFrom is a paid mutator transaction binding the contract method 0xe293db5e.
+//
+// Solidity: function requestGasFrom(uint8 donor, uint8 recipient, uint256 amt, uint16 lockState) returns()
+func (_Atlas *AtlasTransactorSession) RequestGasFrom(donor uint8, recipient uint8, amt *big.Int, lockState uint16) (*types.Transaction, error) {
+	return _Atlas.Contract.RequestGasFrom(&_Atlas.TransactOpts, donor, recipient, amt, lockState)
+}
+
+// Transfer is a paid mutator transaction binding the contract method 0xa9059cbb.
+//
+// Solidity: function transfer(address to, uint256 amount) returns(bool)
+func (_Atlas *AtlasTransactor) Transfer(opts *bind.TransactOpts, to common.Address, amount *big.Int) (*types.Transaction, error) {
+	return _Atlas.contract.Transact(opts, "transfer", to, amount)
+}
+
+// Transfer is a paid mutator transaction binding the contract method 0xa9059cbb.
+//
+// Solidity: function transfer(address to, uint256 amount) returns(bool)
+func (_Atlas *AtlasSession) Transfer(to common.Address, amount *big.Int) (*types.Transaction, error) {
+	return _Atlas.Contract.Transfer(&_Atlas.TransactOpts, to, amount)
+}
+
+// Transfer is a paid mutator transaction binding the contract method 0xa9059cbb.
+//
+// Solidity: function transfer(address to, uint256 amount) returns(bool)
+func (_Atlas *AtlasTransactorSession) Transfer(to common.Address, amount *big.Int) (*types.Transaction, error) {
+	return _Atlas.Contract.Transfer(&_Atlas.TransactOpts, to, amount)
 }
 
 // TransferDAppERC20 is a paid mutator transaction binding the contract method 0x6625f68b.
@@ -1563,6 +1207,27 @@ func (_Atlas *AtlasTransactorSession) TransferDAppERC20(token common.Address, de
 	return _Atlas.Contract.TransferDAppERC20(&_Atlas.TransactOpts, token, destination, amount, user, controller, callConfig, lockState)
 }
 
+// TransferFrom is a paid mutator transaction binding the contract method 0x23b872dd.
+//
+// Solidity: function transferFrom(address from, address to, uint256 amount) returns(bool)
+func (_Atlas *AtlasTransactor) TransferFrom(opts *bind.TransactOpts, from common.Address, to common.Address, amount *big.Int) (*types.Transaction, error) {
+	return _Atlas.contract.Transact(opts, "transferFrom", from, to, amount)
+}
+
+// TransferFrom is a paid mutator transaction binding the contract method 0x23b872dd.
+//
+// Solidity: function transferFrom(address from, address to, uint256 amount) returns(bool)
+func (_Atlas *AtlasSession) TransferFrom(from common.Address, to common.Address, amount *big.Int) (*types.Transaction, error) {
+	return _Atlas.Contract.TransferFrom(&_Atlas.TransactOpts, from, to, amount)
+}
+
+// TransferFrom is a paid mutator transaction binding the contract method 0x23b872dd.
+//
+// Solidity: function transferFrom(address from, address to, uint256 amount) returns(bool)
+func (_Atlas *AtlasTransactorSession) TransferFrom(from common.Address, to common.Address, amount *big.Int) (*types.Transaction, error) {
+	return _Atlas.Contract.TransferFrom(&_Atlas.TransactOpts, from, to, amount)
+}
+
 // TransferUserERC20 is a paid mutator transaction binding the contract method 0x2c63112c.
 //
 // Solidity: function transferUserERC20(address token, address destination, uint256 amount, address user, address controller, uint32 callConfig, uint16 lockState) returns()
@@ -1582,6 +1247,48 @@ func (_Atlas *AtlasSession) TransferUserERC20(token common.Address, destination 
 // Solidity: function transferUserERC20(address token, address destination, uint256 amount, address user, address controller, uint32 callConfig, uint16 lockState) returns()
 func (_Atlas *AtlasTransactorSession) TransferUserERC20(token common.Address, destination common.Address, amount *big.Int, user common.Address, controller common.Address, callConfig uint32, lockState uint16) (*types.Transaction, error) {
 	return _Atlas.Contract.TransferUserERC20(&_Atlas.TransactOpts, token, destination, amount, user, controller, callConfig, lockState)
+}
+
+// ValidateBalances is a paid mutator transaction binding the contract method 0x15827e08.
+//
+// Solidity: function validateBalances() returns(bool valid)
+func (_Atlas *AtlasTransactor) ValidateBalances(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _Atlas.contract.Transact(opts, "validateBalances")
+}
+
+// ValidateBalances is a paid mutator transaction binding the contract method 0x15827e08.
+//
+// Solidity: function validateBalances() returns(bool valid)
+func (_Atlas *AtlasSession) ValidateBalances() (*types.Transaction, error) {
+	return _Atlas.Contract.ValidateBalances(&_Atlas.TransactOpts)
+}
+
+// ValidateBalances is a paid mutator transaction binding the contract method 0x15827e08.
+//
+// Solidity: function validateBalances() returns(bool valid)
+func (_Atlas *AtlasTransactorSession) ValidateBalances() (*types.Transaction, error) {
+	return _Atlas.Contract.ValidateBalances(&_Atlas.TransactOpts)
+}
+
+// Withdraw is a paid mutator transaction binding the contract method 0x2e1a7d4d.
+//
+// Solidity: function withdraw(uint256 amount) returns()
+func (_Atlas *AtlasTransactor) Withdraw(opts *bind.TransactOpts, amount *big.Int) (*types.Transaction, error) {
+	return _Atlas.contract.Transact(opts, "withdraw", amount)
+}
+
+// Withdraw is a paid mutator transaction binding the contract method 0x2e1a7d4d.
+//
+// Solidity: function withdraw(uint256 amount) returns()
+func (_Atlas *AtlasSession) Withdraw(amount *big.Int) (*types.Transaction, error) {
+	return _Atlas.Contract.Withdraw(&_Atlas.TransactOpts, amount)
+}
+
+// Withdraw is a paid mutator transaction binding the contract method 0x2e1a7d4d.
+//
+// Solidity: function withdraw(uint256 amount) returns()
+func (_Atlas *AtlasTransactorSession) Withdraw(amount *big.Int) (*types.Transaction, error) {
+	return _Atlas.Contract.Withdraw(&_Atlas.TransactOpts, amount)
 }
 
 // Fallback is a paid mutator transaction binding the contract fallback function.
@@ -1626,9 +1333,9 @@ func (_Atlas *AtlasTransactorSession) Receive() (*types.Transaction, error) {
 	return _Atlas.Contract.Receive(&_Atlas.TransactOpts)
 }
 
-// AtlasEIP712DomainChangedIterator is returned from FilterEIP712DomainChanged and is used to iterate over the raw logs and unpacked data for EIP712DomainChanged events raised by the Atlas contract.
-type AtlasEIP712DomainChangedIterator struct {
-	Event *AtlasEIP712DomainChanged // Event containing the contract specifics and raw log
+// AtlasApprovalIterator is returned from FilterApproval and is used to iterate over the raw logs and unpacked data for Approval events raised by the Atlas contract.
+type AtlasApprovalIterator struct {
+	Event *AtlasApproval // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -1642,7 +1349,7 @@ type AtlasEIP712DomainChangedIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *AtlasEIP712DomainChangedIterator) Next() bool {
+func (it *AtlasApprovalIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -1651,7 +1358,7 @@ func (it *AtlasEIP712DomainChangedIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(AtlasEIP712DomainChanged)
+			it.Event = new(AtlasApproval)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -1666,7 +1373,7 @@ func (it *AtlasEIP712DomainChangedIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(AtlasEIP712DomainChanged)
+		it.Event = new(AtlasApproval)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -1682,40 +1389,61 @@ func (it *AtlasEIP712DomainChangedIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *AtlasEIP712DomainChangedIterator) Error() error {
+func (it *AtlasApprovalIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *AtlasEIP712DomainChangedIterator) Close() error {
+func (it *AtlasApprovalIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// AtlasEIP712DomainChanged represents a EIP712DomainChanged event raised by the Atlas contract.
-type AtlasEIP712DomainChanged struct {
-	Raw types.Log // Blockchain specific contextual infos
+// AtlasApproval represents a Approval event raised by the Atlas contract.
+type AtlasApproval struct {
+	Owner   common.Address
+	Spender common.Address
+	Amount  *big.Int
+	Raw     types.Log // Blockchain specific contextual infos
 }
 
-// FilterEIP712DomainChanged is a free log retrieval operation binding the contract event 0x0a6387c9ea3628b88a633bb4f3b151770f70085117a15f9bf3787cda53f13d31.
+// FilterApproval is a free log retrieval operation binding the contract event 0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925.
 //
-// Solidity: event EIP712DomainChanged()
-func (_Atlas *AtlasFilterer) FilterEIP712DomainChanged(opts *bind.FilterOpts) (*AtlasEIP712DomainChangedIterator, error) {
+// Solidity: event Approval(address indexed owner, address indexed spender, uint256 amount)
+func (_Atlas *AtlasFilterer) FilterApproval(opts *bind.FilterOpts, owner []common.Address, spender []common.Address) (*AtlasApprovalIterator, error) {
 
-	logs, sub, err := _Atlas.contract.FilterLogs(opts, "EIP712DomainChanged")
+	var ownerRule []interface{}
+	for _, ownerItem := range owner {
+		ownerRule = append(ownerRule, ownerItem)
+	}
+	var spenderRule []interface{}
+	for _, spenderItem := range spender {
+		spenderRule = append(spenderRule, spenderItem)
+	}
+
+	logs, sub, err := _Atlas.contract.FilterLogs(opts, "Approval", ownerRule, spenderRule)
 	if err != nil {
 		return nil, err
 	}
-	return &AtlasEIP712DomainChangedIterator{contract: _Atlas.contract, event: "EIP712DomainChanged", logs: logs, sub: sub}, nil
+	return &AtlasApprovalIterator{contract: _Atlas.contract, event: "Approval", logs: logs, sub: sub}, nil
 }
 
-// WatchEIP712DomainChanged is a free log subscription operation binding the contract event 0x0a6387c9ea3628b88a633bb4f3b151770f70085117a15f9bf3787cda53f13d31.
+// WatchApproval is a free log subscription operation binding the contract event 0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925.
 //
-// Solidity: event EIP712DomainChanged()
-func (_Atlas *AtlasFilterer) WatchEIP712DomainChanged(opts *bind.WatchOpts, sink chan<- *AtlasEIP712DomainChanged) (event.Subscription, error) {
+// Solidity: event Approval(address indexed owner, address indexed spender, uint256 amount)
+func (_Atlas *AtlasFilterer) WatchApproval(opts *bind.WatchOpts, sink chan<- *AtlasApproval, owner []common.Address, spender []common.Address) (event.Subscription, error) {
 
-	logs, sub, err := _Atlas.contract.WatchLogs(opts, "EIP712DomainChanged")
+	var ownerRule []interface{}
+	for _, ownerItem := range owner {
+		ownerRule = append(ownerRule, ownerItem)
+	}
+	var spenderRule []interface{}
+	for _, spenderItem := range spender {
+		spenderRule = append(spenderRule, spenderItem)
+	}
+
+	logs, sub, err := _Atlas.contract.WatchLogs(opts, "Approval", ownerRule, spenderRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1725,8 +1453,8 @@ func (_Atlas *AtlasFilterer) WatchEIP712DomainChanged(opts *bind.WatchOpts, sink
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(AtlasEIP712DomainChanged)
-				if err := _Atlas.contract.UnpackLog(event, "EIP712DomainChanged", log); err != nil {
+				event := new(AtlasApproval)
+				if err := _Atlas.contract.UnpackLog(event, "Approval", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -1747,12 +1475,12 @@ func (_Atlas *AtlasFilterer) WatchEIP712DomainChanged(opts *bind.WatchOpts, sink
 	}), nil
 }
 
-// ParseEIP712DomainChanged is a log parse operation binding the contract event 0x0a6387c9ea3628b88a633bb4f3b151770f70085117a15f9bf3787cda53f13d31.
+// ParseApproval is a log parse operation binding the contract event 0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925.
 //
-// Solidity: event EIP712DomainChanged()
-func (_Atlas *AtlasFilterer) ParseEIP712DomainChanged(log types.Log) (*AtlasEIP712DomainChanged, error) {
-	event := new(AtlasEIP712DomainChanged)
-	if err := _Atlas.contract.UnpackLog(event, "EIP712DomainChanged", log); err != nil {
+// Solidity: event Approval(address indexed owner, address indexed spender, uint256 amount)
+func (_Atlas *AtlasFilterer) ParseApproval(log types.Log) (*AtlasApproval, error) {
+	event := new(AtlasApproval)
+	if err := _Atlas.contract.UnpackLog(event, "Approval", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
@@ -1828,15 +1556,16 @@ func (it *AtlasMEVPaymentFailureIterator) Close() error {
 
 // AtlasMEVPaymentFailure represents a MEVPaymentFailure event raised by the Atlas contract.
 type AtlasMEVPaymentFailure struct {
-	Controller  common.Address
-	CallConfig  uint32
-	WinningBids []BidData
-	Raw         types.Log // Blockchain specific contextual infos
+	Controller common.Address
+	CallConfig uint32
+	BidToken   common.Address
+	BidAmount  *big.Int
+	Raw        types.Log // Blockchain specific contextual infos
 }
 
-// FilterMEVPaymentFailure is a free log retrieval operation binding the contract event 0x9c57c9b57eeb94cc2ff30fa4d78c17dd15eeb124a334d726ca964d075257684b.
+// FilterMEVPaymentFailure is a free log retrieval operation binding the contract event 0x47ac7e361a60b2835f2a22c12ba42fe0bdcfc613a15f45574bce05ff38c04c13.
 //
-// Solidity: event MEVPaymentFailure(address indexed controller, uint32 callConfig, (address,uint256)[] winningBids)
+// Solidity: event MEVPaymentFailure(address indexed controller, uint32 callConfig, address bidToken, uint256 bidAmount)
 func (_Atlas *AtlasFilterer) FilterMEVPaymentFailure(opts *bind.FilterOpts, controller []common.Address) (*AtlasMEVPaymentFailureIterator, error) {
 
 	var controllerRule []interface{}
@@ -1851,9 +1580,9 @@ func (_Atlas *AtlasFilterer) FilterMEVPaymentFailure(opts *bind.FilterOpts, cont
 	return &AtlasMEVPaymentFailureIterator{contract: _Atlas.contract, event: "MEVPaymentFailure", logs: logs, sub: sub}, nil
 }
 
-// WatchMEVPaymentFailure is a free log subscription operation binding the contract event 0x9c57c9b57eeb94cc2ff30fa4d78c17dd15eeb124a334d726ca964d075257684b.
+// WatchMEVPaymentFailure is a free log subscription operation binding the contract event 0x47ac7e361a60b2835f2a22c12ba42fe0bdcfc613a15f45574bce05ff38c04c13.
 //
-// Solidity: event MEVPaymentFailure(address indexed controller, uint32 callConfig, (address,uint256)[] winningBids)
+// Solidity: event MEVPaymentFailure(address indexed controller, uint32 callConfig, address bidToken, uint256 bidAmount)
 func (_Atlas *AtlasFilterer) WatchMEVPaymentFailure(opts *bind.WatchOpts, sink chan<- *AtlasMEVPaymentFailure, controller []common.Address) (event.Subscription, error) {
 
 	var controllerRule []interface{}
@@ -1893,175 +1622,12 @@ func (_Atlas *AtlasFilterer) WatchMEVPaymentFailure(opts *bind.WatchOpts, sink c
 	}), nil
 }
 
-// ParseMEVPaymentFailure is a log parse operation binding the contract event 0x9c57c9b57eeb94cc2ff30fa4d78c17dd15eeb124a334d726ca964d075257684b.
+// ParseMEVPaymentFailure is a log parse operation binding the contract event 0x47ac7e361a60b2835f2a22c12ba42fe0bdcfc613a15f45574bce05ff38c04c13.
 //
-// Solidity: event MEVPaymentFailure(address indexed controller, uint32 callConfig, (address,uint256)[] winningBids)
+// Solidity: event MEVPaymentFailure(address indexed controller, uint32 callConfig, address bidToken, uint256 bidAmount)
 func (_Atlas *AtlasFilterer) ParseMEVPaymentFailure(log types.Log) (*AtlasMEVPaymentFailure, error) {
 	event := new(AtlasMEVPaymentFailure)
 	if err := _Atlas.contract.UnpackLog(event, "MEVPaymentFailure", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// AtlasNewDAppSignatoryIterator is returned from FilterNewDAppSignatory and is used to iterate over the raw logs and unpacked data for NewDAppSignatory events raised by the Atlas contract.
-type AtlasNewDAppSignatoryIterator struct {
-	Event *AtlasNewDAppSignatory // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *AtlasNewDAppSignatoryIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(AtlasNewDAppSignatory)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(AtlasNewDAppSignatory)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *AtlasNewDAppSignatoryIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *AtlasNewDAppSignatoryIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// AtlasNewDAppSignatory represents a NewDAppSignatory event raised by the Atlas contract.
-type AtlasNewDAppSignatory struct {
-	Controller common.Address
-	Governance common.Address
-	Signatory  common.Address
-	CallConfig uint32
-	Raw        types.Log // Blockchain specific contextual infos
-}
-
-// FilterNewDAppSignatory is a free log retrieval operation binding the contract event 0xcacb2beeeba676b69bddabab0d5f66e2733cabc804f82afd92ea5beae71934b4.
-//
-// Solidity: event NewDAppSignatory(address indexed controller, address indexed governance, address indexed signatory, uint32 callConfig)
-func (_Atlas *AtlasFilterer) FilterNewDAppSignatory(opts *bind.FilterOpts, controller []common.Address, governance []common.Address, signatory []common.Address) (*AtlasNewDAppSignatoryIterator, error) {
-
-	var controllerRule []interface{}
-	for _, controllerItem := range controller {
-		controllerRule = append(controllerRule, controllerItem)
-	}
-	var governanceRule []interface{}
-	for _, governanceItem := range governance {
-		governanceRule = append(governanceRule, governanceItem)
-	}
-	var signatoryRule []interface{}
-	for _, signatoryItem := range signatory {
-		signatoryRule = append(signatoryRule, signatoryItem)
-	}
-
-	logs, sub, err := _Atlas.contract.FilterLogs(opts, "NewDAppSignatory", controllerRule, governanceRule, signatoryRule)
-	if err != nil {
-		return nil, err
-	}
-	return &AtlasNewDAppSignatoryIterator{contract: _Atlas.contract, event: "NewDAppSignatory", logs: logs, sub: sub}, nil
-}
-
-// WatchNewDAppSignatory is a free log subscription operation binding the contract event 0xcacb2beeeba676b69bddabab0d5f66e2733cabc804f82afd92ea5beae71934b4.
-//
-// Solidity: event NewDAppSignatory(address indexed controller, address indexed governance, address indexed signatory, uint32 callConfig)
-func (_Atlas *AtlasFilterer) WatchNewDAppSignatory(opts *bind.WatchOpts, sink chan<- *AtlasNewDAppSignatory, controller []common.Address, governance []common.Address, signatory []common.Address) (event.Subscription, error) {
-
-	var controllerRule []interface{}
-	for _, controllerItem := range controller {
-		controllerRule = append(controllerRule, controllerItem)
-	}
-	var governanceRule []interface{}
-	for _, governanceItem := range governance {
-		governanceRule = append(governanceRule, governanceItem)
-	}
-	var signatoryRule []interface{}
-	for _, signatoryItem := range signatory {
-		signatoryRule = append(signatoryRule, signatoryItem)
-	}
-
-	logs, sub, err := _Atlas.contract.WatchLogs(opts, "NewDAppSignatory", controllerRule, governanceRule, signatoryRule)
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(AtlasNewDAppSignatory)
-				if err := _Atlas.contract.UnpackLog(event, "NewDAppSignatory", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseNewDAppSignatory is a log parse operation binding the contract event 0xcacb2beeeba676b69bddabab0d5f66e2733cabc804f82afd92ea5beae71934b4.
-//
-// Solidity: event NewDAppSignatory(address indexed controller, address indexed governance, address indexed signatory, uint32 callConfig)
-func (_Atlas *AtlasFilterer) ParseNewDAppSignatory(log types.Log) (*AtlasNewDAppSignatory, error) {
-	event := new(AtlasNewDAppSignatory)
-	if err := _Atlas.contract.UnpackLog(event, "NewDAppSignatory", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
@@ -2388,6 +1954,160 @@ func (_Atlas *AtlasFilterer) ParseSolverTxResult(log types.Log) (*AtlasSolverTxR
 	return event, nil
 }
 
+// AtlasTransferIterator is returned from FilterTransfer and is used to iterate over the raw logs and unpacked data for Transfer events raised by the Atlas contract.
+type AtlasTransferIterator struct {
+	Event *AtlasTransfer // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *AtlasTransferIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(AtlasTransfer)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(AtlasTransfer)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *AtlasTransferIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *AtlasTransferIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// AtlasTransfer represents a Transfer event raised by the Atlas contract.
+type AtlasTransfer struct {
+	From   common.Address
+	To     common.Address
+	Amount *big.Int
+	Raw    types.Log // Blockchain specific contextual infos
+}
+
+// FilterTransfer is a free log retrieval operation binding the contract event 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef.
+//
+// Solidity: event Transfer(address indexed from, address indexed to, uint256 amount)
+func (_Atlas *AtlasFilterer) FilterTransfer(opts *bind.FilterOpts, from []common.Address, to []common.Address) (*AtlasTransferIterator, error) {
+
+	var fromRule []interface{}
+	for _, fromItem := range from {
+		fromRule = append(fromRule, fromItem)
+	}
+	var toRule []interface{}
+	for _, toItem := range to {
+		toRule = append(toRule, toItem)
+	}
+
+	logs, sub, err := _Atlas.contract.FilterLogs(opts, "Transfer", fromRule, toRule)
+	if err != nil {
+		return nil, err
+	}
+	return &AtlasTransferIterator{contract: _Atlas.contract, event: "Transfer", logs: logs, sub: sub}, nil
+}
+
+// WatchTransfer is a free log subscription operation binding the contract event 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef.
+//
+// Solidity: event Transfer(address indexed from, address indexed to, uint256 amount)
+func (_Atlas *AtlasFilterer) WatchTransfer(opts *bind.WatchOpts, sink chan<- *AtlasTransfer, from []common.Address, to []common.Address) (event.Subscription, error) {
+
+	var fromRule []interface{}
+	for _, fromItem := range from {
+		fromRule = append(fromRule, fromItem)
+	}
+	var toRule []interface{}
+	for _, toItem := range to {
+		toRule = append(toRule, toItem)
+	}
+
+	logs, sub, err := _Atlas.contract.WatchLogs(opts, "Transfer", fromRule, toRule)
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(AtlasTransfer)
+				if err := _Atlas.contract.UnpackLog(event, "Transfer", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseTransfer is a log parse operation binding the contract event 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef.
+//
+// Solidity: event Transfer(address indexed from, address indexed to, uint256 amount)
+func (_Atlas *AtlasFilterer) ParseTransfer(log types.Log) (*AtlasTransfer, error) {
+	event := new(AtlasTransfer)
+	if err := _Atlas.contract.UnpackLog(event, "Transfer", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
+}
+
 // AtlasUserTxResultIterator is returned from FilterUserTxResult and is used to iterate over the raw logs and unpacked data for UserTxResult events raised by the Atlas contract.
 type AtlasUserTxResultIterator struct {
 	Event *AtlasUserTxResult // Event containing the contract specifics and raw log
@@ -2528,2967 +2248,6 @@ func (_Atlas *AtlasFilterer) WatchUserTxResult(opts *bind.WatchOpts, sink chan<-
 func (_Atlas *AtlasFilterer) ParseUserTxResult(log types.Log) (*AtlasUserTxResult, error) {
 	event := new(AtlasUserTxResult)
 	if err := _Atlas.contract.UnpackLog(event, "UserTxResult", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// AtlasLogIterator is returned from FilterLog and is used to iterate over the raw logs and unpacked data for Log events raised by the Atlas contract.
-type AtlasLogIterator struct {
-	Event *AtlasLog // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *AtlasLogIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(AtlasLog)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(AtlasLog)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *AtlasLogIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *AtlasLogIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// AtlasLog represents a Log event raised by the Atlas contract.
-type AtlasLog struct {
-	Arg0 string
-	Raw  types.Log // Blockchain specific contextual infos
-}
-
-// FilterLog is a free log retrieval operation binding the contract event 0x41304facd9323d75b11bcdd609cb38effffdb05710f7caf0e9b16c6d9d709f50.
-//
-// Solidity: event log(string arg0)
-func (_Atlas *AtlasFilterer) FilterLog(opts *bind.FilterOpts) (*AtlasLogIterator, error) {
-
-	logs, sub, err := _Atlas.contract.FilterLogs(opts, "log")
-	if err != nil {
-		return nil, err
-	}
-	return &AtlasLogIterator{contract: _Atlas.contract, event: "log", logs: logs, sub: sub}, nil
-}
-
-// WatchLog is a free log subscription operation binding the contract event 0x41304facd9323d75b11bcdd609cb38effffdb05710f7caf0e9b16c6d9d709f50.
-//
-// Solidity: event log(string arg0)
-func (_Atlas *AtlasFilterer) WatchLog(opts *bind.WatchOpts, sink chan<- *AtlasLog) (event.Subscription, error) {
-
-	logs, sub, err := _Atlas.contract.WatchLogs(opts, "log")
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(AtlasLog)
-				if err := _Atlas.contract.UnpackLog(event, "log", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseLog is a log parse operation binding the contract event 0x41304facd9323d75b11bcdd609cb38effffdb05710f7caf0e9b16c6d9d709f50.
-//
-// Solidity: event log(string arg0)
-func (_Atlas *AtlasFilterer) ParseLog(log types.Log) (*AtlasLog, error) {
-	event := new(AtlasLog)
-	if err := _Atlas.contract.UnpackLog(event, "log", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// AtlasLogAddressIterator is returned from FilterLogAddress and is used to iterate over the raw logs and unpacked data for LogAddress events raised by the Atlas contract.
-type AtlasLogAddressIterator struct {
-	Event *AtlasLogAddress // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *AtlasLogAddressIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(AtlasLogAddress)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(AtlasLogAddress)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *AtlasLogAddressIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *AtlasLogAddressIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// AtlasLogAddress represents a LogAddress event raised by the Atlas contract.
-type AtlasLogAddress struct {
-	Arg0 common.Address
-	Raw  types.Log // Blockchain specific contextual infos
-}
-
-// FilterLogAddress is a free log retrieval operation binding the contract event 0x7ae74c527414ae135fd97047b12921a5ec3911b804197855d67e25c7b75ee6f3.
-//
-// Solidity: event log_address(address arg0)
-func (_Atlas *AtlasFilterer) FilterLogAddress(opts *bind.FilterOpts) (*AtlasLogAddressIterator, error) {
-
-	logs, sub, err := _Atlas.contract.FilterLogs(opts, "log_address")
-	if err != nil {
-		return nil, err
-	}
-	return &AtlasLogAddressIterator{contract: _Atlas.contract, event: "log_address", logs: logs, sub: sub}, nil
-}
-
-// WatchLogAddress is a free log subscription operation binding the contract event 0x7ae74c527414ae135fd97047b12921a5ec3911b804197855d67e25c7b75ee6f3.
-//
-// Solidity: event log_address(address arg0)
-func (_Atlas *AtlasFilterer) WatchLogAddress(opts *bind.WatchOpts, sink chan<- *AtlasLogAddress) (event.Subscription, error) {
-
-	logs, sub, err := _Atlas.contract.WatchLogs(opts, "log_address")
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(AtlasLogAddress)
-				if err := _Atlas.contract.UnpackLog(event, "log_address", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseLogAddress is a log parse operation binding the contract event 0x7ae74c527414ae135fd97047b12921a5ec3911b804197855d67e25c7b75ee6f3.
-//
-// Solidity: event log_address(address arg0)
-func (_Atlas *AtlasFilterer) ParseLogAddress(log types.Log) (*AtlasLogAddress, error) {
-	event := new(AtlasLogAddress)
-	if err := _Atlas.contract.UnpackLog(event, "log_address", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// AtlasLogArrayIterator is returned from FilterLogArray and is used to iterate over the raw logs and unpacked data for LogArray events raised by the Atlas contract.
-type AtlasLogArrayIterator struct {
-	Event *AtlasLogArray // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *AtlasLogArrayIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(AtlasLogArray)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(AtlasLogArray)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *AtlasLogArrayIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *AtlasLogArrayIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// AtlasLogArray represents a LogArray event raised by the Atlas contract.
-type AtlasLogArray struct {
-	Val []*big.Int
-	Raw types.Log // Blockchain specific contextual infos
-}
-
-// FilterLogArray is a free log retrieval operation binding the contract event 0xfb102865d50addddf69da9b5aa1bced66c80cf869a5c8d0471a467e18ce9cab1.
-//
-// Solidity: event log_array(uint256[] val)
-func (_Atlas *AtlasFilterer) FilterLogArray(opts *bind.FilterOpts) (*AtlasLogArrayIterator, error) {
-
-	logs, sub, err := _Atlas.contract.FilterLogs(opts, "log_array")
-	if err != nil {
-		return nil, err
-	}
-	return &AtlasLogArrayIterator{contract: _Atlas.contract, event: "log_array", logs: logs, sub: sub}, nil
-}
-
-// WatchLogArray is a free log subscription operation binding the contract event 0xfb102865d50addddf69da9b5aa1bced66c80cf869a5c8d0471a467e18ce9cab1.
-//
-// Solidity: event log_array(uint256[] val)
-func (_Atlas *AtlasFilterer) WatchLogArray(opts *bind.WatchOpts, sink chan<- *AtlasLogArray) (event.Subscription, error) {
-
-	logs, sub, err := _Atlas.contract.WatchLogs(opts, "log_array")
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(AtlasLogArray)
-				if err := _Atlas.contract.UnpackLog(event, "log_array", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseLogArray is a log parse operation binding the contract event 0xfb102865d50addddf69da9b5aa1bced66c80cf869a5c8d0471a467e18ce9cab1.
-//
-// Solidity: event log_array(uint256[] val)
-func (_Atlas *AtlasFilterer) ParseLogArray(log types.Log) (*AtlasLogArray, error) {
-	event := new(AtlasLogArray)
-	if err := _Atlas.contract.UnpackLog(event, "log_array", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// AtlasLogArray0Iterator is returned from FilterLogArray0 and is used to iterate over the raw logs and unpacked data for LogArray0 events raised by the Atlas contract.
-type AtlasLogArray0Iterator struct {
-	Event *AtlasLogArray0 // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *AtlasLogArray0Iterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(AtlasLogArray0)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(AtlasLogArray0)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *AtlasLogArray0Iterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *AtlasLogArray0Iterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// AtlasLogArray0 represents a LogArray0 event raised by the Atlas contract.
-type AtlasLogArray0 struct {
-	Val []*big.Int
-	Raw types.Log // Blockchain specific contextual infos
-}
-
-// FilterLogArray0 is a free log retrieval operation binding the contract event 0x890a82679b470f2bd82816ed9b161f97d8b967f37fa3647c21d5bf39749e2dd5.
-//
-// Solidity: event log_array(int256[] val)
-func (_Atlas *AtlasFilterer) FilterLogArray0(opts *bind.FilterOpts) (*AtlasLogArray0Iterator, error) {
-
-	logs, sub, err := _Atlas.contract.FilterLogs(opts, "log_array0")
-	if err != nil {
-		return nil, err
-	}
-	return &AtlasLogArray0Iterator{contract: _Atlas.contract, event: "log_array0", logs: logs, sub: sub}, nil
-}
-
-// WatchLogArray0 is a free log subscription operation binding the contract event 0x890a82679b470f2bd82816ed9b161f97d8b967f37fa3647c21d5bf39749e2dd5.
-//
-// Solidity: event log_array(int256[] val)
-func (_Atlas *AtlasFilterer) WatchLogArray0(opts *bind.WatchOpts, sink chan<- *AtlasLogArray0) (event.Subscription, error) {
-
-	logs, sub, err := _Atlas.contract.WatchLogs(opts, "log_array0")
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(AtlasLogArray0)
-				if err := _Atlas.contract.UnpackLog(event, "log_array0", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseLogArray0 is a log parse operation binding the contract event 0x890a82679b470f2bd82816ed9b161f97d8b967f37fa3647c21d5bf39749e2dd5.
-//
-// Solidity: event log_array(int256[] val)
-func (_Atlas *AtlasFilterer) ParseLogArray0(log types.Log) (*AtlasLogArray0, error) {
-	event := new(AtlasLogArray0)
-	if err := _Atlas.contract.UnpackLog(event, "log_array0", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// AtlasLogArray1Iterator is returned from FilterLogArray1 and is used to iterate over the raw logs and unpacked data for LogArray1 events raised by the Atlas contract.
-type AtlasLogArray1Iterator struct {
-	Event *AtlasLogArray1 // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *AtlasLogArray1Iterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(AtlasLogArray1)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(AtlasLogArray1)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *AtlasLogArray1Iterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *AtlasLogArray1Iterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// AtlasLogArray1 represents a LogArray1 event raised by the Atlas contract.
-type AtlasLogArray1 struct {
-	Val []common.Address
-	Raw types.Log // Blockchain specific contextual infos
-}
-
-// FilterLogArray1 is a free log retrieval operation binding the contract event 0x40e1840f5769073d61bd01372d9b75baa9842d5629a0c99ff103be1178a8e9e2.
-//
-// Solidity: event log_array(address[] val)
-func (_Atlas *AtlasFilterer) FilterLogArray1(opts *bind.FilterOpts) (*AtlasLogArray1Iterator, error) {
-
-	logs, sub, err := _Atlas.contract.FilterLogs(opts, "log_array1")
-	if err != nil {
-		return nil, err
-	}
-	return &AtlasLogArray1Iterator{contract: _Atlas.contract, event: "log_array1", logs: logs, sub: sub}, nil
-}
-
-// WatchLogArray1 is a free log subscription operation binding the contract event 0x40e1840f5769073d61bd01372d9b75baa9842d5629a0c99ff103be1178a8e9e2.
-//
-// Solidity: event log_array(address[] val)
-func (_Atlas *AtlasFilterer) WatchLogArray1(opts *bind.WatchOpts, sink chan<- *AtlasLogArray1) (event.Subscription, error) {
-
-	logs, sub, err := _Atlas.contract.WatchLogs(opts, "log_array1")
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(AtlasLogArray1)
-				if err := _Atlas.contract.UnpackLog(event, "log_array1", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseLogArray1 is a log parse operation binding the contract event 0x40e1840f5769073d61bd01372d9b75baa9842d5629a0c99ff103be1178a8e9e2.
-//
-// Solidity: event log_array(address[] val)
-func (_Atlas *AtlasFilterer) ParseLogArray1(log types.Log) (*AtlasLogArray1, error) {
-	event := new(AtlasLogArray1)
-	if err := _Atlas.contract.UnpackLog(event, "log_array1", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// AtlasLogBytesIterator is returned from FilterLogBytes and is used to iterate over the raw logs and unpacked data for LogBytes events raised by the Atlas contract.
-type AtlasLogBytesIterator struct {
-	Event *AtlasLogBytes // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *AtlasLogBytesIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(AtlasLogBytes)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(AtlasLogBytes)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *AtlasLogBytesIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *AtlasLogBytesIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// AtlasLogBytes represents a LogBytes event raised by the Atlas contract.
-type AtlasLogBytes struct {
-	Arg0 []byte
-	Raw  types.Log // Blockchain specific contextual infos
-}
-
-// FilterLogBytes is a free log retrieval operation binding the contract event 0x23b62ad0584d24a75f0bf3560391ef5659ec6db1269c56e11aa241d637f19b20.
-//
-// Solidity: event log_bytes(bytes arg0)
-func (_Atlas *AtlasFilterer) FilterLogBytes(opts *bind.FilterOpts) (*AtlasLogBytesIterator, error) {
-
-	logs, sub, err := _Atlas.contract.FilterLogs(opts, "log_bytes")
-	if err != nil {
-		return nil, err
-	}
-	return &AtlasLogBytesIterator{contract: _Atlas.contract, event: "log_bytes", logs: logs, sub: sub}, nil
-}
-
-// WatchLogBytes is a free log subscription operation binding the contract event 0x23b62ad0584d24a75f0bf3560391ef5659ec6db1269c56e11aa241d637f19b20.
-//
-// Solidity: event log_bytes(bytes arg0)
-func (_Atlas *AtlasFilterer) WatchLogBytes(opts *bind.WatchOpts, sink chan<- *AtlasLogBytes) (event.Subscription, error) {
-
-	logs, sub, err := _Atlas.contract.WatchLogs(opts, "log_bytes")
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(AtlasLogBytes)
-				if err := _Atlas.contract.UnpackLog(event, "log_bytes", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseLogBytes is a log parse operation binding the contract event 0x23b62ad0584d24a75f0bf3560391ef5659ec6db1269c56e11aa241d637f19b20.
-//
-// Solidity: event log_bytes(bytes arg0)
-func (_Atlas *AtlasFilterer) ParseLogBytes(log types.Log) (*AtlasLogBytes, error) {
-	event := new(AtlasLogBytes)
-	if err := _Atlas.contract.UnpackLog(event, "log_bytes", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// AtlasLogBytes32Iterator is returned from FilterLogBytes32 and is used to iterate over the raw logs and unpacked data for LogBytes32 events raised by the Atlas contract.
-type AtlasLogBytes32Iterator struct {
-	Event *AtlasLogBytes32 // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *AtlasLogBytes32Iterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(AtlasLogBytes32)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(AtlasLogBytes32)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *AtlasLogBytes32Iterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *AtlasLogBytes32Iterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// AtlasLogBytes32 represents a LogBytes32 event raised by the Atlas contract.
-type AtlasLogBytes32 struct {
-	Arg0 [32]byte
-	Raw  types.Log // Blockchain specific contextual infos
-}
-
-// FilterLogBytes32 is a free log retrieval operation binding the contract event 0xe81699b85113eea1c73e10588b2b035e55893369632173afd43feb192fac64e3.
-//
-// Solidity: event log_bytes32(bytes32 arg0)
-func (_Atlas *AtlasFilterer) FilterLogBytes32(opts *bind.FilterOpts) (*AtlasLogBytes32Iterator, error) {
-
-	logs, sub, err := _Atlas.contract.FilterLogs(opts, "log_bytes32")
-	if err != nil {
-		return nil, err
-	}
-	return &AtlasLogBytes32Iterator{contract: _Atlas.contract, event: "log_bytes32", logs: logs, sub: sub}, nil
-}
-
-// WatchLogBytes32 is a free log subscription operation binding the contract event 0xe81699b85113eea1c73e10588b2b035e55893369632173afd43feb192fac64e3.
-//
-// Solidity: event log_bytes32(bytes32 arg0)
-func (_Atlas *AtlasFilterer) WatchLogBytes32(opts *bind.WatchOpts, sink chan<- *AtlasLogBytes32) (event.Subscription, error) {
-
-	logs, sub, err := _Atlas.contract.WatchLogs(opts, "log_bytes32")
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(AtlasLogBytes32)
-				if err := _Atlas.contract.UnpackLog(event, "log_bytes32", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseLogBytes32 is a log parse operation binding the contract event 0xe81699b85113eea1c73e10588b2b035e55893369632173afd43feb192fac64e3.
-//
-// Solidity: event log_bytes32(bytes32 arg0)
-func (_Atlas *AtlasFilterer) ParseLogBytes32(log types.Log) (*AtlasLogBytes32, error) {
-	event := new(AtlasLogBytes32)
-	if err := _Atlas.contract.UnpackLog(event, "log_bytes32", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// AtlasLogIntIterator is returned from FilterLogInt and is used to iterate over the raw logs and unpacked data for LogInt events raised by the Atlas contract.
-type AtlasLogIntIterator struct {
-	Event *AtlasLogInt // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *AtlasLogIntIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(AtlasLogInt)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(AtlasLogInt)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *AtlasLogIntIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *AtlasLogIntIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// AtlasLogInt represents a LogInt event raised by the Atlas contract.
-type AtlasLogInt struct {
-	Arg0 *big.Int
-	Raw  types.Log // Blockchain specific contextual infos
-}
-
-// FilterLogInt is a free log retrieval operation binding the contract event 0x0eb5d52624c8d28ada9fc55a8c502ed5aa3fbe2fb6e91b71b5f376882b1d2fb8.
-//
-// Solidity: event log_int(int256 arg0)
-func (_Atlas *AtlasFilterer) FilterLogInt(opts *bind.FilterOpts) (*AtlasLogIntIterator, error) {
-
-	logs, sub, err := _Atlas.contract.FilterLogs(opts, "log_int")
-	if err != nil {
-		return nil, err
-	}
-	return &AtlasLogIntIterator{contract: _Atlas.contract, event: "log_int", logs: logs, sub: sub}, nil
-}
-
-// WatchLogInt is a free log subscription operation binding the contract event 0x0eb5d52624c8d28ada9fc55a8c502ed5aa3fbe2fb6e91b71b5f376882b1d2fb8.
-//
-// Solidity: event log_int(int256 arg0)
-func (_Atlas *AtlasFilterer) WatchLogInt(opts *bind.WatchOpts, sink chan<- *AtlasLogInt) (event.Subscription, error) {
-
-	logs, sub, err := _Atlas.contract.WatchLogs(opts, "log_int")
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(AtlasLogInt)
-				if err := _Atlas.contract.UnpackLog(event, "log_int", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseLogInt is a log parse operation binding the contract event 0x0eb5d52624c8d28ada9fc55a8c502ed5aa3fbe2fb6e91b71b5f376882b1d2fb8.
-//
-// Solidity: event log_int(int256 arg0)
-func (_Atlas *AtlasFilterer) ParseLogInt(log types.Log) (*AtlasLogInt, error) {
-	event := new(AtlasLogInt)
-	if err := _Atlas.contract.UnpackLog(event, "log_int", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// AtlasLogNamedAddressIterator is returned from FilterLogNamedAddress and is used to iterate over the raw logs and unpacked data for LogNamedAddress events raised by the Atlas contract.
-type AtlasLogNamedAddressIterator struct {
-	Event *AtlasLogNamedAddress // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *AtlasLogNamedAddressIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(AtlasLogNamedAddress)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(AtlasLogNamedAddress)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *AtlasLogNamedAddressIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *AtlasLogNamedAddressIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// AtlasLogNamedAddress represents a LogNamedAddress event raised by the Atlas contract.
-type AtlasLogNamedAddress struct {
-	Key string
-	Val common.Address
-	Raw types.Log // Blockchain specific contextual infos
-}
-
-// FilterLogNamedAddress is a free log retrieval operation binding the contract event 0x9c4e8541ca8f0dc1c413f9108f66d82d3cecb1bddbce437a61caa3175c4cc96f.
-//
-// Solidity: event log_named_address(string key, address val)
-func (_Atlas *AtlasFilterer) FilterLogNamedAddress(opts *bind.FilterOpts) (*AtlasLogNamedAddressIterator, error) {
-
-	logs, sub, err := _Atlas.contract.FilterLogs(opts, "log_named_address")
-	if err != nil {
-		return nil, err
-	}
-	return &AtlasLogNamedAddressIterator{contract: _Atlas.contract, event: "log_named_address", logs: logs, sub: sub}, nil
-}
-
-// WatchLogNamedAddress is a free log subscription operation binding the contract event 0x9c4e8541ca8f0dc1c413f9108f66d82d3cecb1bddbce437a61caa3175c4cc96f.
-//
-// Solidity: event log_named_address(string key, address val)
-func (_Atlas *AtlasFilterer) WatchLogNamedAddress(opts *bind.WatchOpts, sink chan<- *AtlasLogNamedAddress) (event.Subscription, error) {
-
-	logs, sub, err := _Atlas.contract.WatchLogs(opts, "log_named_address")
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(AtlasLogNamedAddress)
-				if err := _Atlas.contract.UnpackLog(event, "log_named_address", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseLogNamedAddress is a log parse operation binding the contract event 0x9c4e8541ca8f0dc1c413f9108f66d82d3cecb1bddbce437a61caa3175c4cc96f.
-//
-// Solidity: event log_named_address(string key, address val)
-func (_Atlas *AtlasFilterer) ParseLogNamedAddress(log types.Log) (*AtlasLogNamedAddress, error) {
-	event := new(AtlasLogNamedAddress)
-	if err := _Atlas.contract.UnpackLog(event, "log_named_address", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// AtlasLogNamedArrayIterator is returned from FilterLogNamedArray and is used to iterate over the raw logs and unpacked data for LogNamedArray events raised by the Atlas contract.
-type AtlasLogNamedArrayIterator struct {
-	Event *AtlasLogNamedArray // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *AtlasLogNamedArrayIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(AtlasLogNamedArray)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(AtlasLogNamedArray)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *AtlasLogNamedArrayIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *AtlasLogNamedArrayIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// AtlasLogNamedArray represents a LogNamedArray event raised by the Atlas contract.
-type AtlasLogNamedArray struct {
-	Key string
-	Val []*big.Int
-	Raw types.Log // Blockchain specific contextual infos
-}
-
-// FilterLogNamedArray is a free log retrieval operation binding the contract event 0x00aaa39c9ffb5f567a4534380c737075702e1f7f14107fc95328e3b56c0325fb.
-//
-// Solidity: event log_named_array(string key, uint256[] val)
-func (_Atlas *AtlasFilterer) FilterLogNamedArray(opts *bind.FilterOpts) (*AtlasLogNamedArrayIterator, error) {
-
-	logs, sub, err := _Atlas.contract.FilterLogs(opts, "log_named_array")
-	if err != nil {
-		return nil, err
-	}
-	return &AtlasLogNamedArrayIterator{contract: _Atlas.contract, event: "log_named_array", logs: logs, sub: sub}, nil
-}
-
-// WatchLogNamedArray is a free log subscription operation binding the contract event 0x00aaa39c9ffb5f567a4534380c737075702e1f7f14107fc95328e3b56c0325fb.
-//
-// Solidity: event log_named_array(string key, uint256[] val)
-func (_Atlas *AtlasFilterer) WatchLogNamedArray(opts *bind.WatchOpts, sink chan<- *AtlasLogNamedArray) (event.Subscription, error) {
-
-	logs, sub, err := _Atlas.contract.WatchLogs(opts, "log_named_array")
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(AtlasLogNamedArray)
-				if err := _Atlas.contract.UnpackLog(event, "log_named_array", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseLogNamedArray is a log parse operation binding the contract event 0x00aaa39c9ffb5f567a4534380c737075702e1f7f14107fc95328e3b56c0325fb.
-//
-// Solidity: event log_named_array(string key, uint256[] val)
-func (_Atlas *AtlasFilterer) ParseLogNamedArray(log types.Log) (*AtlasLogNamedArray, error) {
-	event := new(AtlasLogNamedArray)
-	if err := _Atlas.contract.UnpackLog(event, "log_named_array", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// AtlasLogNamedArray0Iterator is returned from FilterLogNamedArray0 and is used to iterate over the raw logs and unpacked data for LogNamedArray0 events raised by the Atlas contract.
-type AtlasLogNamedArray0Iterator struct {
-	Event *AtlasLogNamedArray0 // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *AtlasLogNamedArray0Iterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(AtlasLogNamedArray0)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(AtlasLogNamedArray0)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *AtlasLogNamedArray0Iterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *AtlasLogNamedArray0Iterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// AtlasLogNamedArray0 represents a LogNamedArray0 event raised by the Atlas contract.
-type AtlasLogNamedArray0 struct {
-	Key string
-	Val []*big.Int
-	Raw types.Log // Blockchain specific contextual infos
-}
-
-// FilterLogNamedArray0 is a free log retrieval operation binding the contract event 0xa73eda09662f46dde729be4611385ff34fe6c44fbbc6f7e17b042b59a3445b57.
-//
-// Solidity: event log_named_array(string key, int256[] val)
-func (_Atlas *AtlasFilterer) FilterLogNamedArray0(opts *bind.FilterOpts) (*AtlasLogNamedArray0Iterator, error) {
-
-	logs, sub, err := _Atlas.contract.FilterLogs(opts, "log_named_array0")
-	if err != nil {
-		return nil, err
-	}
-	return &AtlasLogNamedArray0Iterator{contract: _Atlas.contract, event: "log_named_array0", logs: logs, sub: sub}, nil
-}
-
-// WatchLogNamedArray0 is a free log subscription operation binding the contract event 0xa73eda09662f46dde729be4611385ff34fe6c44fbbc6f7e17b042b59a3445b57.
-//
-// Solidity: event log_named_array(string key, int256[] val)
-func (_Atlas *AtlasFilterer) WatchLogNamedArray0(opts *bind.WatchOpts, sink chan<- *AtlasLogNamedArray0) (event.Subscription, error) {
-
-	logs, sub, err := _Atlas.contract.WatchLogs(opts, "log_named_array0")
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(AtlasLogNamedArray0)
-				if err := _Atlas.contract.UnpackLog(event, "log_named_array0", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseLogNamedArray0 is a log parse operation binding the contract event 0xa73eda09662f46dde729be4611385ff34fe6c44fbbc6f7e17b042b59a3445b57.
-//
-// Solidity: event log_named_array(string key, int256[] val)
-func (_Atlas *AtlasFilterer) ParseLogNamedArray0(log types.Log) (*AtlasLogNamedArray0, error) {
-	event := new(AtlasLogNamedArray0)
-	if err := _Atlas.contract.UnpackLog(event, "log_named_array0", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// AtlasLogNamedArray1Iterator is returned from FilterLogNamedArray1 and is used to iterate over the raw logs and unpacked data for LogNamedArray1 events raised by the Atlas contract.
-type AtlasLogNamedArray1Iterator struct {
-	Event *AtlasLogNamedArray1 // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *AtlasLogNamedArray1Iterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(AtlasLogNamedArray1)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(AtlasLogNamedArray1)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *AtlasLogNamedArray1Iterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *AtlasLogNamedArray1Iterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// AtlasLogNamedArray1 represents a LogNamedArray1 event raised by the Atlas contract.
-type AtlasLogNamedArray1 struct {
-	Key string
-	Val []common.Address
-	Raw types.Log // Blockchain specific contextual infos
-}
-
-// FilterLogNamedArray1 is a free log retrieval operation binding the contract event 0x3bcfb2ae2e8d132dd1fce7cf278a9a19756a9fceabe470df3bdabb4bc577d1bd.
-//
-// Solidity: event log_named_array(string key, address[] val)
-func (_Atlas *AtlasFilterer) FilterLogNamedArray1(opts *bind.FilterOpts) (*AtlasLogNamedArray1Iterator, error) {
-
-	logs, sub, err := _Atlas.contract.FilterLogs(opts, "log_named_array1")
-	if err != nil {
-		return nil, err
-	}
-	return &AtlasLogNamedArray1Iterator{contract: _Atlas.contract, event: "log_named_array1", logs: logs, sub: sub}, nil
-}
-
-// WatchLogNamedArray1 is a free log subscription operation binding the contract event 0x3bcfb2ae2e8d132dd1fce7cf278a9a19756a9fceabe470df3bdabb4bc577d1bd.
-//
-// Solidity: event log_named_array(string key, address[] val)
-func (_Atlas *AtlasFilterer) WatchLogNamedArray1(opts *bind.WatchOpts, sink chan<- *AtlasLogNamedArray1) (event.Subscription, error) {
-
-	logs, sub, err := _Atlas.contract.WatchLogs(opts, "log_named_array1")
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(AtlasLogNamedArray1)
-				if err := _Atlas.contract.UnpackLog(event, "log_named_array1", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseLogNamedArray1 is a log parse operation binding the contract event 0x3bcfb2ae2e8d132dd1fce7cf278a9a19756a9fceabe470df3bdabb4bc577d1bd.
-//
-// Solidity: event log_named_array(string key, address[] val)
-func (_Atlas *AtlasFilterer) ParseLogNamedArray1(log types.Log) (*AtlasLogNamedArray1, error) {
-	event := new(AtlasLogNamedArray1)
-	if err := _Atlas.contract.UnpackLog(event, "log_named_array1", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// AtlasLogNamedBytesIterator is returned from FilterLogNamedBytes and is used to iterate over the raw logs and unpacked data for LogNamedBytes events raised by the Atlas contract.
-type AtlasLogNamedBytesIterator struct {
-	Event *AtlasLogNamedBytes // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *AtlasLogNamedBytesIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(AtlasLogNamedBytes)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(AtlasLogNamedBytes)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *AtlasLogNamedBytesIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *AtlasLogNamedBytesIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// AtlasLogNamedBytes represents a LogNamedBytes event raised by the Atlas contract.
-type AtlasLogNamedBytes struct {
-	Key string
-	Val []byte
-	Raw types.Log // Blockchain specific contextual infos
-}
-
-// FilterLogNamedBytes is a free log retrieval operation binding the contract event 0xd26e16cad4548705e4c9e2d94f98ee91c289085ee425594fd5635fa2964ccf18.
-//
-// Solidity: event log_named_bytes(string key, bytes val)
-func (_Atlas *AtlasFilterer) FilterLogNamedBytes(opts *bind.FilterOpts) (*AtlasLogNamedBytesIterator, error) {
-
-	logs, sub, err := _Atlas.contract.FilterLogs(opts, "log_named_bytes")
-	if err != nil {
-		return nil, err
-	}
-	return &AtlasLogNamedBytesIterator{contract: _Atlas.contract, event: "log_named_bytes", logs: logs, sub: sub}, nil
-}
-
-// WatchLogNamedBytes is a free log subscription operation binding the contract event 0xd26e16cad4548705e4c9e2d94f98ee91c289085ee425594fd5635fa2964ccf18.
-//
-// Solidity: event log_named_bytes(string key, bytes val)
-func (_Atlas *AtlasFilterer) WatchLogNamedBytes(opts *bind.WatchOpts, sink chan<- *AtlasLogNamedBytes) (event.Subscription, error) {
-
-	logs, sub, err := _Atlas.contract.WatchLogs(opts, "log_named_bytes")
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(AtlasLogNamedBytes)
-				if err := _Atlas.contract.UnpackLog(event, "log_named_bytes", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseLogNamedBytes is a log parse operation binding the contract event 0xd26e16cad4548705e4c9e2d94f98ee91c289085ee425594fd5635fa2964ccf18.
-//
-// Solidity: event log_named_bytes(string key, bytes val)
-func (_Atlas *AtlasFilterer) ParseLogNamedBytes(log types.Log) (*AtlasLogNamedBytes, error) {
-	event := new(AtlasLogNamedBytes)
-	if err := _Atlas.contract.UnpackLog(event, "log_named_bytes", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// AtlasLogNamedBytes32Iterator is returned from FilterLogNamedBytes32 and is used to iterate over the raw logs and unpacked data for LogNamedBytes32 events raised by the Atlas contract.
-type AtlasLogNamedBytes32Iterator struct {
-	Event *AtlasLogNamedBytes32 // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *AtlasLogNamedBytes32Iterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(AtlasLogNamedBytes32)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(AtlasLogNamedBytes32)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *AtlasLogNamedBytes32Iterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *AtlasLogNamedBytes32Iterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// AtlasLogNamedBytes32 represents a LogNamedBytes32 event raised by the Atlas contract.
-type AtlasLogNamedBytes32 struct {
-	Key string
-	Val [32]byte
-	Raw types.Log // Blockchain specific contextual infos
-}
-
-// FilterLogNamedBytes32 is a free log retrieval operation binding the contract event 0xafb795c9c61e4fe7468c386f925d7a5429ecad9c0495ddb8d38d690614d32f99.
-//
-// Solidity: event log_named_bytes32(string key, bytes32 val)
-func (_Atlas *AtlasFilterer) FilterLogNamedBytes32(opts *bind.FilterOpts) (*AtlasLogNamedBytes32Iterator, error) {
-
-	logs, sub, err := _Atlas.contract.FilterLogs(opts, "log_named_bytes32")
-	if err != nil {
-		return nil, err
-	}
-	return &AtlasLogNamedBytes32Iterator{contract: _Atlas.contract, event: "log_named_bytes32", logs: logs, sub: sub}, nil
-}
-
-// WatchLogNamedBytes32 is a free log subscription operation binding the contract event 0xafb795c9c61e4fe7468c386f925d7a5429ecad9c0495ddb8d38d690614d32f99.
-//
-// Solidity: event log_named_bytes32(string key, bytes32 val)
-func (_Atlas *AtlasFilterer) WatchLogNamedBytes32(opts *bind.WatchOpts, sink chan<- *AtlasLogNamedBytes32) (event.Subscription, error) {
-
-	logs, sub, err := _Atlas.contract.WatchLogs(opts, "log_named_bytes32")
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(AtlasLogNamedBytes32)
-				if err := _Atlas.contract.UnpackLog(event, "log_named_bytes32", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseLogNamedBytes32 is a log parse operation binding the contract event 0xafb795c9c61e4fe7468c386f925d7a5429ecad9c0495ddb8d38d690614d32f99.
-//
-// Solidity: event log_named_bytes32(string key, bytes32 val)
-func (_Atlas *AtlasFilterer) ParseLogNamedBytes32(log types.Log) (*AtlasLogNamedBytes32, error) {
-	event := new(AtlasLogNamedBytes32)
-	if err := _Atlas.contract.UnpackLog(event, "log_named_bytes32", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// AtlasLogNamedDecimalIntIterator is returned from FilterLogNamedDecimalInt and is used to iterate over the raw logs and unpacked data for LogNamedDecimalInt events raised by the Atlas contract.
-type AtlasLogNamedDecimalIntIterator struct {
-	Event *AtlasLogNamedDecimalInt // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *AtlasLogNamedDecimalIntIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(AtlasLogNamedDecimalInt)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(AtlasLogNamedDecimalInt)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *AtlasLogNamedDecimalIntIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *AtlasLogNamedDecimalIntIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// AtlasLogNamedDecimalInt represents a LogNamedDecimalInt event raised by the Atlas contract.
-type AtlasLogNamedDecimalInt struct {
-	Key      string
-	Val      *big.Int
-	Decimals *big.Int
-	Raw      types.Log // Blockchain specific contextual infos
-}
-
-// FilterLogNamedDecimalInt is a free log retrieval operation binding the contract event 0x5da6ce9d51151ba10c09a559ef24d520b9dac5c5b8810ae8434e4d0d86411a95.
-//
-// Solidity: event log_named_decimal_int(string key, int256 val, uint256 decimals)
-func (_Atlas *AtlasFilterer) FilterLogNamedDecimalInt(opts *bind.FilterOpts) (*AtlasLogNamedDecimalIntIterator, error) {
-
-	logs, sub, err := _Atlas.contract.FilterLogs(opts, "log_named_decimal_int")
-	if err != nil {
-		return nil, err
-	}
-	return &AtlasLogNamedDecimalIntIterator{contract: _Atlas.contract, event: "log_named_decimal_int", logs: logs, sub: sub}, nil
-}
-
-// WatchLogNamedDecimalInt is a free log subscription operation binding the contract event 0x5da6ce9d51151ba10c09a559ef24d520b9dac5c5b8810ae8434e4d0d86411a95.
-//
-// Solidity: event log_named_decimal_int(string key, int256 val, uint256 decimals)
-func (_Atlas *AtlasFilterer) WatchLogNamedDecimalInt(opts *bind.WatchOpts, sink chan<- *AtlasLogNamedDecimalInt) (event.Subscription, error) {
-
-	logs, sub, err := _Atlas.contract.WatchLogs(opts, "log_named_decimal_int")
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(AtlasLogNamedDecimalInt)
-				if err := _Atlas.contract.UnpackLog(event, "log_named_decimal_int", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseLogNamedDecimalInt is a log parse operation binding the contract event 0x5da6ce9d51151ba10c09a559ef24d520b9dac5c5b8810ae8434e4d0d86411a95.
-//
-// Solidity: event log_named_decimal_int(string key, int256 val, uint256 decimals)
-func (_Atlas *AtlasFilterer) ParseLogNamedDecimalInt(log types.Log) (*AtlasLogNamedDecimalInt, error) {
-	event := new(AtlasLogNamedDecimalInt)
-	if err := _Atlas.contract.UnpackLog(event, "log_named_decimal_int", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// AtlasLogNamedDecimalUintIterator is returned from FilterLogNamedDecimalUint and is used to iterate over the raw logs and unpacked data for LogNamedDecimalUint events raised by the Atlas contract.
-type AtlasLogNamedDecimalUintIterator struct {
-	Event *AtlasLogNamedDecimalUint // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *AtlasLogNamedDecimalUintIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(AtlasLogNamedDecimalUint)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(AtlasLogNamedDecimalUint)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *AtlasLogNamedDecimalUintIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *AtlasLogNamedDecimalUintIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// AtlasLogNamedDecimalUint represents a LogNamedDecimalUint event raised by the Atlas contract.
-type AtlasLogNamedDecimalUint struct {
-	Key      string
-	Val      *big.Int
-	Decimals *big.Int
-	Raw      types.Log // Blockchain specific contextual infos
-}
-
-// FilterLogNamedDecimalUint is a free log retrieval operation binding the contract event 0xeb8ba43ced7537421946bd43e828b8b2b8428927aa8f801c13d934bf11aca57b.
-//
-// Solidity: event log_named_decimal_uint(string key, uint256 val, uint256 decimals)
-func (_Atlas *AtlasFilterer) FilterLogNamedDecimalUint(opts *bind.FilterOpts) (*AtlasLogNamedDecimalUintIterator, error) {
-
-	logs, sub, err := _Atlas.contract.FilterLogs(opts, "log_named_decimal_uint")
-	if err != nil {
-		return nil, err
-	}
-	return &AtlasLogNamedDecimalUintIterator{contract: _Atlas.contract, event: "log_named_decimal_uint", logs: logs, sub: sub}, nil
-}
-
-// WatchLogNamedDecimalUint is a free log subscription operation binding the contract event 0xeb8ba43ced7537421946bd43e828b8b2b8428927aa8f801c13d934bf11aca57b.
-//
-// Solidity: event log_named_decimal_uint(string key, uint256 val, uint256 decimals)
-func (_Atlas *AtlasFilterer) WatchLogNamedDecimalUint(opts *bind.WatchOpts, sink chan<- *AtlasLogNamedDecimalUint) (event.Subscription, error) {
-
-	logs, sub, err := _Atlas.contract.WatchLogs(opts, "log_named_decimal_uint")
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(AtlasLogNamedDecimalUint)
-				if err := _Atlas.contract.UnpackLog(event, "log_named_decimal_uint", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseLogNamedDecimalUint is a log parse operation binding the contract event 0xeb8ba43ced7537421946bd43e828b8b2b8428927aa8f801c13d934bf11aca57b.
-//
-// Solidity: event log_named_decimal_uint(string key, uint256 val, uint256 decimals)
-func (_Atlas *AtlasFilterer) ParseLogNamedDecimalUint(log types.Log) (*AtlasLogNamedDecimalUint, error) {
-	event := new(AtlasLogNamedDecimalUint)
-	if err := _Atlas.contract.UnpackLog(event, "log_named_decimal_uint", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// AtlasLogNamedIntIterator is returned from FilterLogNamedInt and is used to iterate over the raw logs and unpacked data for LogNamedInt events raised by the Atlas contract.
-type AtlasLogNamedIntIterator struct {
-	Event *AtlasLogNamedInt // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *AtlasLogNamedIntIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(AtlasLogNamedInt)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(AtlasLogNamedInt)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *AtlasLogNamedIntIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *AtlasLogNamedIntIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// AtlasLogNamedInt represents a LogNamedInt event raised by the Atlas contract.
-type AtlasLogNamedInt struct {
-	Key string
-	Val *big.Int
-	Raw types.Log // Blockchain specific contextual infos
-}
-
-// FilterLogNamedInt is a free log retrieval operation binding the contract event 0x2fe632779174374378442a8e978bccfbdcc1d6b2b0d81f7e8eb776ab2286f168.
-//
-// Solidity: event log_named_int(string key, int256 val)
-func (_Atlas *AtlasFilterer) FilterLogNamedInt(opts *bind.FilterOpts) (*AtlasLogNamedIntIterator, error) {
-
-	logs, sub, err := _Atlas.contract.FilterLogs(opts, "log_named_int")
-	if err != nil {
-		return nil, err
-	}
-	return &AtlasLogNamedIntIterator{contract: _Atlas.contract, event: "log_named_int", logs: logs, sub: sub}, nil
-}
-
-// WatchLogNamedInt is a free log subscription operation binding the contract event 0x2fe632779174374378442a8e978bccfbdcc1d6b2b0d81f7e8eb776ab2286f168.
-//
-// Solidity: event log_named_int(string key, int256 val)
-func (_Atlas *AtlasFilterer) WatchLogNamedInt(opts *bind.WatchOpts, sink chan<- *AtlasLogNamedInt) (event.Subscription, error) {
-
-	logs, sub, err := _Atlas.contract.WatchLogs(opts, "log_named_int")
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(AtlasLogNamedInt)
-				if err := _Atlas.contract.UnpackLog(event, "log_named_int", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseLogNamedInt is a log parse operation binding the contract event 0x2fe632779174374378442a8e978bccfbdcc1d6b2b0d81f7e8eb776ab2286f168.
-//
-// Solidity: event log_named_int(string key, int256 val)
-func (_Atlas *AtlasFilterer) ParseLogNamedInt(log types.Log) (*AtlasLogNamedInt, error) {
-	event := new(AtlasLogNamedInt)
-	if err := _Atlas.contract.UnpackLog(event, "log_named_int", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// AtlasLogNamedStringIterator is returned from FilterLogNamedString and is used to iterate over the raw logs and unpacked data for LogNamedString events raised by the Atlas contract.
-type AtlasLogNamedStringIterator struct {
-	Event *AtlasLogNamedString // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *AtlasLogNamedStringIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(AtlasLogNamedString)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(AtlasLogNamedString)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *AtlasLogNamedStringIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *AtlasLogNamedStringIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// AtlasLogNamedString represents a LogNamedString event raised by the Atlas contract.
-type AtlasLogNamedString struct {
-	Key string
-	Val string
-	Raw types.Log // Blockchain specific contextual infos
-}
-
-// FilterLogNamedString is a free log retrieval operation binding the contract event 0x280f4446b28a1372417dda658d30b95b2992b12ac9c7f378535f29a97acf3583.
-//
-// Solidity: event log_named_string(string key, string val)
-func (_Atlas *AtlasFilterer) FilterLogNamedString(opts *bind.FilterOpts) (*AtlasLogNamedStringIterator, error) {
-
-	logs, sub, err := _Atlas.contract.FilterLogs(opts, "log_named_string")
-	if err != nil {
-		return nil, err
-	}
-	return &AtlasLogNamedStringIterator{contract: _Atlas.contract, event: "log_named_string", logs: logs, sub: sub}, nil
-}
-
-// WatchLogNamedString is a free log subscription operation binding the contract event 0x280f4446b28a1372417dda658d30b95b2992b12ac9c7f378535f29a97acf3583.
-//
-// Solidity: event log_named_string(string key, string val)
-func (_Atlas *AtlasFilterer) WatchLogNamedString(opts *bind.WatchOpts, sink chan<- *AtlasLogNamedString) (event.Subscription, error) {
-
-	logs, sub, err := _Atlas.contract.WatchLogs(opts, "log_named_string")
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(AtlasLogNamedString)
-				if err := _Atlas.contract.UnpackLog(event, "log_named_string", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseLogNamedString is a log parse operation binding the contract event 0x280f4446b28a1372417dda658d30b95b2992b12ac9c7f378535f29a97acf3583.
-//
-// Solidity: event log_named_string(string key, string val)
-func (_Atlas *AtlasFilterer) ParseLogNamedString(log types.Log) (*AtlasLogNamedString, error) {
-	event := new(AtlasLogNamedString)
-	if err := _Atlas.contract.UnpackLog(event, "log_named_string", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// AtlasLogNamedUintIterator is returned from FilterLogNamedUint and is used to iterate over the raw logs and unpacked data for LogNamedUint events raised by the Atlas contract.
-type AtlasLogNamedUintIterator struct {
-	Event *AtlasLogNamedUint // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *AtlasLogNamedUintIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(AtlasLogNamedUint)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(AtlasLogNamedUint)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *AtlasLogNamedUintIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *AtlasLogNamedUintIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// AtlasLogNamedUint represents a LogNamedUint event raised by the Atlas contract.
-type AtlasLogNamedUint struct {
-	Key string
-	Val *big.Int
-	Raw types.Log // Blockchain specific contextual infos
-}
-
-// FilterLogNamedUint is a free log retrieval operation binding the contract event 0xb2de2fbe801a0df6c0cbddfd448ba3c41d48a040ca35c56c8196ef0fcae721a8.
-//
-// Solidity: event log_named_uint(string key, uint256 val)
-func (_Atlas *AtlasFilterer) FilterLogNamedUint(opts *bind.FilterOpts) (*AtlasLogNamedUintIterator, error) {
-
-	logs, sub, err := _Atlas.contract.FilterLogs(opts, "log_named_uint")
-	if err != nil {
-		return nil, err
-	}
-	return &AtlasLogNamedUintIterator{contract: _Atlas.contract, event: "log_named_uint", logs: logs, sub: sub}, nil
-}
-
-// WatchLogNamedUint is a free log subscription operation binding the contract event 0xb2de2fbe801a0df6c0cbddfd448ba3c41d48a040ca35c56c8196ef0fcae721a8.
-//
-// Solidity: event log_named_uint(string key, uint256 val)
-func (_Atlas *AtlasFilterer) WatchLogNamedUint(opts *bind.WatchOpts, sink chan<- *AtlasLogNamedUint) (event.Subscription, error) {
-
-	logs, sub, err := _Atlas.contract.WatchLogs(opts, "log_named_uint")
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(AtlasLogNamedUint)
-				if err := _Atlas.contract.UnpackLog(event, "log_named_uint", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseLogNamedUint is a log parse operation binding the contract event 0xb2de2fbe801a0df6c0cbddfd448ba3c41d48a040ca35c56c8196ef0fcae721a8.
-//
-// Solidity: event log_named_uint(string key, uint256 val)
-func (_Atlas *AtlasFilterer) ParseLogNamedUint(log types.Log) (*AtlasLogNamedUint, error) {
-	event := new(AtlasLogNamedUint)
-	if err := _Atlas.contract.UnpackLog(event, "log_named_uint", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// AtlasLogStringIterator is returned from FilterLogString and is used to iterate over the raw logs and unpacked data for LogString events raised by the Atlas contract.
-type AtlasLogStringIterator struct {
-	Event *AtlasLogString // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *AtlasLogStringIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(AtlasLogString)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(AtlasLogString)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *AtlasLogStringIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *AtlasLogStringIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// AtlasLogString represents a LogString event raised by the Atlas contract.
-type AtlasLogString struct {
-	Arg0 string
-	Raw  types.Log // Blockchain specific contextual infos
-}
-
-// FilterLogString is a free log retrieval operation binding the contract event 0x0b2e13ff20ac7b474198655583edf70dedd2c1dc980e329c4fbb2fc0748b796b.
-//
-// Solidity: event log_string(string arg0)
-func (_Atlas *AtlasFilterer) FilterLogString(opts *bind.FilterOpts) (*AtlasLogStringIterator, error) {
-
-	logs, sub, err := _Atlas.contract.FilterLogs(opts, "log_string")
-	if err != nil {
-		return nil, err
-	}
-	return &AtlasLogStringIterator{contract: _Atlas.contract, event: "log_string", logs: logs, sub: sub}, nil
-}
-
-// WatchLogString is a free log subscription operation binding the contract event 0x0b2e13ff20ac7b474198655583edf70dedd2c1dc980e329c4fbb2fc0748b796b.
-//
-// Solidity: event log_string(string arg0)
-func (_Atlas *AtlasFilterer) WatchLogString(opts *bind.WatchOpts, sink chan<- *AtlasLogString) (event.Subscription, error) {
-
-	logs, sub, err := _Atlas.contract.WatchLogs(opts, "log_string")
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(AtlasLogString)
-				if err := _Atlas.contract.UnpackLog(event, "log_string", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseLogString is a log parse operation binding the contract event 0x0b2e13ff20ac7b474198655583edf70dedd2c1dc980e329c4fbb2fc0748b796b.
-//
-// Solidity: event log_string(string arg0)
-func (_Atlas *AtlasFilterer) ParseLogString(log types.Log) (*AtlasLogString, error) {
-	event := new(AtlasLogString)
-	if err := _Atlas.contract.UnpackLog(event, "log_string", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// AtlasLogUintIterator is returned from FilterLogUint and is used to iterate over the raw logs and unpacked data for LogUint events raised by the Atlas contract.
-type AtlasLogUintIterator struct {
-	Event *AtlasLogUint // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *AtlasLogUintIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(AtlasLogUint)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(AtlasLogUint)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *AtlasLogUintIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *AtlasLogUintIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// AtlasLogUint represents a LogUint event raised by the Atlas contract.
-type AtlasLogUint struct {
-	Arg0 *big.Int
-	Raw  types.Log // Blockchain specific contextual infos
-}
-
-// FilterLogUint is a free log retrieval operation binding the contract event 0x2cab9790510fd8bdfbd2115288db33fec66691d476efc5427cfd4c0969301755.
-//
-// Solidity: event log_uint(uint256 arg0)
-func (_Atlas *AtlasFilterer) FilterLogUint(opts *bind.FilterOpts) (*AtlasLogUintIterator, error) {
-
-	logs, sub, err := _Atlas.contract.FilterLogs(opts, "log_uint")
-	if err != nil {
-		return nil, err
-	}
-	return &AtlasLogUintIterator{contract: _Atlas.contract, event: "log_uint", logs: logs, sub: sub}, nil
-}
-
-// WatchLogUint is a free log subscription operation binding the contract event 0x2cab9790510fd8bdfbd2115288db33fec66691d476efc5427cfd4c0969301755.
-//
-// Solidity: event log_uint(uint256 arg0)
-func (_Atlas *AtlasFilterer) WatchLogUint(opts *bind.WatchOpts, sink chan<- *AtlasLogUint) (event.Subscription, error) {
-
-	logs, sub, err := _Atlas.contract.WatchLogs(opts, "log_uint")
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(AtlasLogUint)
-				if err := _Atlas.contract.UnpackLog(event, "log_uint", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseLogUint is a log parse operation binding the contract event 0x2cab9790510fd8bdfbd2115288db33fec66691d476efc5427cfd4c0969301755.
-//
-// Solidity: event log_uint(uint256 arg0)
-func (_Atlas *AtlasFilterer) ParseLogUint(log types.Log) (*AtlasLogUint, error) {
-	event := new(AtlasLogUint)
-	if err := _Atlas.contract.UnpackLog(event, "log_uint", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
-}
-
-// AtlasLogsIterator is returned from FilterLogs and is used to iterate over the raw logs and unpacked data for Logs events raised by the Atlas contract.
-type AtlasLogsIterator struct {
-	Event *AtlasLogs // Event containing the contract specifics and raw log
-
-	contract *bind.BoundContract // Generic contract to use for unpacking event data
-	event    string              // Event name to use for unpacking event data
-
-	logs chan types.Log        // Log channel receiving the found contract events
-	sub  ethereum.Subscription // Subscription for errors, completion and termination
-	done bool                  // Whether the subscription completed delivering logs
-	fail error                 // Occurred error to stop iteration
-}
-
-// Next advances the iterator to the subsequent event, returning whether there
-// are any more events found. In case of a retrieval or parsing error, false is
-// returned and Error() can be queried for the exact failure.
-func (it *AtlasLogsIterator) Next() bool {
-	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(AtlasLogs)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(AtlasLogs)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
-}
-
-// Error returns any retrieval or parsing error occurred during filtering.
-func (it *AtlasLogsIterator) Error() error {
-	return it.fail
-}
-
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *AtlasLogsIterator) Close() error {
-	it.sub.Unsubscribe()
-	return nil
-}
-
-// AtlasLogs represents a Logs event raised by the Atlas contract.
-type AtlasLogs struct {
-	Arg0 []byte
-	Raw  types.Log // Blockchain specific contextual infos
-}
-
-// FilterLogs is a free log retrieval operation binding the contract event 0xe7950ede0394b9f2ce4a5a1bf5a7e1852411f7e6661b4308c913c4bfd11027e4.
-//
-// Solidity: event logs(bytes arg0)
-func (_Atlas *AtlasFilterer) FilterLogs(opts *bind.FilterOpts) (*AtlasLogsIterator, error) {
-
-	logs, sub, err := _Atlas.contract.FilterLogs(opts, "logs")
-	if err != nil {
-		return nil, err
-	}
-	return &AtlasLogsIterator{contract: _Atlas.contract, event: "logs", logs: logs, sub: sub}, nil
-}
-
-// WatchLogs is a free log subscription operation binding the contract event 0xe7950ede0394b9f2ce4a5a1bf5a7e1852411f7e6661b4308c913c4bfd11027e4.
-//
-// Solidity: event logs(bytes arg0)
-func (_Atlas *AtlasFilterer) WatchLogs(opts *bind.WatchOpts, sink chan<- *AtlasLogs) (event.Subscription, error) {
-
-	logs, sub, err := _Atlas.contract.WatchLogs(opts, "logs")
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(AtlasLogs)
-				if err := _Atlas.contract.UnpackLog(event, "logs", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
-}
-
-// ParseLogs is a log parse operation binding the contract event 0xe7950ede0394b9f2ce4a5a1bf5a7e1852411f7e6661b4308c913c4bfd11027e4.
-//
-// Solidity: event logs(bytes arg0)
-func (_Atlas *AtlasFilterer) ParseLogs(log types.Log) (*AtlasLogs, error) {
-	event := new(AtlasLogs)
-	if err := _Atlas.contract.UnpackLog(event, "logs", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
