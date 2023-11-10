@@ -5,6 +5,7 @@ import (
 	"log"
 	"math/big"
 
+	"github.com/FastLane-Labs/atlas-examples/contracts/Atlas"
 	"github.com/FastLane-Labs/atlas-examples/contracts/ERC20"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -13,10 +14,10 @@ import (
 )
 
 var (
-	ETH_ADDRESS             = common.HexToAddress("0x0")
-	WETH_ADDRESS            = common.HexToAddress("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2")
-	DAI_ADDRESS             = common.HexToAddress("0x6B175474E89094C44Da98b954EedeAC495271d0F")
-	UniswapV3Router_ADDRESS = common.HexToAddress("0xE592427A0AEce92De3Edee1F18E0157C05861564")
+	ETH_ADDRESS                    = common.HexToAddress("0x0")
+	WETH_ADDRESS                   = common.HexToAddress("0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14")
+	UNI_ADDRESS                    = common.HexToAddress("0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984")
+	UniswapUniversalRouter_ADDRESS = common.HexToAddress("0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD")
 )
 
 func approve(tokenAddress common.Address, beneficiary common.Address, amount *big.Int, ethClient *ethclient.Client, signer *bind.TransactOpts) {
@@ -35,4 +36,43 @@ func approve(tokenAddress common.Address, beneficiary common.Address, amount *bi
 	if err != nil {
 		log.Fatalf("could not wait for ERC20 approval transaction to be mined: %s", err)
 	}
+}
+
+func printBalances(swapIntentOp *SwapIntentOperation, solverOp *Atlas.SolverOperation, ethClient *ethclient.Client) {
+	// Contracts
+	tokenUserBuys, err := ERC20.NewERC20(swapIntentOp.SwapIntent.TokenUserBuys, ethClient)
+	if err != nil {
+		log.Fatalf("could not load TokenUserBuys contract: %s", err)
+	}
+
+	tokenUserSells, err := ERC20.NewERC20(swapIntentOp.SwapIntent.TokenUserSells, ethClient)
+	if err != nil {
+		log.Fatalf("could not load TokenUserSells contract: %s", err)
+	}
+
+	// User
+	tokenUserBuysBalance, err := tokenUserBuys.BalanceOf(nil, swapIntentOp.UserOperation.From)
+	if err != nil {
+		log.Fatalf("could not get user's TokenUserBuys balance: %s", err)
+	}
+
+	tokenUserSellsBalance, err := tokenUserSells.BalanceOf(nil, swapIntentOp.UserOperation.From)
+	if err != nil {
+		log.Fatalf("could not get user's TokenUserSells balance: %s", err)
+	}
+
+	log.Printf("\t\tUser balances: %s=%s, %s=%s", swapIntentOp.SwapIntent.TokenUserBuys.Hex(), tokenUserBuysBalance.String(), swapIntentOp.SwapIntent.TokenUserSells.Hex(), tokenUserSellsBalance.String())
+
+	// Solver
+	solverUserBuysBalance, err := tokenUserBuys.BalanceOf(nil, solverOp.Solver)
+	if err != nil {
+		log.Fatalf("could not get solvers's TokenUserBuys balance: %s", err)
+	}
+
+	solverUserSellsBalance, err := tokenUserSells.BalanceOf(nil, solverOp.Solver)
+	if err != nil {
+		log.Fatalf("could not get solver's TokenUserSells balance: %s", err)
+	}
+
+	log.Printf("\t\tSolver balances: %s=%s, %s=%s", swapIntentOp.SwapIntent.TokenUserBuys.Hex(), solverUserBuysBalance.String(), swapIntentOp.SwapIntent.TokenUserSells.Hex(), solverUserSellsBalance.String())
 }

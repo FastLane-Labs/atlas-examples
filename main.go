@@ -24,14 +24,14 @@ func main() {
 	governance := entities.NewGovernance(app.PrivateKeys["governance"], governanceSignatureChan, shutdownChan)
 
 	// Launch the backend goroutine
-	entities.NewBackend(app.PrivateKeys["bundler"], app.EthClient, app.Atlas, app.AtlasVerification, app.DAppController, app.TxBuilder, governance.GetGovernanceAddress(),
+	entities.NewBackend(app.PrivateKeys["bundler"], app.EthClient, app.ChainId, app.Atlas, app.AtlasVerification, app.DAppController, app.TxBuilder, governance.GetGovernanceAddress(),
 		swapIntentOperationSubmitChan, swapIntentOperationBroadcastChan, solverOperationSubmitChan, governanceSignatureChan, shutdownChan)
 
 	// Launch the solver goroutine
-	entities.NewSolver(app.PrivateKeys["solver"], app.EthClient, app.Atlas, app.AtlasVerification, app.DAppController, app.TxBuilder, app.Weth, app.Dai, app.Addresses,
-		app.UniswapV3Router, swapIntentOperationBroadcastChan, solverOperationSubmitChan, shutdownChan)
+	entities.NewSolver(app.PrivateKeys["solver"], app.EthClient, app.ChainId, app.Atlas, app.AtlasVerification, app.DAppController, app.TxBuilder, app.Weth, app.Uni, app.Addresses,
+		app.UniswapUniversalRouter, swapIntentOperationBroadcastChan, solverOperationSubmitChan, shutdownChan)
 
-	user := entities.NewUser(app.PrivateKeys["user"], app.EthClient, app.Atlas, app.AtlasFactory, app.AtlasVerification, app.DAppController, app.TxBuilder, app.Weth, app.Addresses,
+	user := entities.NewUser(app.PrivateKeys["user"], app.EthClient, app.ChainId, app.Atlas, app.AtlasFactory, app.AtlasVerification, app.DAppController, app.TxBuilder, app.Weth, app.Addresses,
 		swapIntentOperationSubmitChan)
 
 	// User initiate a swap intent

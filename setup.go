@@ -1,10 +1,8 @@
 package main
 
 import (
-	"crypto/tls"
 	"encoding/json"
 	"log"
-	"net/http"
 	"os"
 
 	"github.com/FastLane-Labs/atlas-examples/contracts/Atlas"
@@ -13,7 +11,7 @@ import (
 	"github.com/FastLane-Labs/atlas-examples/contracts/ERC20"
 	"github.com/FastLane-Labs/atlas-examples/contracts/SwapIntentController"
 	"github.com/FastLane-Labs/atlas-examples/contracts/TxBuilder"
-	"github.com/FastLane-Labs/atlas-examples/contracts/UniswapV3Router"
+	"github.com/FastLane-Labs/atlas-examples/contracts/UniswapUniversalRouter"
 	"github.com/FastLane-Labs/atlas-examples/contracts/WETH9"
 	"github.com/FastLane-Labs/atlas-examples/entities"
 
@@ -24,6 +22,7 @@ import (
 )
 
 type Config struct {
+	ChainId               int64          `json:"chainId"`
 	AtlasAddress          common.Address `json:"atlas"`
 	AtlasFactoryAddress   common.Address `json:"atlasFactory"`
 	AtlasVerification     common.Address `json:"atlasVerification"`
@@ -34,15 +33,17 @@ type Config struct {
 }
 
 type App struct {
+	ChainId int64
+
 	Atlas             *Atlas.Atlas
 	AtlasFactory      *AtlasFactory.AtlasFactory
 	AtlasVerification *AtlasVerification.AtlasVerification
 	DAppController    *SwapIntentController.SwapIntentController
 	TxBuilder         *TxBuilder.TxBuilder
 
-	Weth            *WETH9.WETH9
-	Dai             *ERC20.ERC20
-	UniswapV3Router *UniswapV3Router.UniswapV3Router
+	Weth                   *WETH9.WETH9
+	Uni                    *ERC20.ERC20
+	UniswapUniversalRouter *UniswapUniversalRouter.UniswapUniversalRouter
 
 	EthClient *ethclient.Client
 
@@ -72,6 +73,8 @@ func setup() *App {
 		log.Fatalf("could not decode config file: %s", err)
 	}
 
+	app.ChainId = config.ChainId
+
 	app.Addresses["atlas"] = config.AtlasAddress
 	app.Addresses["atlasFactory"] = config.AtlasFactoryAddress
 	app.Addresses["atlasVerification"] = config.AtlasVerification
@@ -84,9 +87,6 @@ func setup() *App {
 	if err != nil {
 		log.Fatalf("could not load .env file: %s", err)
 	}
-
-	// Disable certs verification
-	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
 	// Init eth client
 	app.EthClient, err = ethclient.Dial(env["RPC_URL"])
@@ -126,13 +126,13 @@ func setup() *App {
 		log.Fatal("could not initialize WETH9 contract")
 	}
 
-	app.Dai, err = ERC20.NewERC20(entities.DAI_ADDRESS, app.EthClient)
+	app.Uni, err = ERC20.NewERC20(entities.UNI_ADDRESS, app.EthClient)
 	if err != nil {
-		log.Fatal("could not initialize DAI contract")
+		log.Fatal("could not initialize UNI contract")
 	}
 
-	// Load Uniswap V3 router
-	app.UniswapV3Router, err = UniswapV3Router.NewUniswapV3Router(entities.UniswapV3Router_ADDRESS, app.EthClient)
+	// Load Uniswap universal router contract
+	app.UniswapUniversalRouter, err = UniswapUniversalRouter.NewUniswapUniversalRouter(entities.UniswapUniversalRouter_ADDRESS, app.EthClient)
 	if err != nil {
 		log.Fatal("could not initialize Uniswap V3 router contract")
 	}

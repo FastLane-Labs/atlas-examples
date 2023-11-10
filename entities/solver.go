@@ -6,7 +6,6 @@ import (
 	"log"
 	"math/big"
 	"os"
-	"time"
 
 	"github.com/FastLane-Labs/atlas-examples/contracts/Atlas"
 	"github.com/FastLane-Labs/atlas-examples/contracts/AtlasVerification"
@@ -14,7 +13,7 @@ import (
 	"github.com/FastLane-Labs/atlas-examples/contracts/SimpleRFQSolver"
 	"github.com/FastLane-Labs/atlas-examples/contracts/SwapIntentController"
 	"github.com/FastLane-Labs/atlas-examples/contracts/TxBuilder"
-	"github.com/FastLane-Labs/atlas-examples/contracts/UniswapV3Router"
+	"github.com/FastLane-Labs/atlas-examples/contracts/UniswapUniversalRouter"
 	"github.com/FastLane-Labs/atlas-examples/contracts/WETH9"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -35,9 +34,9 @@ type Solver struct {
 	txBuilder         *TxBuilder.TxBuilder
 
 	weth *WETH9.WETH9
-	dai  *ERC20.ERC20
+	uni  *ERC20.ERC20
 
-	uniswapV3Router *UniswapV3Router.UniswapV3Router
+	uniswapUniversalRouter *UniswapUniversalRouter.UniswapUniversalRouter
 
 	addresses map[string]common.Address
 
@@ -52,8 +51,8 @@ type Solver struct {
 	log *log.Logger
 }
 
-func NewSolver(pk string, ethClient *ethclient.Client, atlas *Atlas.Atlas, atlasVerification *AtlasVerification.AtlasVerification, dappController *SwapIntentController.SwapIntentController,
-	txBuilder *TxBuilder.TxBuilder, weth *WETH9.WETH9, dai *ERC20.ERC20, addresses map[string]common.Address, uniswapV3Router *UniswapV3Router.UniswapV3Router,
+func NewSolver(pk string, ethClient *ethclient.Client, chainId int64, atlas *Atlas.Atlas, atlasVerification *AtlasVerification.AtlasVerification, dappController *SwapIntentController.SwapIntentController,
+	txBuilder *TxBuilder.TxBuilder, weth *WETH9.WETH9, uni *ERC20.ERC20, addresses map[string]common.Address, uniswapUniversalRouter *UniswapUniversalRouter.UniswapUniversalRouter,
 	newSwapIntentOperationChan chan *SwapIntentOperation, solverOperationSubmitChan chan *Atlas.SolverOperation, shutdownChan chan struct{}) *Solver {
 	logger := log.New(os.Stdout, "[SOLVER]\t", log.LstdFlags|log.Lmsgprefix|log.Lmicroseconds)
 
@@ -62,7 +61,7 @@ func NewSolver(pk string, ethClient *ethclient.Client, atlas *Atlas.Atlas, atlas
 		logger.Fatalf("could not load solver's private key: %s", err)
 	}
 
-	signer, err := bind.NewKeyedTransactorWithChainID(privateKey, common.Big1)
+	signer, err := bind.NewKeyedTransactorWithChainID(privateKey, big.NewInt(chainId))
 	if err != nil {
 		logger.Fatalf("could not initialize solver's signer: %s", err)
 	}
@@ -76,8 +75,8 @@ func NewSolver(pk string, ethClient *ethclient.Client, atlas *Atlas.Atlas, atlas
 		dappController:             dappController,
 		txBuilder:                  txBuilder,
 		weth:                       weth,
-		dai:                        dai,
-		uniswapV3Router:            uniswapV3Router,
+		uni:                        uni,
+		uniswapUniversalRouter:     uniswapUniversalRouter,
 		addresses:                  addresses,
 		newSwapIntentOperationChan: newSwapIntentOperationChan,
 		solverOperationSubmitChan:  solverOperationSubmitChan,
@@ -93,7 +92,7 @@ func (s *Solver) run() {
 		select {
 		case swapIntentOperation := <-s.newSwapIntentOperationChan:
 			s.log.Println("Received a new swap intent")
-			s.getDaiForSolverContract(swapIntentOperation.SwapIntent.AmountUserBuys)
+			s.getUniForSolverContract(swapIntentOperation.SwapIntent.AmountUserBuys)
 
 			dConfig, err := s.dappController.GetDAppConfig(nil, SwapIntentController.UserOperation(*swapIntentOperation.UserOperation))
 			if err != nil {
@@ -118,21 +117,21 @@ func (s *Solver) run() {
 	}
 }
 
-func (s *Solver) getDaiForSolverContract(amount *big.Int) {
-	solverContractDaiBalance, err := s.dai.BalanceOf(nil, s.addresses["solverContract"])
+func (s *Solver) getUniForSolverContract(amount *big.Int) {
+	solverContractUniBalance, err := s.uni.BalanceOf(nil, s.addresses["solverContract"])
 	if err != nil {
-		s.log.Fatalf("could not get solver's DAI balance: %s", err)
+		s.log.Fatalf("could not get solver's UNI balance: %s", err)
 	}
 
-	daiNeeded := new(big.Int).Sub(amount, solverContractDaiBalance)
-	if daiNeeded.Cmp(common.Big0) > 0 {
+	uniNeeded := new(big.Int).Sub(amount, solverContractUniBalance)
+	if uniNeeded.Cmp(common.Big0) > 0 {
 		// Solver wraps some ETH if needed
 		solverWethBalance, err := s.weth.BalanceOf(nil, s.signer.From)
 		if err != nil {
 			s.log.Fatalf("could not get solver's WETH balance: %s", err)
 		}
 
-		wethNeeded := new(big.Int).Sub(big.NewInt(1e18), solverWethBalance)
+		wethNeeded := new(big.Int).Sub(big.NewInt(2*1e17), solverWethBalance)
 		if wethNeeded.Cmp(common.Big0) > 0 {
 			s.signer.Value = wethNeeded
 			tx, err := s.weth.Deposit(s.signer)
@@ -146,24 +145,32 @@ func (s *Solver) getDaiForSolverContract(amount *big.Int) {
 			}
 		}
 
-		approve(WETH_ADDRESS, UniswapV3Router_ADDRESS, big.NewInt(1e18), s.ethClient, s.signer)
+		approve(WETH_ADDRESS, UniswapUniversalRouter_ADDRESS, big.NewInt(1e18), s.ethClient, s.signer)
 
-		s.signer.Value = common.Big0
-		tx, err := s.uniswapV3Router.ExactOutputSingle(
-			s.signer,
-			UniswapV3Router.ISwapRouterExactOutputSingleParams{
-				TokenIn:           WETH_ADDRESS,
-				TokenOut:          DAI_ADDRESS,
-				Fee:               big.NewInt(3000),
-				Recipient:         s.addresses["solverContract"],
-				Deadline:          big.NewInt(time.Now().Unix() + 10),
-				AmountOut:         daiNeeded,
-				AmountInMaximum:   big.NewInt(1e18),
-				SqrtPriceLimitX96: common.Big0,
-			},
+		path, err := v3PathSinglePool.Pack(WETH_ADDRESS, big.NewInt(500), UNI_ADDRESS)
+		if err != nil {
+			s.log.Fatalf("could not pack path: %s", err)
+		}
+
+		commandInputs, err := v3SwapExactOut.Pack(
+			s.addresses["solverContract"],
+			uniNeeded,
+			big.NewInt(1e16),
+			path,
+			true,
 		)
 		if err != nil {
-			s.log.Fatalf("could not get DAI for solver: %s", err)
+			s.log.Fatalf("could not pack command inputs: %s", err)
+		}
+
+		s.signer.Value = common.Big0
+		tx, err := s.uniswapUniversalRouter.Execute(
+			s.signer,
+			common.Hex2Bytes("0x01"), // V3_SWAP_EXACT_OUT
+			[][]byte{commandInputs},
+		)
+		if err != nil {
+			s.log.Fatalf("could not get UNI for solver: %s", err)
 		}
 
 		_, err = bind.WaitMined(context.Background(), s.ethClient, tx)

@@ -21,8 +21,8 @@ import (
 )
 
 var (
-	WETH_AMOUNT_TO_SELL, _ = new(big.Int).SetString("10000000000000000000", 10)
-	DAI_AMOUNT_TO_BUY, _   = new(big.Int).SetString("20000000000000000000", 10)
+	WETH_AMOUNT_TO_SELL  = big.NewInt(1e17)
+	UNI_AMOUNT_TO_BUY, _ = new(big.Int).SetString("40000000000000000000", 10)
 )
 
 type User struct {
@@ -47,7 +47,7 @@ type User struct {
 	log *log.Logger
 }
 
-func NewUser(pk string, ethClient *ethclient.Client, atlas *Atlas.Atlas, atlasFactory *AtlasFactory.AtlasFactory, atlasVerification *AtlasVerification.AtlasVerification, dappController *SwapIntentController.SwapIntentController,
+func NewUser(pk string, ethClient *ethclient.Client, chainId int64, atlas *Atlas.Atlas, atlasFactory *AtlasFactory.AtlasFactory, atlasVerification *AtlasVerification.AtlasVerification, dappController *SwapIntentController.SwapIntentController,
 	txBuilder *TxBuilder.TxBuilder, weth *WETH9.WETH9, addresses map[string]common.Address, swapIntentOperationSubmitChan chan *SwapIntentOperation) *User {
 	logger := log.New(os.Stdout, "[USER]\t", log.LstdFlags|log.Lmsgprefix|log.Lmicroseconds)
 
@@ -56,7 +56,7 @@ func NewUser(pk string, ethClient *ethclient.Client, atlas *Atlas.Atlas, atlasFa
 		logger.Fatalf("could not load user's private key: %s", err)
 	}
 
-	signer, err := bind.NewKeyedTransactorWithChainID(privateKey, common.Big1)
+	signer, err := bind.NewKeyedTransactorWithChainID(privateKey, big.NewInt(chainId))
 	if err != nil {
 		logger.Fatalf("could not initialize user's signer: %s", err)
 	}
@@ -79,8 +79,8 @@ func NewUser(pk string, ethClient *ethclient.Client, atlas *Atlas.Atlas, atlasFa
 
 func (u *User) StartSwapIntent() {
 	swapIntent := SwapIntentController.SwapIntent{
-		TokenUserBuys:          DAI_ADDRESS,
-		AmountUserBuys:         DAI_AMOUNT_TO_BUY,
+		TokenUserBuys:          UNI_ADDRESS,
+		AmountUserBuys:         UNI_AMOUNT_TO_BUY,
 		TokenUserSells:         WETH_ADDRESS,
 		AmountUserSells:        WETH_AMOUNT_TO_SELL,
 		AuctionBaseCurrency:    ETH_ADDRESS,
@@ -169,7 +169,7 @@ func (u *User) buildUserOperation(swapIntent SwapIntentController.SwapIntent) At
 		nil,
 		u.signer.From,
 		u.addresses["dAppController"],
-		big.NewInt(1000000000000),
+		big.NewInt(10*1e9),
 		common.Big0,
 		big.NewInt(int64(currentBlock)+100),
 		userOpData,

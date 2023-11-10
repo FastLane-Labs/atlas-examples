@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/ecdsa"
 	"log"
+	"math/big"
 	"os"
 
 	"github.com/FastLane-Labs/atlas-examples/contracts/Atlas"
@@ -51,7 +52,7 @@ type Backend struct {
 	log *log.Logger
 }
 
-func NewBackend(pk string, ethClient *ethclient.Client, atlas *Atlas.Atlas, atlasVerification *AtlasVerification.AtlasVerification, dappController *SwapIntentController.SwapIntentController, txBuilder *TxBuilder.TxBuilder,
+func NewBackend(pk string, ethClient *ethclient.Client, chainId int64, atlas *Atlas.Atlas, atlasVerification *AtlasVerification.AtlasVerification, dappController *SwapIntentController.SwapIntentController, txBuilder *TxBuilder.TxBuilder,
 	governanceAddress common.Address, swapIntentOperationReceiveChan, swapIntentOperationBroadcastChan chan *SwapIntentOperation,
 	solverOperationReceiveChan chan *Atlas.SolverOperation, governanceSignatureChan chan []byte, shutdownChan chan struct{}) *Backend {
 	logger := log.New(os.Stdout, "[BACKEND]\t", log.LstdFlags|log.Lmsgprefix|log.Lmicroseconds)
@@ -61,7 +62,7 @@ func NewBackend(pk string, ethClient *ethclient.Client, atlas *Atlas.Atlas, atla
 		logger.Fatalf("could not load user's private key: %s", err)
 	}
 
-	bundlerSigner, err := bind.NewKeyedTransactorWithChainID(bundlerPrivateKey, common.Big1)
+	bundlerSigner, err := bind.NewKeyedTransactorWithChainID(bundlerPrivateKey, big.NewInt(int64(chainId)))
 	if err != nil {
 		logger.Fatalf("could not initialize user's signer: %s", err)
 	}
@@ -143,9 +144,15 @@ func (b *Backend) run() {
 			dAppOperation.Signature = <-b.governanceSignatureChan
 			b.log.Println("Received signed payload from governance")
 
+			// Before
+			printBalances(swapIntentOperation, solverOperation, b.ethClient)
+
 			// In this example, the backend is the bundler
 			b.log.Println("Calls metacall")
 			b.metacall(*swapIntentOperation.UserOperation, solverOperations, dAppOperation)
+
+			// After
+			printBalances(swapIntentOperation, solverOperation, b.ethClient)
 
 			// Intent filled, remove it from processing
 			delete(b.processingSwapIntents, common.Bytes2Hex(solverOperation.UserOpHash[:]))

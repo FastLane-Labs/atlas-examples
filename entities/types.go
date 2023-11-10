@@ -29,3 +29,25 @@ var (
 
 	userOpArg = abi.Arguments{{Type: userOpType}}
 )
+
+var (
+	addressType, _ = abi.NewType("address", "", nil)
+	uint24Type, _  = abi.NewType("uint24", "", nil)
+	uint256Type, _ = abi.NewType("uint256", "", nil)
+	bytesType, _   = abi.NewType("bytes", "", nil)
+	boolType, _    = abi.NewType("bool", "", nil)
+
+	v3SwapExactOut = abi.Arguments{
+		abi.Argument{Name: "recipient", Type: addressType},
+		abi.Argument{Name: "amountOut", Type: uint256Type},
+		abi.Argument{Name: "amountInMaximum", Type: uint256Type},
+		abi.Argument{Name: "path", Type: bytesType},
+		abi.Argument{Name: "tokenInFromSender", Type: boolType},
+	}
+
+	v3PathSinglePool = abi.Arguments{
+		abi.Argument{Name: "tokenIn", Type: addressType},
+		abi.Argument{Name: "fee", Type: uint24Type},
+		abi.Argument{Name: "tokenOut", Type: addressType},
+	}
+)
