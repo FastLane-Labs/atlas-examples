@@ -5,7 +5,7 @@ A simple example for the swap intent case using Atlas.
 
 **Environment**
 
-Create `.env` file, patterned on `.env.example`. Credentials and private keys for the testnet are privately communicated.
+Create `.env` file, patterned on `.env.example`.
 
 **Config file**
 

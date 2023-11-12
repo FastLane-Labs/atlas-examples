@@ -8,12 +8,12 @@
       },
       {
         "internalType": "address",
-        "name": "escrowAddress",
+        "name": "atlasAddress",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "atlasAddress",
+        "name": "_verification",
         "type": "address"
       }
     ],
@@ -44,77 +44,53 @@
         "components": [
           {
             "internalType": "address",
-            "name": "to",
+            "name": "from",
             "type": "address"
           },
-          {
-            "internalType": "uint32",
-            "name": "callConfig",
-            "type": "uint32"
-          }
-        ],
-        "internalType": "struct DAppConfig",
-        "name": "dConfig",
-        "type": "tuple"
-      },
-      {
-        "components": [
           {
             "internalType": "address",
             "name": "to",
             "type": "address"
           },
           {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "from",
-                "type": "address"
-              },
-              {
-                "internalType": "address",
-                "name": "to",
-                "type": "address"
-              },
-              {
-                "internalType": "uint256",
-                "name": "value",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "gas",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "maxFeePerGas",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "nonce",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "deadline",
-                "type": "uint256"
-              },
-              {
-                "internalType": "address",
-                "name": "control",
-                "type": "address"
-              },
-              {
-                "internalType": "bytes",
-                "name": "data",
-                "type": "bytes"
-              }
-            ],
-            "internalType": "struct UserCall",
-            "name": "call",
-            "type": "tuple"
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "gas",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxFeePerGas",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "nonce",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "deadline",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "dapp",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "control",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes",
+            "name": "data",
+            "type": "bytes"
           },
           {
             "internalType": "bytes",
@@ -130,92 +106,73 @@
         "components": [
           {
             "internalType": "address",
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
             "name": "to",
             "type": "address"
           },
           {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "from",
-                "type": "address"
-              },
-              {
-                "internalType": "address",
-                "name": "to",
-                "type": "address"
-              },
-              {
-                "internalType": "uint256",
-                "name": "value",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "gas",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "maxFeePerGas",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "nonce",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "deadline",
-                "type": "uint256"
-              },
-              {
-                "internalType": "bytes32",
-                "name": "controlCodeHash",
-                "type": "bytes32"
-              },
-              {
-                "internalType": "bytes32",
-                "name": "userOpHash",
-                "type": "bytes32"
-              },
-              {
-                "internalType": "bytes32",
-                "name": "bidsHash",
-                "type": "bytes32"
-              },
-              {
-                "internalType": "bytes",
-                "name": "data",
-                "type": "bytes"
-              }
-            ],
-            "internalType": "struct SolverCall",
-            "name": "call",
-            "type": "tuple"
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "gas",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxFeePerGas",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "nonce",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "deadline",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "solver",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "control",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "userOpHash",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "bidToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "bidAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes",
+            "name": "data",
+            "type": "bytes"
           },
           {
             "internalType": "bytes",
             "name": "signature",
             "type": "bytes"
-          },
-          {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "token",
-                "type": "address"
-              },
-              {
-                "internalType": "uint256",
-                "name": "bidAmount",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct BidData[]",
-            "name": "bids",
-            "type": "tuple[]"
           }
         ],
         "internalType": "struct SolverOperation[]",
@@ -229,65 +186,53 @@
         "components": [
           {
             "internalType": "address",
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
             "name": "to",
             "type": "address"
           },
           {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "from",
-                "type": "address"
-              },
-              {
-                "internalType": "address",
-                "name": "to",
-                "type": "address"
-              },
-              {
-                "internalType": "uint256",
-                "name": "value",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "gas",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "maxFeePerGas",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "nonce",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "deadline",
-                "type": "uint256"
-              },
-              {
-                "internalType": "bytes32",
-                "name": "controlCodeHash",
-                "type": "bytes32"
-              },
-              {
-                "internalType": "bytes32",
-                "name": "userOpHash",
-                "type": "bytes32"
-              },
-              {
-                "internalType": "bytes32",
-                "name": "callChainHash",
-                "type": "bytes32"
-              }
-            ],
-            "internalType": "struct DAppApproval",
-            "name": "approval",
-            "type": "tuple"
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "gas",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxFeePerGas",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "nonce",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "deadline",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "control",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "userOpHash",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "callChainHash",
+            "type": "bytes32"
           },
           {
             "internalType": "bytes",
@@ -309,60 +254,53 @@
         "components": [
           {
             "internalType": "address",
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
             "name": "to",
             "type": "address"
           },
           {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "from",
-                "type": "address"
-              },
-              {
-                "internalType": "address",
-                "name": "to",
-                "type": "address"
-              },
-              {
-                "internalType": "uint256",
-                "name": "value",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "gas",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "maxFeePerGas",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "nonce",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "deadline",
-                "type": "uint256"
-              },
-              {
-                "internalType": "address",
-                "name": "control",
-                "type": "address"
-              },
-              {
-                "internalType": "bytes",
-                "name": "data",
-                "type": "bytes"
-              }
-            ],
-            "internalType": "struct UserCall",
-            "name": "call",
-            "type": "tuple"
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "gas",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxFeePerGas",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "nonce",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "deadline",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "dapp",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "control",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes",
+            "name": "data",
+            "type": "bytes"
           },
           {
             "internalType": "bytes",
@@ -372,23 +310,6 @@
         ],
         "internalType": "struct UserOperation",
         "name": "userOp",
-        "type": "tuple"
-      },
-      {
-        "components": [
-          {
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "uint32",
-            "name": "callConfig",
-            "type": "uint32"
-          }
-        ],
-        "internalType": "struct DAppConfig",
-        "name": "dConfig",
         "type": "tuple"
       },
       {
@@ -418,92 +339,73 @@
         "components": [
           {
             "internalType": "address",
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
             "name": "to",
             "type": "address"
           },
           {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "from",
-                "type": "address"
-              },
-              {
-                "internalType": "address",
-                "name": "to",
-                "type": "address"
-              },
-              {
-                "internalType": "uint256",
-                "name": "value",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "gas",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "maxFeePerGas",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "nonce",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "deadline",
-                "type": "uint256"
-              },
-              {
-                "internalType": "bytes32",
-                "name": "controlCodeHash",
-                "type": "bytes32"
-              },
-              {
-                "internalType": "bytes32",
-                "name": "userOpHash",
-                "type": "bytes32"
-              },
-              {
-                "internalType": "bytes32",
-                "name": "bidsHash",
-                "type": "bytes32"
-              },
-              {
-                "internalType": "bytes",
-                "name": "data",
-                "type": "bytes"
-              }
-            ],
-            "internalType": "struct SolverCall",
-            "name": "call",
-            "type": "tuple"
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "gas",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxFeePerGas",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "nonce",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "deadline",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "solver",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "control",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "userOpHash",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "bidToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "bidAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes",
+            "name": "data",
+            "type": "bytes"
           },
           {
             "internalType": "bytes",
             "name": "signature",
             "type": "bytes"
-          },
-          {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "token",
-                "type": "address"
-              },
-              {
-                "internalType": "uint256",
-                "name": "bidAmount",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct BidData[]",
-            "name": "bids",
-            "type": "tuple[]"
           }
         ],
         "internalType": "struct SolverOperation",
@@ -553,120 +455,6 @@
         "components": [
           {
             "internalType": "address",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "from",
-                "type": "address"
-              },
-              {
-                "internalType": "address",
-                "name": "to",
-                "type": "address"
-              },
-              {
-                "internalType": "uint256",
-                "name": "value",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "gas",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "maxFeePerGas",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "nonce",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "deadline",
-                "type": "uint256"
-              },
-              {
-                "internalType": "address",
-                "name": "control",
-                "type": "address"
-              },
-              {
-                "internalType": "bytes",
-                "name": "data",
-                "type": "bytes"
-              }
-            ],
-            "internalType": "struct UserCall",
-            "name": "call",
-            "type": "tuple"
-          },
-          {
-            "internalType": "bytes",
-            "name": "signature",
-            "type": "bytes"
-          }
-        ],
-        "internalType": "struct UserOperation",
-        "name": "userOp",
-        "type": "tuple"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "control",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "escrow",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "gas",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "components": [
-          {
-            "internalType": "address",
             "name": "from",
             "type": "address"
           },
@@ -702,6 +490,11 @@
           },
           {
             "internalType": "address",
+            "name": "dapp",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
             "name": "control",
             "type": "address"
           },
@@ -709,36 +502,55 @@
             "internalType": "bytes",
             "name": "data",
             "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "signature",
+            "type": "bytes"
           }
         ],
-        "internalType": "struct UserCall",
-        "name": "uCall",
+        "internalType": "struct UserOperation",
+        "name": "userOp",
         "type": "tuple"
-      },
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "control",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "gas",
+    "outputs": [
       {
         "internalType": "uint256",
-        "name": "amount",
+        "name": "",
         "type": "uint256"
       }
     ],
-    "name": "getBidData",
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getBlockchainID",
     "outputs": [
       {
-        "components": [
-          {
-            "internalType": "address",
-            "name": "token",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "bidAmount",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct BidData[]",
-        "name": "bids",
-        "type": "tuple[]"
+        "internalType": "uint256",
+        "name": "chainId",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -758,31 +570,6 @@
         "internalType": "bytes32",
         "name": "",
         "type": "bytes32"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getDAppConfig",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "uint32",
-            "name": "callConfig",
-            "type": "uint32"
-          }
-        ],
-        "internalType": "struct DAppConfig",
-        "name": "",
-        "type": "tuple"
       }
     ],
     "stateMutability": "view",
@@ -840,6 +627,19 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "verification",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",

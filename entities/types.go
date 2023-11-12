@@ -24,8 +24,25 @@ var (
 		{Name: "Nonce", Type: "uint256"},
 		{Name: "Deadline", Type: "uint256"},
 		{Name: "Control", Type: "address"},
+		{Name: "Dapp", Type: "address"},
 		{Name: "Data", Type: "bytes"},
+		{Name: "Signature", Type: "bytes"},
 	})
 
 	userOpArg = abi.Arguments{{Type: userOpType}}
+)
+
+var (
+	addressType, _ = abi.NewType("address", "address", nil)
+	uint256Type, _ = abi.NewType("uint256", "uint256", nil)
+	bytesType, _   = abi.NewType("bytes", "bytes", nil)
+	boolType, _    = abi.NewType("bool", "bool", nil)
+
+	v3SwapExactOut = abi.Arguments{
+		abi.Argument{Name: "recipient", Type: addressType},
+		abi.Argument{Name: "amountOut", Type: uint256Type},
+		abi.Argument{Name: "amountInMaximum", Type: uint256Type},
+		abi.Argument{Name: "path", Type: bytesType},
+		abi.Argument{Name: "tokenInFromSender", Type: boolType},
+	}
 )

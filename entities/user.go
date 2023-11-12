@@ -8,6 +8,8 @@ import (
 	"os"
 
 	"github.com/FastLane-Labs/atlas-examples/contracts/Atlas"
+	"github.com/FastLane-Labs/atlas-examples/contracts/AtlasFactory"
+	"github.com/FastLane-Labs/atlas-examples/contracts/AtlasVerification"
 	"github.com/FastLane-Labs/atlas-examples/contracts/SwapIntentController"
 	"github.com/FastLane-Labs/atlas-examples/contracts/TxBuilder"
 	"github.com/FastLane-Labs/atlas-examples/contracts/WETH9"
@@ -19,8 +21,8 @@ import (
 )
 
 var (
-	WETH_AMOUNT_TO_SELL, _ = new(big.Int).SetString("10000000000000000000", 10)
-	DAI_AMOUNT_TO_BUY, _   = new(big.Int).SetString("20000000000000000000", 10)
+	WETH_AMOUNT_TO_SELL = big.NewInt(1e16)
+	UNI_AMOUNT_TO_BUY   = big.NewInt(3 * 1e15)
 )
 
 type User struct {
@@ -29,9 +31,11 @@ type User struct {
 
 	ethClient *ethclient.Client
 
-	atlas          *Atlas.Atlas
-	dappController *SwapIntentController.SwapIntentController
-	txBuilder      *TxBuilder.TxBuilder
+	atlas             *Atlas.Atlas
+	atlasFactory      *AtlasFactory.AtlasFactory
+	atlasVerification *AtlasVerification.AtlasVerification
+	dappController    *SwapIntentController.SwapIntentController
+	txBuilder         *TxBuilder.TxBuilder
 
 	weth *WETH9.WETH9
 
@@ -43,7 +47,7 @@ type User struct {
 	log *log.Logger
 }
 
-func NewUser(pk string, ethClient *ethclient.Client, atlas *Atlas.Atlas, dappController *SwapIntentController.SwapIntentController,
+func NewUser(pk string, ethClient *ethclient.Client, chainId int64, atlas *Atlas.Atlas, atlasFactory *AtlasFactory.AtlasFactory, atlasVerification *AtlasVerification.AtlasVerification, dappController *SwapIntentController.SwapIntentController,
 	txBuilder *TxBuilder.TxBuilder, weth *WETH9.WETH9, addresses map[string]common.Address, swapIntentOperationSubmitChan chan *SwapIntentOperation) *User {
 	logger := log.New(os.Stdout, "[USER]\t", log.LstdFlags|log.Lmsgprefix|log.Lmicroseconds)
 
@@ -52,7 +56,7 @@ func NewUser(pk string, ethClient *ethclient.Client, atlas *Atlas.Atlas, dappCon
 		logger.Fatalf("could not load user's private key: %s", err)
 	}
 
-	signer, err := bind.NewKeyedTransactorWithChainID(privateKey, common.Big1)
+	signer, err := bind.NewKeyedTransactorWithChainID(privateKey, big.NewInt(chainId))
 	if err != nil {
 		logger.Fatalf("could not initialize user's signer: %s", err)
 	}
@@ -62,6 +66,8 @@ func NewUser(pk string, ethClient *ethclient.Client, atlas *Atlas.Atlas, dappCon
 		privateKey:                    privateKey,
 		ethClient:                     ethClient,
 		atlas:                         atlas,
+		atlasFactory:                  atlasFactory,
+		atlasVerification:             atlasVerification,
 		dappController:                dappController,
 		txBuilder:                     txBuilder,
 		weth:                          weth,
@@ -73,8 +79,8 @@ func NewUser(pk string, ethClient *ethclient.Client, atlas *Atlas.Atlas, dappCon
 
 func (u *User) StartSwapIntent() {
 	swapIntent := SwapIntentController.SwapIntent{
-		TokenUserBuys:          DAI_ADDRESS,
-		AmountUserBuys:         DAI_AMOUNT_TO_BUY,
+		TokenUserBuys:          UNI_ADDRESS,
+		AmountUserBuys:         UNI_AMOUNT_TO_BUY,
 		TokenUserSells:         WETH_ADDRESS,
 		AmountUserSells:        WETH_AMOUNT_TO_SELL,
 		AuctionBaseCurrency:    ETH_ADDRESS,
@@ -82,18 +88,13 @@ func (u *User) StartSwapIntent() {
 		Conditions:             []SwapIntentController.Condition{},
 	}
 
+	userOperation := u.buildUserOperation(swapIntent)
+	executionEnvironment := u.getOrCreateExecutionEnvironment(userOperation.Dapp)
+
 	u.getWethAndApproveAtlas(WETH_AMOUNT_TO_SELL)
 
-	dConfig, err := u.dappController.GetDAppConfig(nil)
-	if err != nil {
-		u.log.Fatalf("could not get dApp config: %s", err)
-	}
-
-	executionEnvironment := u.getOrCreateExecutionEnvironment(Atlas.DAppConfig(dConfig))
-	userOperation := u.buildUserOperation(swapIntent)
-
 	// Submit the intent to the backend
-	u.log.Println("submits swap intent to the backend")
+	u.log.Println("Submits swap intent to the backend")
 	u.swapIntentOperationSubmitChan <- &SwapIntentOperation{
 		SwapIntent:           &swapIntent,
 		UserOperation:        &userOperation,
@@ -110,6 +111,7 @@ func (u *User) getWethAndApproveAtlas(amount *big.Int) {
 
 	wethNeeded := new(big.Int).Sub(amount, wethBalance)
 	if wethNeeded.Cmp(common.Big0) > 0 {
+		u.log.Println("Wrapping ETH")
 		u.signer.Value = wethNeeded
 		tx, err := u.weth.Deposit(u.signer)
 		if err != nil {
@@ -120,21 +122,30 @@ func (u *User) getWethAndApproveAtlas(amount *big.Int) {
 		if err != nil {
 			u.log.Fatalf("could not wait for deposit transaction to be mined: %s", err)
 		}
+		u.log.Printf("Wrapped ETH: %s", tx.Hash().Hex())
 	}
 
 	// Approve those WETH for Atlas
-	approve(WETH_ADDRESS, u.addresses["atlas"], wethNeeded, u.ethClient, u.signer)
+	allowance, err := u.weth.Allowance(nil, u.signer.From, u.addresses["atlas"])
+	if err != nil {
+		u.log.Fatalf("could not get user's WETH allowance: %s", err)
+	}
+
+	if allowance.Cmp(common.Big0) == 0 {
+		approve(WETH_ADDRESS, u.addresses["atlas"], MaxUint256, u.ethClient, u.signer)
+	}
 }
 
-func (u *User) getOrCreateExecutionEnvironment(dConfig Atlas.DAppConfig) common.Address {
-	execEnvData, err := u.atlas.GetExecutionEnvironment(nil, u.signer.From, dConfig.To)
+func (u *User) getOrCreateExecutionEnvironment(dAppControl common.Address) common.Address {
+	execEnvData, err := u.atlasFactory.GetExecutionEnvironment(nil, u.signer.From, dAppControl)
 	if err != nil {
 		u.log.Fatalf("could not get execution environment data: %s", err)
 	}
 
 	if !execEnvData.Exists {
+		u.log.Println("Creating execution environment")
 		u.signer.Value = new(big.Int).Set(common.Big0)
-		tx, err := u.atlas.CreateExecutionEnvironment(u.signer, dConfig)
+		tx, err := u.atlas.CreateExecutionEnvironment(u.signer, dAppControl)
 		if err != nil {
 			u.log.Fatalf("could not create execution environment: %s", err)
 		}
@@ -143,6 +154,7 @@ func (u *User) getOrCreateExecutionEnvironment(dConfig Atlas.DAppConfig) common.
 		if err != nil {
 			u.log.Fatalf("could not wait for execution environment creation transaction to be mined: %s", err)
 		}
+		u.log.Printf("Created execution environment: %s", tx.Hash().Hex())
 	}
 
 	return execEnvData.ExecutionEnvironment
@@ -168,7 +180,7 @@ func (u *User) buildUserOperation(swapIntent SwapIntentController.SwapIntent) At
 		nil,
 		u.signer.From,
 		u.addresses["dAppController"],
-		big.NewInt(1000000000000),
+		big.NewInt(10*1e9),
 		common.Big0,
 		big.NewInt(int64(currentBlock)+100),
 		userOpData,
@@ -177,12 +189,8 @@ func (u *User) buildUserOperation(swapIntent SwapIntentController.SwapIntent) At
 		u.log.Fatalf("could not build user operation: %s", err)
 	}
 
-	userOp := Atlas.UserOperation{
-		To:   op.To,
-		Call: Atlas.UserCall(op.Call),
-	}
-
-	userOpPayload, err := u.atlas.GetUserOperationPayload(nil, userOp)
+	userOp := Atlas.UserOperation(op)
+	userOpPayload, err := u.atlasVerification.GetUserOperationPayload(nil, AtlasVerification.UserOperation(userOp))
 	if err != nil {
 		u.log.Fatalf("could not get user operation payload: %s", err)
 	}

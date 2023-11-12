@@ -6,14 +6,14 @@ import (
 	"log"
 	"math/big"
 	"os"
-	"time"
 
 	"github.com/FastLane-Labs/atlas-examples/contracts/Atlas"
+	"github.com/FastLane-Labs/atlas-examples/contracts/AtlasVerification"
 	"github.com/FastLane-Labs/atlas-examples/contracts/ERC20"
 	"github.com/FastLane-Labs/atlas-examples/contracts/SimpleRFQSolver"
 	"github.com/FastLane-Labs/atlas-examples/contracts/SwapIntentController"
 	"github.com/FastLane-Labs/atlas-examples/contracts/TxBuilder"
-	"github.com/FastLane-Labs/atlas-examples/contracts/UniswapV3Router"
+	"github.com/FastLane-Labs/atlas-examples/contracts/UniswapUniversalRouter"
 	"github.com/FastLane-Labs/atlas-examples/contracts/WETH9"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -22,20 +22,25 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
+var (
+	atlEthBalanceMin = big.NewInt(1e17)
+)
+
 type Solver struct {
 	signer     *bind.TransactOpts
 	privateKey *ecdsa.PrivateKey
 
 	ethClient *ethclient.Client
 
-	atlas          *Atlas.Atlas
-	dappController *SwapIntentController.SwapIntentController
-	txBuilder      *TxBuilder.TxBuilder
+	atlas             *Atlas.Atlas
+	atlasVerification *AtlasVerification.AtlasVerification
+	dappController    *SwapIntentController.SwapIntentController
+	txBuilder         *TxBuilder.TxBuilder
 
 	weth *WETH9.WETH9
-	dai  *ERC20.ERC20
+	uni  *ERC20.ERC20
 
-	uniswapV3Router *UniswapV3Router.UniswapV3Router
+	uniswapUniversalRouter *UniswapUniversalRouter.UniswapUniversalRouter
 
 	addresses map[string]common.Address
 
@@ -50,8 +55,8 @@ type Solver struct {
 	log *log.Logger
 }
 
-func NewSolver(pk string, ethClient *ethclient.Client, atlas *Atlas.Atlas, dappController *SwapIntentController.SwapIntentController,
-	txBuilder *TxBuilder.TxBuilder, weth *WETH9.WETH9, dai *ERC20.ERC20, addresses map[string]common.Address, uniswapV3Router *UniswapV3Router.UniswapV3Router,
+func NewSolver(pk string, ethClient *ethclient.Client, chainId int64, atlas *Atlas.Atlas, atlasVerification *AtlasVerification.AtlasVerification, dappController *SwapIntentController.SwapIntentController,
+	txBuilder *TxBuilder.TxBuilder, weth *WETH9.WETH9, uni *ERC20.ERC20, addresses map[string]common.Address, uniswapUniversalRouter *UniswapUniversalRouter.UniswapUniversalRouter,
 	newSwapIntentOperationChan chan *SwapIntentOperation, solverOperationSubmitChan chan *Atlas.SolverOperation, shutdownChan chan struct{}) *Solver {
 	logger := log.New(os.Stdout, "[SOLVER]\t", log.LstdFlags|log.Lmsgprefix|log.Lmicroseconds)
 
@@ -60,7 +65,7 @@ func NewSolver(pk string, ethClient *ethclient.Client, atlas *Atlas.Atlas, dappC
 		logger.Fatalf("could not load solver's private key: %s", err)
 	}
 
-	signer, err := bind.NewKeyedTransactorWithChainID(privateKey, common.Big1)
+	signer, err := bind.NewKeyedTransactorWithChainID(privateKey, big.NewInt(chainId))
 	if err != nil {
 		logger.Fatalf("could not initialize solver's signer: %s", err)
 	}
@@ -70,11 +75,12 @@ func NewSolver(pk string, ethClient *ethclient.Client, atlas *Atlas.Atlas, dappC
 		privateKey:                 privateKey,
 		ethClient:                  ethClient,
 		atlas:                      atlas,
+		atlasVerification:          atlasVerification,
 		dappController:             dappController,
 		txBuilder:                  txBuilder,
 		weth:                       weth,
-		dai:                        dai,
-		uniswapV3Router:            uniswapV3Router,
+		uni:                        uni,
+		uniswapUniversalRouter:     uniswapUniversalRouter,
 		addresses:                  addresses,
 		newSwapIntentOperationChan: newSwapIntentOperationChan,
 		solverOperationSubmitChan:  solverOperationSubmitChan,
@@ -90,11 +96,32 @@ func (s *Solver) run() {
 		select {
 		case swapIntentOperation := <-s.newSwapIntentOperationChan:
 			s.log.Println("Received a new swap intent")
-			s.getDaiForSolverContract(swapIntentOperation.SwapIntent.AmountUserBuys)
+			s.getUniForSolverContract(swapIntentOperation.SwapIntent.AmountUserBuys)
 
-			dConfig, err := s.dappController.GetDAppConfig(nil)
+			dConfig, err := s.dappController.GetDAppConfig(nil, SwapIntentController.UserOperation(*swapIntentOperation.UserOperation))
 			if err != nil {
 				s.log.Fatalf("could not get dApp config: %s", err)
+			}
+
+			atlEthBalance, err := s.atlas.BalanceOf(nil, s.signer.From)
+			if err != nil {
+				s.log.Fatalf("could not get solver's atlEth balance: %s", err)
+			}
+
+			depositNeeded := new(big.Int).Sub(atlEthBalanceMin, atlEthBalance)
+			if depositNeeded.Cmp(common.Big0) > 0 {
+				s.log.Println("Getting AtlEth")
+				s.signer.Value = depositNeeded
+				tx, err := s.atlas.Deposit(s.signer)
+				if err != nil {
+					s.log.Fatalf("could not deposit ATL-ETH for solver: %s", err)
+				}
+
+				_, err = bind.WaitMined(context.Background(), s.ethClient, tx)
+				if err != nil {
+					s.log.Fatalf("could not wait for deposit transaction to be mined: %s", err)
+				}
+				s.log.Printf("Got AtlEth: %s", tx.Hash().Hex())
 			}
 
 			solverOperation := s.buildSolverOperation(
@@ -102,7 +129,7 @@ func (s *Solver) run() {
 				*swapIntentOperation.SwapIntent,
 				*swapIntentOperation.UserOperation,
 				swapIntentOperation.ExecutionEnvironment,
-				big.NewInt(1e18),
+				new(big.Int).Div(swapIntentOperation.SwapIntent.AmountUserSells, big.NewInt(100)), // Bid 1% of the amount the user sells
 			)
 
 			// Submit the solver operation to the backend
@@ -115,22 +142,23 @@ func (s *Solver) run() {
 	}
 }
 
-func (s *Solver) getDaiForSolverContract(amount *big.Int) {
-	solverContractDaiBalance, err := s.dai.BalanceOf(nil, s.addresses["solverContract"])
+func (s *Solver) getUniForSolverContract(amount *big.Int) {
+	solverContractUniBalance, err := s.uni.BalanceOf(nil, s.addresses["solverContract"])
 	if err != nil {
-		s.log.Fatalf("could not get solver's DAI balance: %s", err)
+		s.log.Fatalf("could not get solver's UNI balance: %s", err)
 	}
 
-	daiNeeded := new(big.Int).Sub(amount, solverContractDaiBalance)
-	if daiNeeded.Cmp(common.Big0) > 0 {
+	uniNeeded := new(big.Int).Sub(amount, solverContractUniBalance)
+	if uniNeeded.Cmp(common.Big0) > 0 {
 		// Solver wraps some ETH if needed
 		solverWethBalance, err := s.weth.BalanceOf(nil, s.signer.From)
 		if err != nil {
 			s.log.Fatalf("could not get solver's WETH balance: %s", err)
 		}
 
-		wethNeeded := new(big.Int).Sub(big.NewInt(1e18), solverWethBalance)
+		wethNeeded := new(big.Int).Sub(big.NewInt(2*1e17), solverWethBalance)
 		if wethNeeded.Cmp(common.Big0) > 0 {
+			s.log.Println("Wrapping ETH")
 			s.signer.Value = wethNeeded
 			tx, err := s.weth.Deposit(s.signer)
 			if err != nil {
@@ -141,32 +169,63 @@ func (s *Solver) getDaiForSolverContract(amount *big.Int) {
 			if err != nil {
 				s.log.Fatalf("could not wait for deposit transaction to be mined: %s", err)
 			}
+			s.log.Printf("Wrapped ETH: %s", tx.Hash().Hex())
 		}
 
-		approve(WETH_ADDRESS, UniswapV3Router_ADDRESS, big.NewInt(1e18), s.ethClient, s.signer)
+		allowance, err := s.weth.Allowance(nil, s.signer.From, Permit2_ADDRESS)
+		if err != nil {
+			s.log.Fatalf("could not get solver's WETH allowance: %s", err)
+		}
 
-		s.signer.Value = common.Big0
-		tx, err := s.uniswapV3Router.ExactOutputSingle(
-			s.signer,
-			UniswapV3Router.ISwapRouterExactOutputSingleParams{
-				TokenIn:           WETH_ADDRESS,
-				TokenOut:          DAI_ADDRESS,
-				Fee:               big.NewInt(3000),
-				Recipient:         s.addresses["solverContract"],
-				Deadline:          big.NewInt(time.Now().Unix() + 10),
-				AmountOut:         daiNeeded,
-				AmountInMaximum:   big.NewInt(1e18),
-				SqrtPriceLimitX96: common.Big0,
-			},
+		if allowance.Cmp(common.Big0) == 0 {
+			s.log.Println("Approving WETH for Permit2")
+			tx, err := s.weth.Approve(
+				s.signer,
+				Permit2_ADDRESS,
+				MaxUint256,
+			)
+			if err != nil {
+				s.log.Fatalf("could not approve WETH for solver: %s", err)
+			}
+
+			_, err = bind.WaitMined(context.Background(), s.ethClient, tx)
+			if err != nil {
+				s.log.Fatalf("could not wait for WETH approval transaction to be mined: %s", err)
+			}
+			s.log.Printf("Approved WETH: %s", tx.Hash().Hex())
+		}
+
+		path := common.LeftPadBytes(UNI_ADDRESS.Bytes(), 20)
+		path = append(path, common.LeftPadBytes(big.NewInt(3000).Bytes(), 3)...)
+		path = append(path, common.LeftPadBytes(WETH_ADDRESS.Bytes(), 20)...)
+
+		commandInputs, err := v3SwapExactOut.Pack(
+			s.addresses["solverContract"],
+			uniNeeded,
+			big.NewInt(2*1e17),
+			path,
+			true,
 		)
 		if err != nil {
-			s.log.Fatalf("could not get DAI for solver: %s", err)
+			s.log.Fatalf("could not pack command inputs: %s", err)
+		}
+
+		s.log.Println("Swapping ETH for UNI")
+		s.signer.Value = common.Big0
+		tx, err := s.uniswapUniversalRouter.Execute(
+			s.signer,
+			common.Hex2Bytes("01"), // V3_SWAP_EXACT_OUT
+			[][]byte{commandInputs},
+		)
+		if err != nil {
+			s.log.Fatalf("could not get UNI for solver: %s", err)
 		}
 
 		_, err = bind.WaitMined(context.Background(), s.ethClient, tx)
 		if err != nil {
-			s.log.Fatalf("could not wait for exactOutputSingle transaction to be mined: %s", err)
+			s.log.Fatalf("could not wait for execute transaction to be mined: %s", err)
 		}
+		s.log.Printf("Swapped ETH for UNI: %s", tx.Hash().Hex())
 	}
 }
 
@@ -183,8 +242,7 @@ func (s *Solver) buildSolverOperation(dConfig Atlas.DAppConfig, swapIntent SwapI
 
 	op, err := s.txBuilder.BuildSolverOperation(
 		nil,
-		TxBuilder.UserOperation{To: userOperation.To, Call: TxBuilder.UserCall(userOperation.Call), Signature: userOperation.Signature},
-		TxBuilder.DAppConfig(dConfig),
+		TxBuilder.UserOperation(userOperation),
 		solverOpData,
 		s.signer.From,
 		s.addresses["solverContract"],
@@ -194,18 +252,8 @@ func (s *Solver) buildSolverOperation(dConfig Atlas.DAppConfig, swapIntent SwapI
 		s.log.Fatalf("could not build solver operation: %s", err)
 	}
 
-	bids := make([]Atlas.BidData, len(op.Bids))
-	for i, bid := range op.Bids {
-		bids[i] = Atlas.BidData(bid)
-	}
-
-	solverOp := Atlas.SolverOperation{
-		To:   op.To,
-		Call: Atlas.SolverCall(op.Call),
-		Bids: bids,
-	}
-
-	solverOpPayload, err := s.atlas.GetSolverPayload(nil, solverOp.Call)
+	solverOp := Atlas.SolverOperation(op)
+	solverOpPayload, err := s.atlasVerification.GetSolverPayload(nil, AtlasVerification.SolverOperation(solverOp))
 	if err != nil {
 		s.log.Fatalf("could not get solver operation payload: %s", err)
 	}

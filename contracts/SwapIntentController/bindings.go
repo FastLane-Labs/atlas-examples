@@ -28,30 +28,24 @@ var (
 	_ = event.NewSubscription
 )
 
-// BidData is an auto generated low-level Go binding around an user-defined struct.
-type BidData struct {
-	Token     common.Address
-	BidAmount *big.Int
-}
-
 // CallConfig is an auto generated low-level Go binding around an user-defined struct.
 type CallConfig struct {
-	Sequenced               bool
-	RequirePreOps           bool
-	TrackPreOpsReturnData   bool
-	TrackUserReturnData     bool
-	DelegateUser            bool
-	LocalUser               bool
-	PreSolver               bool
-	PostSolver              bool
-	RequirePostOps          bool
-	ZeroSolvers             bool
-	ReuseUserOp             bool
-	UserBundler             bool
-	DAppBundler             bool
-	UnknownBundler          bool
-	ForwardPreOpsReturnData bool
-	ForwardUserReturnData   bool
+	Sequenced                        bool
+	RequirePreOps                    bool
+	TrackPreOpsReturnData            bool
+	TrackUserReturnData              bool
+	DelegateUser                     bool
+	LocalUser                        bool
+	PreSolver                        bool
+	PostSolver                       bool
+	RequirePostOps                   bool
+	ZeroSolvers                      bool
+	ReuseUserOp                      bool
+	UserBundler                      bool
+	SolverBundler                    bool
+	VerifySolverBundlerCallChainHash bool
+	UnknownBundler                   bool
+	ForwardReturnData                bool
 }
 
 // Condition is an auto generated low-level Go binding around an user-defined struct.
@@ -64,41 +58,25 @@ type Condition struct {
 type DAppConfig struct {
 	To         common.Address
 	CallConfig uint32
-}
-
-// PayeeData is an auto generated low-level Go binding around an user-defined struct.
-type PayeeData struct {
-	Token    common.Address
-	Payments []PaymentData
-	Data     []byte
-}
-
-// PaymentData is an auto generated low-level Go binding around an user-defined struct.
-type PaymentData struct {
-	Payee        common.Address
-	PayeePercent *big.Int
-}
-
-// SolverCall is an auto generated low-level Go binding around an user-defined struct.
-type SolverCall struct {
-	From            common.Address
-	To              common.Address
-	Value           *big.Int
-	Gas             *big.Int
-	Nonce           *big.Int
-	MaxFeePerGas    *big.Int
-	UserOpHash      [32]byte
-	ControlCodeHash [32]byte
-	BidsHash        [32]byte
-	Data            []byte
+	BidToken   common.Address
 }
 
 // SolverOperation is an auto generated low-level Go binding around an user-defined struct.
 type SolverOperation struct {
-	To        common.Address
-	Call      SolverCall
-	Signature []byte
-	Bids      []BidData
+	From         common.Address
+	To           common.Address
+	Value        *big.Int
+	Gas          *big.Int
+	MaxFeePerGas *big.Int
+	Nonce        *big.Int
+	Deadline     *big.Int
+	Solver       common.Address
+	Control      common.Address
+	UserOpHash   [32]byte
+	BidToken     common.Address
+	BidAmount    *big.Int
+	Data         []byte
+	Signature    []byte
 }
 
 // SwapData is an auto generated low-level Go binding around an user-defined struct.
@@ -108,7 +86,6 @@ type SwapData struct {
 	TokenUserSells      common.Address
 	AmountUserSells     *big.Int
 	AuctionBaseCurrency common.Address
-	SolverGasLiability  *big.Int
 }
 
 // SwapIntent is an auto generated low-level Go binding around an user-defined struct.
@@ -122,22 +99,24 @@ type SwapIntent struct {
 	Conditions             []Condition
 }
 
-// UserCall is an auto generated low-level Go binding around an user-defined struct.
-type UserCall struct {
+// UserOperation is an auto generated low-level Go binding around an user-defined struct.
+type UserOperation struct {
 	From         common.Address
 	To           common.Address
-	Deadline     *big.Int
-	Gas          *big.Int
-	Nonce        *big.Int
-	MaxFeePerGas *big.Int
 	Value        *big.Int
+	Gas          *big.Int
+	MaxFeePerGas *big.Int
+	Nonce        *big.Int
+	Deadline     *big.Int
+	Dapp         common.Address
 	Control      common.Address
 	Data         []byte
+	Signature    []byte
 }
 
 // SwapIntentControllerMetaData contains all meta data concerning the SwapIntentController contract.
 var SwapIntentControllerMetaData = &bind.MetaData{
-	ABI: "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_escrow\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"name\":\"log\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"log_address\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"val\",\"type\":\"uint256[]\"}],\"name\":\"log_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"int256[]\",\"name\":\"val\",\"type\":\"int256[]\"}],\"name\":\"log_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address[]\",\"name\":\"val\",\"type\":\"address[]\"}],\"name\":\"log_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"name\":\"log_bytes\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"name\":\"log_bytes32\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"int256\",\"name\":\"\",\"type\":\"int256\"}],\"name\":\"log_int\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"val\",\"type\":\"address\"}],\"name\":\"log_named_address\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"val\",\"type\":\"uint256[]\"}],\"name\":\"log_named_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"int256[]\",\"name\":\"val\",\"type\":\"int256[]\"}],\"name\":\"log_named_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address[]\",\"name\":\"val\",\"type\":\"address[]\"}],\"name\":\"log_named_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"val\",\"type\":\"bytes\"}],\"name\":\"log_named_bytes\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"val\",\"type\":\"bytes32\"}],\"name\":\"log_named_bytes32\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"int256\",\"name\":\"val\",\"type\":\"int256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"decimals\",\"type\":\"uint256\"}],\"name\":\"log_named_decimal_int\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"val\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"decimals\",\"type\":\"uint256\"}],\"name\":\"log_named_decimal_uint\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"int256\",\"name\":\"val\",\"type\":\"int256\"}],\"name\":\"log_named_int\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"val\",\"type\":\"string\"}],\"name\":\"log_named_string\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"val\",\"type\":\"uint256\"}],\"name\":\"log_named_uint\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"name\":\"log_string\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"log_uint\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"name\":\"logs\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"EXPECTED_GAS_USAGE_EX_SOLVER\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"IS_TEST\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MAX_USER_CONDITIONS\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"USER_CONDITION_GAS_LIMIT\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"allocateValueCall\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"atlas\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"callConfig\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"control\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"escrow\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"failed\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structUserCall\",\"name\":\"uCall\",\"type\":\"tuple\"}],\"name\":\"getBidFormat\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"bidAmount\",\"type\":\"uint256\"}],\"internalType\":\"structBidData[]\",\"name\":\"\",\"type\":\"tuple[]\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"userOpHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"controlCodeHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"bidsHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structSolverCall\",\"name\":\"call\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"bidAmount\",\"type\":\"uint256\"}],\"internalType\":\"structBidData[]\",\"name\":\"bids\",\"type\":\"tuple[]\"}],\"internalType\":\"structSolverOperation\",\"name\":\"solverOp\",\"type\":\"tuple\"}],\"name\":\"getBidValue\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getCallConfig\",\"outputs\":[{\"components\":[{\"internalType\":\"bool\",\"name\":\"sequenced\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"requirePreOps\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"trackPreOpsReturnData\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"trackUserReturnData\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"delegateUser\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"localUser\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"preSolver\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"postSolver\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"requirePostOps\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"zeroSolvers\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"reuseUserOp\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"userBundler\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"dAppBundler\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"unknownBundler\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"forwardPreOpsReturnData\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"forwardUserReturnData\",\"type\":\"bool\"}],\"internalType\":\"structCallConfig\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getDAppConfig\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint32\",\"name\":\"callConfig\",\"type\":\"uint32\"}],\"internalType\":\"structDAppConfig\",\"name\":\"dConfig\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getDAppSignatory\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"governanceAddress\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"name\":\"getPayeeData\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"payee\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"payeePercent\",\"type\":\"uint256\"}],\"internalType\":\"structPaymentData[]\",\"name\":\"payments\",\"type\":\"tuple[]\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structPayeeData[]\",\"name\":\"\",\"type\":\"tuple[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"governance\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"postOpsCall\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"postSolverCall\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structUserCall\",\"name\":\"uCall\",\"type\":\"tuple\"}],\"name\":\"preOpsCall\",\"outputs\":[{\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"preSolverCall\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"requireSequencedNonces\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isSequenced\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"salt\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"source\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"tokenUserBuys\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amountUserBuys\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"tokenUserSells\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amountUserSells\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"auctionBaseCurrency\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"solverMustReimburseGas\",\"type\":\"bool\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"antecedent\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"context\",\"type\":\"bytes\"}],\"internalType\":\"structCondition[]\",\"name\":\"conditions\",\"type\":\"tuple[]\"}],\"internalType\":\"structSwapIntent\",\"name\":\"swapIntent\",\"type\":\"tuple\"}],\"name\":\"swap\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"tokenUserBuys\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amountUserBuys\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"tokenUserSells\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amountUserSells\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"auctionBaseCurrency\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"solverGasLiability\",\"type\":\"uint256\"}],\"internalType\":\"structSwapData\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"userDelegated\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"delegated\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]",
+	ABI: "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_escrow\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"name\":\"log\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"log_address\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"val\",\"type\":\"uint256[]\"}],\"name\":\"log_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"int256[]\",\"name\":\"val\",\"type\":\"int256[]\"}],\"name\":\"log_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address[]\",\"name\":\"val\",\"type\":\"address[]\"}],\"name\":\"log_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"name\":\"log_bytes\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"name\":\"log_bytes32\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"int256\",\"name\":\"\",\"type\":\"int256\"}],\"name\":\"log_int\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"val\",\"type\":\"address\"}],\"name\":\"log_named_address\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"val\",\"type\":\"uint256[]\"}],\"name\":\"log_named_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"int256[]\",\"name\":\"val\",\"type\":\"int256[]\"}],\"name\":\"log_named_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address[]\",\"name\":\"val\",\"type\":\"address[]\"}],\"name\":\"log_named_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"val\",\"type\":\"bytes\"}],\"name\":\"log_named_bytes\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"val\",\"type\":\"bytes32\"}],\"name\":\"log_named_bytes32\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"int256\",\"name\":\"val\",\"type\":\"int256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"decimals\",\"type\":\"uint256\"}],\"name\":\"log_named_decimal_int\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"val\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"decimals\",\"type\":\"uint256\"}],\"name\":\"log_named_decimal_uint\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"int256\",\"name\":\"val\",\"type\":\"int256\"}],\"name\":\"log_named_int\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"val\",\"type\":\"string\"}],\"name\":\"log_named_string\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"val\",\"type\":\"uint256\"}],\"name\":\"log_named_uint\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"name\":\"log_string\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"log_uint\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"name\":\"logs\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"EXPECTED_GAS_USAGE_EX_SOLVER\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"IS_TEST\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MAX_USER_CONDITIONS\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"USER_CONDITION_GAS_LIMIT\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"bidToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"bidAmount\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"allocateValueCall\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"atlas\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"callConfig\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"control\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"escrow\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"failed\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"dapp\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structUserOperation\",\"name\":\"userOp\",\"type\":\"tuple\"}],\"name\":\"getBidFormat\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"bidToken\",\"type\":\"address\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"solver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"userOpHash\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"bidToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"bidAmount\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structSolverOperation\",\"name\":\"solverOp\",\"type\":\"tuple\"}],\"name\":\"getBidValue\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getCallConfig\",\"outputs\":[{\"components\":[{\"internalType\":\"bool\",\"name\":\"sequenced\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"requirePreOps\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"trackPreOpsReturnData\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"trackUserReturnData\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"delegateUser\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"localUser\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"preSolver\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"postSolver\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"requirePostOps\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"zeroSolvers\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"reuseUserOp\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"userBundler\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"solverBundler\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"verifySolverBundlerCallChainHash\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"unknownBundler\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"forwardReturnData\",\"type\":\"bool\"}],\"internalType\":\"structCallConfig\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"dapp\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structUserOperation\",\"name\":\"userOp\",\"type\":\"tuple\"}],\"name\":\"getDAppConfig\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint32\",\"name\":\"callConfig\",\"type\":\"uint32\"},{\"internalType\":\"address\",\"name\":\"bidToken\",\"type\":\"address\"}],\"internalType\":\"structDAppConfig\",\"name\":\"dConfig\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getDAppSignatory\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"governanceAddress\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"governance\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"postOpsCall\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"postSolverCall\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"dapp\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structUserOperation\",\"name\":\"userOp\",\"type\":\"tuple\"}],\"name\":\"preOpsCall\",\"outputs\":[{\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"preSolverCall\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"requireSequencedNonces\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isSequenced\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"salt\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"source\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"tokenUserBuys\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amountUserBuys\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"tokenUserSells\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amountUserSells\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"auctionBaseCurrency\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"solverMustReimburseGas\",\"type\":\"bool\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"antecedent\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"context\",\"type\":\"bytes\"}],\"internalType\":\"structCondition[]\",\"name\":\"conditions\",\"type\":\"tuple[]\"}],\"internalType\":\"structSwapIntent\",\"name\":\"swapIntent\",\"type\":\"tuple\"}],\"name\":\"swap\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"tokenUserBuys\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amountUserBuys\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"tokenUserSells\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amountUserSells\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"auctionBaseCurrency\",\"type\":\"address\"}],\"internalType\":\"structSwapData\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"userDelegated\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"delegated\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]",
 }
 
 // SwapIntentControllerABI is the input ABI used to generate the binding from.
@@ -534,40 +513,40 @@ func (_SwapIntentController *SwapIntentControllerCallerSession) Escrow() (common
 	return _SwapIntentController.Contract.Escrow(&_SwapIntentController.CallOpts)
 }
 
-// GetBidFormat is a free data retrieval call binding the contract method 0x54543ae6.
+// GetBidFormat is a free data retrieval call binding the contract method 0x09dbeb08.
 //
-// Solidity: function getBidFormat((address,address,uint256,uint256,uint256,uint256,uint256,address,bytes) uCall) pure returns((address,uint256)[])
-func (_SwapIntentController *SwapIntentControllerCaller) GetBidFormat(opts *bind.CallOpts, uCall UserCall) ([]BidData, error) {
+// Solidity: function getBidFormat((address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes,bytes) userOp) pure returns(address bidToken)
+func (_SwapIntentController *SwapIntentControllerCaller) GetBidFormat(opts *bind.CallOpts, userOp UserOperation) (common.Address, error) {
 	var out []interface{}
-	err := _SwapIntentController.contract.Call(opts, &out, "getBidFormat", uCall)
+	err := _SwapIntentController.contract.Call(opts, &out, "getBidFormat", userOp)
 
 	if err != nil {
-		return *new([]BidData), err
+		return *new(common.Address), err
 	}
 
-	out0 := *abi.ConvertType(out[0], new([]BidData)).(*[]BidData)
+	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
 
 	return out0, err
 
 }
 
-// GetBidFormat is a free data retrieval call binding the contract method 0x54543ae6.
+// GetBidFormat is a free data retrieval call binding the contract method 0x09dbeb08.
 //
-// Solidity: function getBidFormat((address,address,uint256,uint256,uint256,uint256,uint256,address,bytes) uCall) pure returns((address,uint256)[])
-func (_SwapIntentController *SwapIntentControllerSession) GetBidFormat(uCall UserCall) ([]BidData, error) {
-	return _SwapIntentController.Contract.GetBidFormat(&_SwapIntentController.CallOpts, uCall)
+// Solidity: function getBidFormat((address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes,bytes) userOp) pure returns(address bidToken)
+func (_SwapIntentController *SwapIntentControllerSession) GetBidFormat(userOp UserOperation) (common.Address, error) {
+	return _SwapIntentController.Contract.GetBidFormat(&_SwapIntentController.CallOpts, userOp)
 }
 
-// GetBidFormat is a free data retrieval call binding the contract method 0x54543ae6.
+// GetBidFormat is a free data retrieval call binding the contract method 0x09dbeb08.
 //
-// Solidity: function getBidFormat((address,address,uint256,uint256,uint256,uint256,uint256,address,bytes) uCall) pure returns((address,uint256)[])
-func (_SwapIntentController *SwapIntentControllerCallerSession) GetBidFormat(uCall UserCall) ([]BidData, error) {
-	return _SwapIntentController.Contract.GetBidFormat(&_SwapIntentController.CallOpts, uCall)
+// Solidity: function getBidFormat((address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes,bytes) userOp) pure returns(address bidToken)
+func (_SwapIntentController *SwapIntentControllerCallerSession) GetBidFormat(userOp UserOperation) (common.Address, error) {
+	return _SwapIntentController.Contract.GetBidFormat(&_SwapIntentController.CallOpts, userOp)
 }
 
-// GetBidValue is a free data retrieval call binding the contract method 0x7c236dce.
+// GetBidValue is a free data retrieval call binding the contract method 0xc14b782d.
 //
-// Solidity: function getBidValue((address,(address,address,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32,bytes),bytes,(address,uint256)[]) solverOp) pure returns(uint256)
+// Solidity: function getBidValue((address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes32,address,uint256,bytes,bytes) solverOp) pure returns(uint256)
 func (_SwapIntentController *SwapIntentControllerCaller) GetBidValue(opts *bind.CallOpts, solverOp SolverOperation) (*big.Int, error) {
 	var out []interface{}
 	err := _SwapIntentController.contract.Call(opts, &out, "getBidValue", solverOp)
@@ -582,16 +561,16 @@ func (_SwapIntentController *SwapIntentControllerCaller) GetBidValue(opts *bind.
 
 }
 
-// GetBidValue is a free data retrieval call binding the contract method 0x7c236dce.
+// GetBidValue is a free data retrieval call binding the contract method 0xc14b782d.
 //
-// Solidity: function getBidValue((address,(address,address,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32,bytes),bytes,(address,uint256)[]) solverOp) pure returns(uint256)
+// Solidity: function getBidValue((address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes32,address,uint256,bytes,bytes) solverOp) pure returns(uint256)
 func (_SwapIntentController *SwapIntentControllerSession) GetBidValue(solverOp SolverOperation) (*big.Int, error) {
 	return _SwapIntentController.Contract.GetBidValue(&_SwapIntentController.CallOpts, solverOp)
 }
 
-// GetBidValue is a free data retrieval call binding the contract method 0x7c236dce.
+// GetBidValue is a free data retrieval call binding the contract method 0xc14b782d.
 //
-// Solidity: function getBidValue((address,(address,address,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32,bytes),bytes,(address,uint256)[]) solverOp) pure returns(uint256)
+// Solidity: function getBidValue((address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes32,address,uint256,bytes,bytes) solverOp) pure returns(uint256)
 func (_SwapIntentController *SwapIntentControllerCallerSession) GetBidValue(solverOp SolverOperation) (*big.Int, error) {
 	return _SwapIntentController.Contract.GetBidValue(&_SwapIntentController.CallOpts, solverOp)
 }
@@ -627,12 +606,12 @@ func (_SwapIntentController *SwapIntentControllerCallerSession) GetCallConfig() 
 	return _SwapIntentController.Contract.GetCallConfig(&_SwapIntentController.CallOpts)
 }
 
-// GetDAppConfig is a free data retrieval call binding the contract method 0xac4aab6e.
+// GetDAppConfig is a free data retrieval call binding the contract method 0x18fca270.
 //
-// Solidity: function getDAppConfig() view returns((address,uint32) dConfig)
-func (_SwapIntentController *SwapIntentControllerCaller) GetDAppConfig(opts *bind.CallOpts) (DAppConfig, error) {
+// Solidity: function getDAppConfig((address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes,bytes) userOp) view returns((address,uint32,address) dConfig)
+func (_SwapIntentController *SwapIntentControllerCaller) GetDAppConfig(opts *bind.CallOpts, userOp UserOperation) (DAppConfig, error) {
 	var out []interface{}
-	err := _SwapIntentController.contract.Call(opts, &out, "getDAppConfig")
+	err := _SwapIntentController.contract.Call(opts, &out, "getDAppConfig", userOp)
 
 	if err != nil {
 		return *new(DAppConfig), err
@@ -644,18 +623,18 @@ func (_SwapIntentController *SwapIntentControllerCaller) GetDAppConfig(opts *bin
 
 }
 
-// GetDAppConfig is a free data retrieval call binding the contract method 0xac4aab6e.
+// GetDAppConfig is a free data retrieval call binding the contract method 0x18fca270.
 //
-// Solidity: function getDAppConfig() view returns((address,uint32) dConfig)
-func (_SwapIntentController *SwapIntentControllerSession) GetDAppConfig() (DAppConfig, error) {
-	return _SwapIntentController.Contract.GetDAppConfig(&_SwapIntentController.CallOpts)
+// Solidity: function getDAppConfig((address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes,bytes) userOp) view returns((address,uint32,address) dConfig)
+func (_SwapIntentController *SwapIntentControllerSession) GetDAppConfig(userOp UserOperation) (DAppConfig, error) {
+	return _SwapIntentController.Contract.GetDAppConfig(&_SwapIntentController.CallOpts, userOp)
 }
 
-// GetDAppConfig is a free data retrieval call binding the contract method 0xac4aab6e.
+// GetDAppConfig is a free data retrieval call binding the contract method 0x18fca270.
 //
-// Solidity: function getDAppConfig() view returns((address,uint32) dConfig)
-func (_SwapIntentController *SwapIntentControllerCallerSession) GetDAppConfig() (DAppConfig, error) {
-	return _SwapIntentController.Contract.GetDAppConfig(&_SwapIntentController.CallOpts)
+// Solidity: function getDAppConfig((address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes,bytes) userOp) view returns((address,uint32,address) dConfig)
+func (_SwapIntentController *SwapIntentControllerCallerSession) GetDAppConfig(userOp UserOperation) (DAppConfig, error) {
+	return _SwapIntentController.Contract.GetDAppConfig(&_SwapIntentController.CallOpts, userOp)
 }
 
 // GetDAppSignatory is a free data retrieval call binding the contract method 0xee418488.
@@ -687,37 +666,6 @@ func (_SwapIntentController *SwapIntentControllerSession) GetDAppSignatory() (co
 // Solidity: function getDAppSignatory() view returns(address governanceAddress)
 func (_SwapIntentController *SwapIntentControllerCallerSession) GetDAppSignatory() (common.Address, error) {
 	return _SwapIntentController.Contract.GetDAppSignatory(&_SwapIntentController.CallOpts)
-}
-
-// GetPayeeData is a free data retrieval call binding the contract method 0x7dbba9f4.
-//
-// Solidity: function getPayeeData(bytes ) view returns((address,(address,uint256)[],bytes)[])
-func (_SwapIntentController *SwapIntentControllerCaller) GetPayeeData(opts *bind.CallOpts, arg0 []byte) ([]PayeeData, error) {
-	var out []interface{}
-	err := _SwapIntentController.contract.Call(opts, &out, "getPayeeData", arg0)
-
-	if err != nil {
-		return *new([]PayeeData), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new([]PayeeData)).(*[]PayeeData)
-
-	return out0, err
-
-}
-
-// GetPayeeData is a free data retrieval call binding the contract method 0x7dbba9f4.
-//
-// Solidity: function getPayeeData(bytes ) view returns((address,(address,uint256)[],bytes)[])
-func (_SwapIntentController *SwapIntentControllerSession) GetPayeeData(arg0 []byte) ([]PayeeData, error) {
-	return _SwapIntentController.Contract.GetPayeeData(&_SwapIntentController.CallOpts, arg0)
-}
-
-// GetPayeeData is a free data retrieval call binding the contract method 0x7dbba9f4.
-//
-// Solidity: function getPayeeData(bytes ) view returns((address,(address,uint256)[],bytes)[])
-func (_SwapIntentController *SwapIntentControllerCallerSession) GetPayeeData(arg0 []byte) ([]PayeeData, error) {
-	return _SwapIntentController.Contract.GetPayeeData(&_SwapIntentController.CallOpts, arg0)
 }
 
 // Governance is a free data retrieval call binding the contract method 0x5aa6e675.
@@ -875,25 +823,25 @@ func (_SwapIntentController *SwapIntentControllerCallerSession) UserDelegated() 
 	return _SwapIntentController.Contract.UserDelegated(&_SwapIntentController.CallOpts)
 }
 
-// AllocateValueCall is a paid mutator transaction binding the contract method 0xd94f0cd5.
+// AllocateValueCall is a paid mutator transaction binding the contract method 0x2f5e0d16.
 //
-// Solidity: function allocateValueCall(bytes data) returns()
-func (_SwapIntentController *SwapIntentControllerTransactor) AllocateValueCall(opts *bind.TransactOpts, data []byte) (*types.Transaction, error) {
-	return _SwapIntentController.contract.Transact(opts, "allocateValueCall", data)
+// Solidity: function allocateValueCall(address bidToken, uint256 bidAmount, bytes data) returns()
+func (_SwapIntentController *SwapIntentControllerTransactor) AllocateValueCall(opts *bind.TransactOpts, bidToken common.Address, bidAmount *big.Int, data []byte) (*types.Transaction, error) {
+	return _SwapIntentController.contract.Transact(opts, "allocateValueCall", bidToken, bidAmount, data)
 }
 
-// AllocateValueCall is a paid mutator transaction binding the contract method 0xd94f0cd5.
+// AllocateValueCall is a paid mutator transaction binding the contract method 0x2f5e0d16.
 //
-// Solidity: function allocateValueCall(bytes data) returns()
-func (_SwapIntentController *SwapIntentControllerSession) AllocateValueCall(data []byte) (*types.Transaction, error) {
-	return _SwapIntentController.Contract.AllocateValueCall(&_SwapIntentController.TransactOpts, data)
+// Solidity: function allocateValueCall(address bidToken, uint256 bidAmount, bytes data) returns()
+func (_SwapIntentController *SwapIntentControllerSession) AllocateValueCall(bidToken common.Address, bidAmount *big.Int, data []byte) (*types.Transaction, error) {
+	return _SwapIntentController.Contract.AllocateValueCall(&_SwapIntentController.TransactOpts, bidToken, bidAmount, data)
 }
 
-// AllocateValueCall is a paid mutator transaction binding the contract method 0xd94f0cd5.
+// AllocateValueCall is a paid mutator transaction binding the contract method 0x2f5e0d16.
 //
-// Solidity: function allocateValueCall(bytes data) returns()
-func (_SwapIntentController *SwapIntentControllerTransactorSession) AllocateValueCall(data []byte) (*types.Transaction, error) {
-	return _SwapIntentController.Contract.AllocateValueCall(&_SwapIntentController.TransactOpts, data)
+// Solidity: function allocateValueCall(address bidToken, uint256 bidAmount, bytes data) returns()
+func (_SwapIntentController *SwapIntentControllerTransactorSession) AllocateValueCall(bidToken common.Address, bidAmount *big.Int, data []byte) (*types.Transaction, error) {
+	return _SwapIntentController.Contract.AllocateValueCall(&_SwapIntentController.TransactOpts, bidToken, bidAmount, data)
 }
 
 // Failed is a paid mutator transaction binding the contract method 0xba414fa6.
@@ -919,105 +867,105 @@ func (_SwapIntentController *SwapIntentControllerTransactorSession) Failed() (*t
 
 // PostOpsCall is a paid mutator transaction binding the contract method 0x6585e19a.
 //
-// Solidity: function postOpsCall(bytes data) returns(bool)
+// Solidity: function postOpsCall(bytes data) payable returns(bool)
 func (_SwapIntentController *SwapIntentControllerTransactor) PostOpsCall(opts *bind.TransactOpts, data []byte) (*types.Transaction, error) {
 	return _SwapIntentController.contract.Transact(opts, "postOpsCall", data)
 }
 
 // PostOpsCall is a paid mutator transaction binding the contract method 0x6585e19a.
 //
-// Solidity: function postOpsCall(bytes data) returns(bool)
+// Solidity: function postOpsCall(bytes data) payable returns(bool)
 func (_SwapIntentController *SwapIntentControllerSession) PostOpsCall(data []byte) (*types.Transaction, error) {
 	return _SwapIntentController.Contract.PostOpsCall(&_SwapIntentController.TransactOpts, data)
 }
 
 // PostOpsCall is a paid mutator transaction binding the contract method 0x6585e19a.
 //
-// Solidity: function postOpsCall(bytes data) returns(bool)
+// Solidity: function postOpsCall(bytes data) payable returns(bool)
 func (_SwapIntentController *SwapIntentControllerTransactorSession) PostOpsCall(data []byte) (*types.Transaction, error) {
 	return _SwapIntentController.Contract.PostOpsCall(&_SwapIntentController.TransactOpts, data)
 }
 
 // PostSolverCall is a paid mutator transaction binding the contract method 0x0f523813.
 //
-// Solidity: function postSolverCall(bytes data) returns(bool)
+// Solidity: function postSolverCall(bytes data) payable returns(bool)
 func (_SwapIntentController *SwapIntentControllerTransactor) PostSolverCall(opts *bind.TransactOpts, data []byte) (*types.Transaction, error) {
 	return _SwapIntentController.contract.Transact(opts, "postSolverCall", data)
 }
 
 // PostSolverCall is a paid mutator transaction binding the contract method 0x0f523813.
 //
-// Solidity: function postSolverCall(bytes data) returns(bool)
+// Solidity: function postSolverCall(bytes data) payable returns(bool)
 func (_SwapIntentController *SwapIntentControllerSession) PostSolverCall(data []byte) (*types.Transaction, error) {
 	return _SwapIntentController.Contract.PostSolverCall(&_SwapIntentController.TransactOpts, data)
 }
 
 // PostSolverCall is a paid mutator transaction binding the contract method 0x0f523813.
 //
-// Solidity: function postSolverCall(bytes data) returns(bool)
+// Solidity: function postSolverCall(bytes data) payable returns(bool)
 func (_SwapIntentController *SwapIntentControllerTransactorSession) PostSolverCall(data []byte) (*types.Transaction, error) {
 	return _SwapIntentController.Contract.PostSolverCall(&_SwapIntentController.TransactOpts, data)
 }
 
-// PreOpsCall is a paid mutator transaction binding the contract method 0x9fed5cd4.
+// PreOpsCall is a paid mutator transaction binding the contract method 0xf1f4e7d5.
 //
-// Solidity: function preOpsCall((address,address,uint256,uint256,uint256,uint256,uint256,address,bytes) uCall) returns(bytes)
-func (_SwapIntentController *SwapIntentControllerTransactor) PreOpsCall(opts *bind.TransactOpts, uCall UserCall) (*types.Transaction, error) {
-	return _SwapIntentController.contract.Transact(opts, "preOpsCall", uCall)
+// Solidity: function preOpsCall((address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes,bytes) userOp) payable returns(bytes)
+func (_SwapIntentController *SwapIntentControllerTransactor) PreOpsCall(opts *bind.TransactOpts, userOp UserOperation) (*types.Transaction, error) {
+	return _SwapIntentController.contract.Transact(opts, "preOpsCall", userOp)
 }
 
-// PreOpsCall is a paid mutator transaction binding the contract method 0x9fed5cd4.
+// PreOpsCall is a paid mutator transaction binding the contract method 0xf1f4e7d5.
 //
-// Solidity: function preOpsCall((address,address,uint256,uint256,uint256,uint256,uint256,address,bytes) uCall) returns(bytes)
-func (_SwapIntentController *SwapIntentControllerSession) PreOpsCall(uCall UserCall) (*types.Transaction, error) {
-	return _SwapIntentController.Contract.PreOpsCall(&_SwapIntentController.TransactOpts, uCall)
+// Solidity: function preOpsCall((address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes,bytes) userOp) payable returns(bytes)
+func (_SwapIntentController *SwapIntentControllerSession) PreOpsCall(userOp UserOperation) (*types.Transaction, error) {
+	return _SwapIntentController.Contract.PreOpsCall(&_SwapIntentController.TransactOpts, userOp)
 }
 
-// PreOpsCall is a paid mutator transaction binding the contract method 0x9fed5cd4.
+// PreOpsCall is a paid mutator transaction binding the contract method 0xf1f4e7d5.
 //
-// Solidity: function preOpsCall((address,address,uint256,uint256,uint256,uint256,uint256,address,bytes) uCall) returns(bytes)
-func (_SwapIntentController *SwapIntentControllerTransactorSession) PreOpsCall(uCall UserCall) (*types.Transaction, error) {
-	return _SwapIntentController.Contract.PreOpsCall(&_SwapIntentController.TransactOpts, uCall)
+// Solidity: function preOpsCall((address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes,bytes) userOp) payable returns(bytes)
+func (_SwapIntentController *SwapIntentControllerTransactorSession) PreOpsCall(userOp UserOperation) (*types.Transaction, error) {
+	return _SwapIntentController.Contract.PreOpsCall(&_SwapIntentController.TransactOpts, userOp)
 }
 
 // PreSolverCall is a paid mutator transaction binding the contract method 0x59244761.
 //
-// Solidity: function preSolverCall(bytes data) returns(bool)
+// Solidity: function preSolverCall(bytes data) payable returns(bool)
 func (_SwapIntentController *SwapIntentControllerTransactor) PreSolverCall(opts *bind.TransactOpts, data []byte) (*types.Transaction, error) {
 	return _SwapIntentController.contract.Transact(opts, "preSolverCall", data)
 }
 
 // PreSolverCall is a paid mutator transaction binding the contract method 0x59244761.
 //
-// Solidity: function preSolverCall(bytes data) returns(bool)
+// Solidity: function preSolverCall(bytes data) payable returns(bool)
 func (_SwapIntentController *SwapIntentControllerSession) PreSolverCall(data []byte) (*types.Transaction, error) {
 	return _SwapIntentController.Contract.PreSolverCall(&_SwapIntentController.TransactOpts, data)
 }
 
 // PreSolverCall is a paid mutator transaction binding the contract method 0x59244761.
 //
-// Solidity: function preSolverCall(bytes data) returns(bool)
+// Solidity: function preSolverCall(bytes data) payable returns(bool)
 func (_SwapIntentController *SwapIntentControllerTransactorSession) PreSolverCall(data []byte) (*types.Transaction, error) {
 	return _SwapIntentController.Contract.PreSolverCall(&_SwapIntentController.TransactOpts, data)
 }
 
 // Swap is a paid mutator transaction binding the contract method 0x83a6992a.
 //
-// Solidity: function swap((address,uint256,address,uint256,address,bool,(address,bytes)[]) swapIntent) payable returns((address,uint256,address,uint256,address,uint256))
+// Solidity: function swap((address,uint256,address,uint256,address,bool,(address,bytes)[]) swapIntent) payable returns((address,uint256,address,uint256,address))
 func (_SwapIntentController *SwapIntentControllerTransactor) Swap(opts *bind.TransactOpts, swapIntent SwapIntent) (*types.Transaction, error) {
 	return _SwapIntentController.contract.Transact(opts, "swap", swapIntent)
 }
 
 // Swap is a paid mutator transaction binding the contract method 0x83a6992a.
 //
-// Solidity: function swap((address,uint256,address,uint256,address,bool,(address,bytes)[]) swapIntent) payable returns((address,uint256,address,uint256,address,uint256))
+// Solidity: function swap((address,uint256,address,uint256,address,bool,(address,bytes)[]) swapIntent) payable returns((address,uint256,address,uint256,address))
 func (_SwapIntentController *SwapIntentControllerSession) Swap(swapIntent SwapIntent) (*types.Transaction, error) {
 	return _SwapIntentController.Contract.Swap(&_SwapIntentController.TransactOpts, swapIntent)
 }
 
 // Swap is a paid mutator transaction binding the contract method 0x83a6992a.
 //
-// Solidity: function swap((address,uint256,address,uint256,address,bool,(address,bytes)[]) swapIntent) payable returns((address,uint256,address,uint256,address,uint256))
+// Solidity: function swap((address,uint256,address,uint256,address,bool,(address,bytes)[]) swapIntent) payable returns((address,uint256,address,uint256,address))
 func (_SwapIntentController *SwapIntentControllerTransactorSession) Swap(swapIntent SwapIntent) (*types.Transaction, error) {
 	return _SwapIntentController.Contract.Swap(&_SwapIntentController.TransactOpts, swapIntent)
 }

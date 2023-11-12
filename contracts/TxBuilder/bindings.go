@@ -28,64 +28,23 @@ var (
 	_ = event.NewSubscription
 )
 
-// BidData is an auto generated low-level Go binding around an user-defined struct.
-type BidData struct {
-	Token     common.Address
-	BidAmount *big.Int
-}
-
-// DAppApproval is an auto generated low-level Go binding around an user-defined struct.
-type DAppApproval struct {
-	From            common.Address
-	To              common.Address
-	Value           *big.Int
-	Gas             *big.Int
-	MaxFeePerGas    *big.Int
-	Nonce           *big.Int
-	Deadline        *big.Int
-	ControlCodeHash [32]byte
-	UserOpHash      [32]byte
-	CallChainHash   [32]byte
-}
-
-// DAppConfig is an auto generated low-level Go binding around an user-defined struct.
-type DAppConfig struct {
-	To         common.Address
-	CallConfig uint32
-}
-
 // DAppOperation is an auto generated low-level Go binding around an user-defined struct.
 type DAppOperation struct {
-	To        common.Address
-	Approval  DAppApproval
-	Signature []byte
-}
-
-// SolverCall is an auto generated low-level Go binding around an user-defined struct.
-type SolverCall struct {
-	From            common.Address
-	To              common.Address
-	Value           *big.Int
-	Gas             *big.Int
-	MaxFeePerGas    *big.Int
-	Nonce           *big.Int
-	Deadline        *big.Int
-	ControlCodeHash [32]byte
-	UserOpHash      [32]byte
-	BidsHash        [32]byte
-	Data            []byte
+	From          common.Address
+	To            common.Address
+	Value         *big.Int
+	Gas           *big.Int
+	MaxFeePerGas  *big.Int
+	Nonce         *big.Int
+	Deadline      *big.Int
+	Control       common.Address
+	UserOpHash    [32]byte
+	CallChainHash [32]byte
+	Signature     []byte
 }
 
 // SolverOperation is an auto generated low-level Go binding around an user-defined struct.
 type SolverOperation struct {
-	To        common.Address
-	Call      SolverCall
-	Signature []byte
-	Bids      []BidData
-}
-
-// UserCall is an auto generated low-level Go binding around an user-defined struct.
-type UserCall struct {
 	From         common.Address
 	To           common.Address
 	Value        *big.Int
@@ -93,20 +52,33 @@ type UserCall struct {
 	MaxFeePerGas *big.Int
 	Nonce        *big.Int
 	Deadline     *big.Int
+	Solver       common.Address
 	Control      common.Address
+	UserOpHash   [32]byte
+	BidToken     common.Address
+	BidAmount    *big.Int
 	Data         []byte
+	Signature    []byte
 }
 
 // UserOperation is an auto generated low-level Go binding around an user-defined struct.
 type UserOperation struct {
-	To        common.Address
-	Call      UserCall
-	Signature []byte
+	From         common.Address
+	To           common.Address
+	Value        *big.Int
+	Gas          *big.Int
+	MaxFeePerGas *big.Int
+	Nonce        *big.Int
+	Deadline     *big.Int
+	Dapp         common.Address
+	Control      common.Address
+	Data         []byte
+	Signature    []byte
 }
 
 // TxBuilderMetaData contains all meta data concerning the TxBuilder contract.
 var TxBuilderMetaData = &bind.MetaData{
-	ABI: "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"controller\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"escrowAddress\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"atlasAddress\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"atlas\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"governanceEOA\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint32\",\"name\":\"callConfig\",\"type\":\"uint32\"}],\"internalType\":\"structDAppConfig\",\"name\":\"dConfig\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structUserCall\",\"name\":\"call\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structUserOperation\",\"name\":\"userOp\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"controlCodeHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"userOpHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"bidsHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structSolverCall\",\"name\":\"call\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"bidAmount\",\"type\":\"uint256\"}],\"internalType\":\"structBidData[]\",\"name\":\"bids\",\"type\":\"tuple[]\"}],\"internalType\":\"structSolverOperation[]\",\"name\":\"solverOps\",\"type\":\"tuple[]\"}],\"name\":\"buildDAppOperation\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"controlCodeHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"userOpHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"callChainHash\",\"type\":\"bytes32\"}],\"internalType\":\"structDAppApproval\",\"name\":\"approval\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structDAppOperation\",\"name\":\"dAppOp\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structUserCall\",\"name\":\"call\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structUserOperation\",\"name\":\"userOp\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint32\",\"name\":\"callConfig\",\"type\":\"uint32\"}],\"internalType\":\"structDAppConfig\",\"name\":\"dConfig\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"solverOpData\",\"type\":\"bytes\"},{\"internalType\":\"address\",\"name\":\"solverEOA\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"solverContract\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"bidAmount\",\"type\":\"uint256\"}],\"name\":\"buildSolverOperation\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"controlCodeHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"userOpHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"bidsHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structSolverCall\",\"name\":\"call\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"bidAmount\",\"type\":\"uint256\"}],\"internalType\":\"structBidData[]\",\"name\":\"bids\",\"type\":\"tuple[]\"}],\"internalType\":\"structSolverOperation\",\"name\":\"solverOp\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"buildUserOperation\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structUserCall\",\"name\":\"call\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structUserOperation\",\"name\":\"userOp\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"control\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"escrow\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"gas\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structUserCall\",\"name\":\"uCall\",\"type\":\"tuple\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"getBidData\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"bidAmount\",\"type\":\"uint256\"}],\"internalType\":\"structBidData[]\",\"name\":\"bids\",\"type\":\"tuple[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"dAppControl\",\"type\":\"address\"}],\"name\":\"getControlCodeHash\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getDAppConfig\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint32\",\"name\":\"callConfig\",\"type\":\"uint32\"}],\"internalType\":\"structDAppConfig\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"signatory\",\"type\":\"address\"}],\"name\":\"governanceNextNonce\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"solverSigner\",\"type\":\"address\"}],\"name\":\"solverNextNonce\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"}],\"name\":\"userNextNonce\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]",
+	ABI: "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"controller\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"atlasAddress\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_verification\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"atlas\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"governanceEOA\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"dapp\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structUserOperation\",\"name\":\"userOp\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"solver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"userOpHash\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"bidToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"bidAmount\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structSolverOperation[]\",\"name\":\"solverOps\",\"type\":\"tuple[]\"}],\"name\":\"buildDAppOperation\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"userOpHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"callChainHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structDAppOperation\",\"name\":\"dAppOp\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"dapp\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structUserOperation\",\"name\":\"userOp\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"solverOpData\",\"type\":\"bytes\"},{\"internalType\":\"address\",\"name\":\"solverEOA\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"solverContract\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"bidAmount\",\"type\":\"uint256\"}],\"name\":\"buildSolverOperation\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"solver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"userOpHash\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"bidToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"bidAmount\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structSolverOperation\",\"name\":\"solverOp\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"buildUserOperation\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"maxFeePerGas\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"dapp\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"control\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structUserOperation\",\"name\":\"userOp\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"control\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"gas\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getBlockchainID\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"chainId\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"dAppControl\",\"type\":\"address\"}],\"name\":\"getControlCodeHash\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"signatory\",\"type\":\"address\"}],\"name\":\"governanceNextNonce\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"solverSigner\",\"type\":\"address\"}],\"name\":\"solverNextNonce\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"}],\"name\":\"userNextNonce\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"verification\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]",
 }
 
 // TxBuilderABI is the input ABI used to generate the binding from.
@@ -286,12 +258,12 @@ func (_TxBuilder *TxBuilderCallerSession) Atlas() (common.Address, error) {
 	return _TxBuilder.Contract.Atlas(&_TxBuilder.CallOpts)
 }
 
-// BuildDAppOperation is a free data retrieval call binding the contract method 0x7e680394.
+// BuildDAppOperation is a free data retrieval call binding the contract method 0x261120cf.
 //
-// Solidity: function buildDAppOperation(address governanceEOA, (address,uint32) dConfig, (address,(address,address,uint256,uint256,uint256,uint256,uint256,address,bytes),bytes) userOp, (address,(address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32,bytes),bytes,(address,uint256)[])[] solverOps) view returns((address,(address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32),bytes) dAppOp)
-func (_TxBuilder *TxBuilderCaller) BuildDAppOperation(opts *bind.CallOpts, governanceEOA common.Address, dConfig DAppConfig, userOp UserOperation, solverOps []SolverOperation) (DAppOperation, error) {
+// Solidity: function buildDAppOperation(address governanceEOA, (address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes,bytes) userOp, (address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes32,address,uint256,bytes,bytes)[] solverOps) view returns((address,address,uint256,uint256,uint256,uint256,uint256,address,bytes32,bytes32,bytes) dAppOp)
+func (_TxBuilder *TxBuilderCaller) BuildDAppOperation(opts *bind.CallOpts, governanceEOA common.Address, userOp UserOperation, solverOps []SolverOperation) (DAppOperation, error) {
 	var out []interface{}
-	err := _TxBuilder.contract.Call(opts, &out, "buildDAppOperation", governanceEOA, dConfig, userOp, solverOps)
+	err := _TxBuilder.contract.Call(opts, &out, "buildDAppOperation", governanceEOA, userOp, solverOps)
 
 	if err != nil {
 		return *new(DAppOperation), err
@@ -303,26 +275,26 @@ func (_TxBuilder *TxBuilderCaller) BuildDAppOperation(opts *bind.CallOpts, gover
 
 }
 
-// BuildDAppOperation is a free data retrieval call binding the contract method 0x7e680394.
+// BuildDAppOperation is a free data retrieval call binding the contract method 0x261120cf.
 //
-// Solidity: function buildDAppOperation(address governanceEOA, (address,uint32) dConfig, (address,(address,address,uint256,uint256,uint256,uint256,uint256,address,bytes),bytes) userOp, (address,(address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32,bytes),bytes,(address,uint256)[])[] solverOps) view returns((address,(address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32),bytes) dAppOp)
-func (_TxBuilder *TxBuilderSession) BuildDAppOperation(governanceEOA common.Address, dConfig DAppConfig, userOp UserOperation, solverOps []SolverOperation) (DAppOperation, error) {
-	return _TxBuilder.Contract.BuildDAppOperation(&_TxBuilder.CallOpts, governanceEOA, dConfig, userOp, solverOps)
+// Solidity: function buildDAppOperation(address governanceEOA, (address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes,bytes) userOp, (address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes32,address,uint256,bytes,bytes)[] solverOps) view returns((address,address,uint256,uint256,uint256,uint256,uint256,address,bytes32,bytes32,bytes) dAppOp)
+func (_TxBuilder *TxBuilderSession) BuildDAppOperation(governanceEOA common.Address, userOp UserOperation, solverOps []SolverOperation) (DAppOperation, error) {
+	return _TxBuilder.Contract.BuildDAppOperation(&_TxBuilder.CallOpts, governanceEOA, userOp, solverOps)
 }
 
-// BuildDAppOperation is a free data retrieval call binding the contract method 0x7e680394.
+// BuildDAppOperation is a free data retrieval call binding the contract method 0x261120cf.
 //
-// Solidity: function buildDAppOperation(address governanceEOA, (address,uint32) dConfig, (address,(address,address,uint256,uint256,uint256,uint256,uint256,address,bytes),bytes) userOp, (address,(address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32,bytes),bytes,(address,uint256)[])[] solverOps) view returns((address,(address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32),bytes) dAppOp)
-func (_TxBuilder *TxBuilderCallerSession) BuildDAppOperation(governanceEOA common.Address, dConfig DAppConfig, userOp UserOperation, solverOps []SolverOperation) (DAppOperation, error) {
-	return _TxBuilder.Contract.BuildDAppOperation(&_TxBuilder.CallOpts, governanceEOA, dConfig, userOp, solverOps)
+// Solidity: function buildDAppOperation(address governanceEOA, (address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes,bytes) userOp, (address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes32,address,uint256,bytes,bytes)[] solverOps) view returns((address,address,uint256,uint256,uint256,uint256,uint256,address,bytes32,bytes32,bytes) dAppOp)
+func (_TxBuilder *TxBuilderCallerSession) BuildDAppOperation(governanceEOA common.Address, userOp UserOperation, solverOps []SolverOperation) (DAppOperation, error) {
+	return _TxBuilder.Contract.BuildDAppOperation(&_TxBuilder.CallOpts, governanceEOA, userOp, solverOps)
 }
 
-// BuildSolverOperation is a free data retrieval call binding the contract method 0x501b8cb1.
+// BuildSolverOperation is a free data retrieval call binding the contract method 0xbec0ceb8.
 //
-// Solidity: function buildSolverOperation((address,(address,address,uint256,uint256,uint256,uint256,uint256,address,bytes),bytes) userOp, (address,uint32) dConfig, bytes solverOpData, address solverEOA, address solverContract, uint256 bidAmount) view returns((address,(address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32,bytes),bytes,(address,uint256)[]) solverOp)
-func (_TxBuilder *TxBuilderCaller) BuildSolverOperation(opts *bind.CallOpts, userOp UserOperation, dConfig DAppConfig, solverOpData []byte, solverEOA common.Address, solverContract common.Address, bidAmount *big.Int) (SolverOperation, error) {
+// Solidity: function buildSolverOperation((address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes,bytes) userOp, bytes solverOpData, address solverEOA, address solverContract, uint256 bidAmount) view returns((address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes32,address,uint256,bytes,bytes) solverOp)
+func (_TxBuilder *TxBuilderCaller) BuildSolverOperation(opts *bind.CallOpts, userOp UserOperation, solverOpData []byte, solverEOA common.Address, solverContract common.Address, bidAmount *big.Int) (SolverOperation, error) {
 	var out []interface{}
-	err := _TxBuilder.contract.Call(opts, &out, "buildSolverOperation", userOp, dConfig, solverOpData, solverEOA, solverContract, bidAmount)
+	err := _TxBuilder.contract.Call(opts, &out, "buildSolverOperation", userOp, solverOpData, solverEOA, solverContract, bidAmount)
 
 	if err != nil {
 		return *new(SolverOperation), err
@@ -334,23 +306,23 @@ func (_TxBuilder *TxBuilderCaller) BuildSolverOperation(opts *bind.CallOpts, use
 
 }
 
-// BuildSolverOperation is a free data retrieval call binding the contract method 0x501b8cb1.
+// BuildSolverOperation is a free data retrieval call binding the contract method 0xbec0ceb8.
 //
-// Solidity: function buildSolverOperation((address,(address,address,uint256,uint256,uint256,uint256,uint256,address,bytes),bytes) userOp, (address,uint32) dConfig, bytes solverOpData, address solverEOA, address solverContract, uint256 bidAmount) view returns((address,(address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32,bytes),bytes,(address,uint256)[]) solverOp)
-func (_TxBuilder *TxBuilderSession) BuildSolverOperation(userOp UserOperation, dConfig DAppConfig, solverOpData []byte, solverEOA common.Address, solverContract common.Address, bidAmount *big.Int) (SolverOperation, error) {
-	return _TxBuilder.Contract.BuildSolverOperation(&_TxBuilder.CallOpts, userOp, dConfig, solverOpData, solverEOA, solverContract, bidAmount)
+// Solidity: function buildSolverOperation((address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes,bytes) userOp, bytes solverOpData, address solverEOA, address solverContract, uint256 bidAmount) view returns((address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes32,address,uint256,bytes,bytes) solverOp)
+func (_TxBuilder *TxBuilderSession) BuildSolverOperation(userOp UserOperation, solverOpData []byte, solverEOA common.Address, solverContract common.Address, bidAmount *big.Int) (SolverOperation, error) {
+	return _TxBuilder.Contract.BuildSolverOperation(&_TxBuilder.CallOpts, userOp, solverOpData, solverEOA, solverContract, bidAmount)
 }
 
-// BuildSolverOperation is a free data retrieval call binding the contract method 0x501b8cb1.
+// BuildSolverOperation is a free data retrieval call binding the contract method 0xbec0ceb8.
 //
-// Solidity: function buildSolverOperation((address,(address,address,uint256,uint256,uint256,uint256,uint256,address,bytes),bytes) userOp, (address,uint32) dConfig, bytes solverOpData, address solverEOA, address solverContract, uint256 bidAmount) view returns((address,(address,address,uint256,uint256,uint256,uint256,uint256,bytes32,bytes32,bytes32,bytes),bytes,(address,uint256)[]) solverOp)
-func (_TxBuilder *TxBuilderCallerSession) BuildSolverOperation(userOp UserOperation, dConfig DAppConfig, solverOpData []byte, solverEOA common.Address, solverContract common.Address, bidAmount *big.Int) (SolverOperation, error) {
-	return _TxBuilder.Contract.BuildSolverOperation(&_TxBuilder.CallOpts, userOp, dConfig, solverOpData, solverEOA, solverContract, bidAmount)
+// Solidity: function buildSolverOperation((address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes,bytes) userOp, bytes solverOpData, address solverEOA, address solverContract, uint256 bidAmount) view returns((address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes32,address,uint256,bytes,bytes) solverOp)
+func (_TxBuilder *TxBuilderCallerSession) BuildSolverOperation(userOp UserOperation, solverOpData []byte, solverEOA common.Address, solverContract common.Address, bidAmount *big.Int) (SolverOperation, error) {
+	return _TxBuilder.Contract.BuildSolverOperation(&_TxBuilder.CallOpts, userOp, solverOpData, solverEOA, solverContract, bidAmount)
 }
 
 // BuildUserOperation is a free data retrieval call binding the contract method 0x2c7aec7f.
 //
-// Solidity: function buildUserOperation(address from, address to, uint256 maxFeePerGas, uint256 value, uint256 deadline, bytes data) view returns((address,(address,address,uint256,uint256,uint256,uint256,uint256,address,bytes),bytes) userOp)
+// Solidity: function buildUserOperation(address from, address to, uint256 maxFeePerGas, uint256 value, uint256 deadline, bytes data) view returns((address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes,bytes) userOp)
 func (_TxBuilder *TxBuilderCaller) BuildUserOperation(opts *bind.CallOpts, from common.Address, to common.Address, maxFeePerGas *big.Int, value *big.Int, deadline *big.Int, data []byte) (UserOperation, error) {
 	var out []interface{}
 	err := _TxBuilder.contract.Call(opts, &out, "buildUserOperation", from, to, maxFeePerGas, value, deadline, data)
@@ -367,14 +339,14 @@ func (_TxBuilder *TxBuilderCaller) BuildUserOperation(opts *bind.CallOpts, from 
 
 // BuildUserOperation is a free data retrieval call binding the contract method 0x2c7aec7f.
 //
-// Solidity: function buildUserOperation(address from, address to, uint256 maxFeePerGas, uint256 value, uint256 deadline, bytes data) view returns((address,(address,address,uint256,uint256,uint256,uint256,uint256,address,bytes),bytes) userOp)
+// Solidity: function buildUserOperation(address from, address to, uint256 maxFeePerGas, uint256 value, uint256 deadline, bytes data) view returns((address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes,bytes) userOp)
 func (_TxBuilder *TxBuilderSession) BuildUserOperation(from common.Address, to common.Address, maxFeePerGas *big.Int, value *big.Int, deadline *big.Int, data []byte) (UserOperation, error) {
 	return _TxBuilder.Contract.BuildUserOperation(&_TxBuilder.CallOpts, from, to, maxFeePerGas, value, deadline, data)
 }
 
 // BuildUserOperation is a free data retrieval call binding the contract method 0x2c7aec7f.
 //
-// Solidity: function buildUserOperation(address from, address to, uint256 maxFeePerGas, uint256 value, uint256 deadline, bytes data) view returns((address,(address,address,uint256,uint256,uint256,uint256,uint256,address,bytes),bytes) userOp)
+// Solidity: function buildUserOperation(address from, address to, uint256 maxFeePerGas, uint256 value, uint256 deadline, bytes data) view returns((address,address,uint256,uint256,uint256,uint256,uint256,address,address,bytes,bytes) userOp)
 func (_TxBuilder *TxBuilderCallerSession) BuildUserOperation(from common.Address, to common.Address, maxFeePerGas *big.Int, value *big.Int, deadline *big.Int, data []byte) (UserOperation, error) {
 	return _TxBuilder.Contract.BuildUserOperation(&_TxBuilder.CallOpts, from, to, maxFeePerGas, value, deadline, data)
 }
@@ -410,37 +382,6 @@ func (_TxBuilder *TxBuilderCallerSession) Control() (common.Address, error) {
 	return _TxBuilder.Contract.Control(&_TxBuilder.CallOpts)
 }
 
-// Escrow is a free data retrieval call binding the contract method 0xe2fdcc17.
-//
-// Solidity: function escrow() view returns(address)
-func (_TxBuilder *TxBuilderCaller) Escrow(opts *bind.CallOpts) (common.Address, error) {
-	var out []interface{}
-	err := _TxBuilder.contract.Call(opts, &out, "escrow")
-
-	if err != nil {
-		return *new(common.Address), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
-
-	return out0, err
-
-}
-
-// Escrow is a free data retrieval call binding the contract method 0xe2fdcc17.
-//
-// Solidity: function escrow() view returns(address)
-func (_TxBuilder *TxBuilderSession) Escrow() (common.Address, error) {
-	return _TxBuilder.Contract.Escrow(&_TxBuilder.CallOpts)
-}
-
-// Escrow is a free data retrieval call binding the contract method 0xe2fdcc17.
-//
-// Solidity: function escrow() view returns(address)
-func (_TxBuilder *TxBuilderCallerSession) Escrow() (common.Address, error) {
-	return _TxBuilder.Contract.Escrow(&_TxBuilder.CallOpts)
-}
-
 // Gas is a free data retrieval call binding the contract method 0x6ca7c216.
 //
 // Solidity: function gas() view returns(uint256)
@@ -472,35 +413,35 @@ func (_TxBuilder *TxBuilderCallerSession) Gas() (*big.Int, error) {
 	return _TxBuilder.Contract.Gas(&_TxBuilder.CallOpts)
 }
 
-// GetBidData is a free data retrieval call binding the contract method 0xd9d1c9d0.
+// GetBlockchainID is a free data retrieval call binding the contract method 0x4213cf78.
 //
-// Solidity: function getBidData((address,address,uint256,uint256,uint256,uint256,uint256,address,bytes) uCall, uint256 amount) view returns((address,uint256)[] bids)
-func (_TxBuilder *TxBuilderCaller) GetBidData(opts *bind.CallOpts, uCall UserCall, amount *big.Int) ([]BidData, error) {
+// Solidity: function getBlockchainID() view returns(uint256 chainId)
+func (_TxBuilder *TxBuilderCaller) GetBlockchainID(opts *bind.CallOpts) (*big.Int, error) {
 	var out []interface{}
-	err := _TxBuilder.contract.Call(opts, &out, "getBidData", uCall, amount)
+	err := _TxBuilder.contract.Call(opts, &out, "getBlockchainID")
 
 	if err != nil {
-		return *new([]BidData), err
+		return *new(*big.Int), err
 	}
 
-	out0 := *abi.ConvertType(out[0], new([]BidData)).(*[]BidData)
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
 
 	return out0, err
 
 }
 
-// GetBidData is a free data retrieval call binding the contract method 0xd9d1c9d0.
+// GetBlockchainID is a free data retrieval call binding the contract method 0x4213cf78.
 //
-// Solidity: function getBidData((address,address,uint256,uint256,uint256,uint256,uint256,address,bytes) uCall, uint256 amount) view returns((address,uint256)[] bids)
-func (_TxBuilder *TxBuilderSession) GetBidData(uCall UserCall, amount *big.Int) ([]BidData, error) {
-	return _TxBuilder.Contract.GetBidData(&_TxBuilder.CallOpts, uCall, amount)
+// Solidity: function getBlockchainID() view returns(uint256 chainId)
+func (_TxBuilder *TxBuilderSession) GetBlockchainID() (*big.Int, error) {
+	return _TxBuilder.Contract.GetBlockchainID(&_TxBuilder.CallOpts)
 }
 
-// GetBidData is a free data retrieval call binding the contract method 0xd9d1c9d0.
+// GetBlockchainID is a free data retrieval call binding the contract method 0x4213cf78.
 //
-// Solidity: function getBidData((address,address,uint256,uint256,uint256,uint256,uint256,address,bytes) uCall, uint256 amount) view returns((address,uint256)[] bids)
-func (_TxBuilder *TxBuilderCallerSession) GetBidData(uCall UserCall, amount *big.Int) ([]BidData, error) {
-	return _TxBuilder.Contract.GetBidData(&_TxBuilder.CallOpts, uCall, amount)
+// Solidity: function getBlockchainID() view returns(uint256 chainId)
+func (_TxBuilder *TxBuilderCallerSession) GetBlockchainID() (*big.Int, error) {
+	return _TxBuilder.Contract.GetBlockchainID(&_TxBuilder.CallOpts)
 }
 
 // GetControlCodeHash is a free data retrieval call binding the contract method 0x68726f96.
@@ -532,37 +473,6 @@ func (_TxBuilder *TxBuilderSession) GetControlCodeHash(dAppControl common.Addres
 // Solidity: function getControlCodeHash(address dAppControl) view returns(bytes32)
 func (_TxBuilder *TxBuilderCallerSession) GetControlCodeHash(dAppControl common.Address) ([32]byte, error) {
 	return _TxBuilder.Contract.GetControlCodeHash(&_TxBuilder.CallOpts, dAppControl)
-}
-
-// GetDAppConfig is a free data retrieval call binding the contract method 0xac4aab6e.
-//
-// Solidity: function getDAppConfig() view returns((address,uint32))
-func (_TxBuilder *TxBuilderCaller) GetDAppConfig(opts *bind.CallOpts) (DAppConfig, error) {
-	var out []interface{}
-	err := _TxBuilder.contract.Call(opts, &out, "getDAppConfig")
-
-	if err != nil {
-		return *new(DAppConfig), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(DAppConfig)).(*DAppConfig)
-
-	return out0, err
-
-}
-
-// GetDAppConfig is a free data retrieval call binding the contract method 0xac4aab6e.
-//
-// Solidity: function getDAppConfig() view returns((address,uint32))
-func (_TxBuilder *TxBuilderSession) GetDAppConfig() (DAppConfig, error) {
-	return _TxBuilder.Contract.GetDAppConfig(&_TxBuilder.CallOpts)
-}
-
-// GetDAppConfig is a free data retrieval call binding the contract method 0xac4aab6e.
-//
-// Solidity: function getDAppConfig() view returns((address,uint32))
-func (_TxBuilder *TxBuilderCallerSession) GetDAppConfig() (DAppConfig, error) {
-	return _TxBuilder.Contract.GetDAppConfig(&_TxBuilder.CallOpts)
 }
 
 // GovernanceNextNonce is a free data retrieval call binding the contract method 0x9dc3ce1c.
@@ -656,4 +566,35 @@ func (_TxBuilder *TxBuilderSession) UserNextNonce(user common.Address) (*big.Int
 // Solidity: function userNextNonce(address user) view returns(uint256)
 func (_TxBuilder *TxBuilderCallerSession) UserNextNonce(user common.Address) (*big.Int, error) {
 	return _TxBuilder.Contract.UserNextNonce(&_TxBuilder.CallOpts, user)
+}
+
+// Verification is a free data retrieval call binding the contract method 0x4ffe2a8b.
+//
+// Solidity: function verification() view returns(address)
+func (_TxBuilder *TxBuilderCaller) Verification(opts *bind.CallOpts) (common.Address, error) {
+	var out []interface{}
+	err := _TxBuilder.contract.Call(opts, &out, "verification")
+
+	if err != nil {
+		return *new(common.Address), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+
+	return out0, err
+
+}
+
+// Verification is a free data retrieval call binding the contract method 0x4ffe2a8b.
+//
+// Solidity: function verification() view returns(address)
+func (_TxBuilder *TxBuilderSession) Verification() (common.Address, error) {
+	return _TxBuilder.Contract.Verification(&_TxBuilder.CallOpts)
+}
+
+// Verification is a free data retrieval call binding the contract method 0x4ffe2a8b.
+//
+// Solidity: function verification() view returns(address)
+func (_TxBuilder *TxBuilderCallerSession) Verification() (common.Address, error) {
+	return _TxBuilder.Contract.Verification(&_TxBuilder.CallOpts)
 }
