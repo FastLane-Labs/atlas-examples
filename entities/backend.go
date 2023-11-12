@@ -166,7 +166,7 @@ func (b *Backend) run() {
 func (b *Backend) metacall(userOperation Atlas.UserOperation, solverOperations []Atlas.SolverOperation, verification Atlas.DAppOperation) {
 	signer := b.bundlerSigner
 	signer.Value = common.Big0
-	signer.GasLimit = 5000000
+	signer.GasLimit = 1000000
 
 	tx, err := b.atlas.Metacall(
 		signer,
@@ -183,11 +183,13 @@ func (b *Backend) metacall(userOperation Atlas.UserOperation, solverOperations [
 		b.log.Fatalf("could not wait for metacall transaction to be mined: %s", err)
 	}
 
+	var status string
 	if receipt.Status == 1 {
-		b.log.Println("Metacall successful")
+		status = "Metacall successful"
 	} else {
-		b.log.Println("Metacall reverted")
+		status = "Metacall reverted"
 	}
+	b.log.Printf("%s: %s", status, tx.Hash().Hex())
 }
 
 // Builds the dAppOperation object without signature

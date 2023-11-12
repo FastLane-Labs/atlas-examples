@@ -17,7 +17,10 @@ var (
 	ETH_ADDRESS                    = common.HexToAddress("0x0")
 	WETH_ADDRESS                   = common.HexToAddress("0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14")
 	UNI_ADDRESS                    = common.HexToAddress("0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984")
+	Permit2_ADDRESS                = common.HexToAddress("0x000000000022D473030F116dDEE9F6B43aC78BA3")
 	UniswapUniversalRouter_ADDRESS = common.HexToAddress("0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD")
+
+	MaxUint256, _ = new(big.Int).SetString("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 16)
 )
 
 func approve(tokenAddress common.Address, beneficiary common.Address, amount *big.Int, ethClient *ethclient.Client, signer *bind.TransactOpts) {

@@ -22,6 +22,10 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
+var (
+	atlEthBalanceMin = big.NewInt(1e17)
+)
+
 type Solver struct {
 	signer     *bind.TransactOpts
 	privateKey *ecdsa.PrivateKey
@@ -99,12 +103,33 @@ func (s *Solver) run() {
 				s.log.Fatalf("could not get dApp config: %s", err)
 			}
 
+			atlEthBalance, err := s.atlas.BalanceOf(nil, s.signer.From)
+			if err != nil {
+				s.log.Fatalf("could not get solver's atlEth balance: %s", err)
+			}
+
+			depositNeeded := new(big.Int).Sub(atlEthBalanceMin, atlEthBalance)
+			if depositNeeded.Cmp(common.Big0) > 0 {
+				s.log.Println("Getting AtlEth")
+				s.signer.Value = depositNeeded
+				tx, err := s.atlas.Deposit(s.signer)
+				if err != nil {
+					s.log.Fatalf("could not deposit ATL-ETH for solver: %s", err)
+				}
+
+				_, err = bind.WaitMined(context.Background(), s.ethClient, tx)
+				if err != nil {
+					s.log.Fatalf("could not wait for deposit transaction to be mined: %s", err)
+				}
+				s.log.Printf("Got AtlEth: %s", tx.Hash().Hex())
+			}
+
 			solverOperation := s.buildSolverOperation(
 				Atlas.DAppConfig(dConfig),
 				*swapIntentOperation.SwapIntent,
 				*swapIntentOperation.UserOperation,
 				swapIntentOperation.ExecutionEnvironment,
-				big.NewInt(1e18),
+				new(big.Int).Div(swapIntentOperation.SwapIntent.AmountUserSells, big.NewInt(100)), // Bid 1% of the amount the user sells
 			)
 
 			// Submit the solver operation to the backend
@@ -133,6 +158,7 @@ func (s *Solver) getUniForSolverContract(amount *big.Int) {
 
 		wethNeeded := new(big.Int).Sub(big.NewInt(2*1e17), solverWethBalance)
 		if wethNeeded.Cmp(common.Big0) > 0 {
+			s.log.Println("Wrapping ETH")
 			s.signer.Value = wethNeeded
 			tx, err := s.weth.Deposit(s.signer)
 			if err != nil {
@@ -143,19 +169,40 @@ func (s *Solver) getUniForSolverContract(amount *big.Int) {
 			if err != nil {
 				s.log.Fatalf("could not wait for deposit transaction to be mined: %s", err)
 			}
+			s.log.Printf("Wrapped ETH: %s", tx.Hash().Hex())
 		}
 
-		approve(WETH_ADDRESS, UniswapUniversalRouter_ADDRESS, big.NewInt(1e18), s.ethClient, s.signer)
-
-		path, err := v3PathSinglePool.Pack(WETH_ADDRESS, big.NewInt(500), UNI_ADDRESS)
+		allowance, err := s.weth.Allowance(nil, s.signer.From, Permit2_ADDRESS)
 		if err != nil {
-			s.log.Fatalf("could not pack path: %s", err)
+			s.log.Fatalf("could not get solver's WETH allowance: %s", err)
 		}
+
+		if allowance.Cmp(common.Big0) == 0 {
+			s.log.Println("Approving WETH for Permit2")
+			tx, err := s.weth.Approve(
+				s.signer,
+				Permit2_ADDRESS,
+				MaxUint256,
+			)
+			if err != nil {
+				s.log.Fatalf("could not approve WETH for solver: %s", err)
+			}
+
+			_, err = bind.WaitMined(context.Background(), s.ethClient, tx)
+			if err != nil {
+				s.log.Fatalf("could not wait for WETH approval transaction to be mined: %s", err)
+			}
+			s.log.Printf("Approved WETH: %s", tx.Hash().Hex())
+		}
+
+		path := common.LeftPadBytes(UNI_ADDRESS.Bytes(), 20)
+		path = append(path, common.LeftPadBytes(big.NewInt(3000).Bytes(), 3)...)
+		path = append(path, common.LeftPadBytes(WETH_ADDRESS.Bytes(), 20)...)
 
 		commandInputs, err := v3SwapExactOut.Pack(
 			s.addresses["solverContract"],
 			uniNeeded,
-			big.NewInt(1e16),
+			big.NewInt(2*1e17),
 			path,
 			true,
 		)
@@ -163,10 +210,11 @@ func (s *Solver) getUniForSolverContract(amount *big.Int) {
 			s.log.Fatalf("could not pack command inputs: %s", err)
 		}
 
+		s.log.Println("Swapping ETH for UNI")
 		s.signer.Value = common.Big0
 		tx, err := s.uniswapUniversalRouter.Execute(
 			s.signer,
-			common.Hex2Bytes("0x01"), // V3_SWAP_EXACT_OUT
+			common.Hex2Bytes("01"), // V3_SWAP_EXACT_OUT
 			[][]byte{commandInputs},
 		)
 		if err != nil {
@@ -175,8 +223,9 @@ func (s *Solver) getUniForSolverContract(amount *big.Int) {
 
 		_, err = bind.WaitMined(context.Background(), s.ethClient, tx)
 		if err != nil {
-			s.log.Fatalf("could not wait for exactOutputSingle transaction to be mined: %s", err)
+			s.log.Fatalf("could not wait for execute transaction to be mined: %s", err)
 		}
+		s.log.Printf("Swapped ETH for UNI: %s", tx.Hash().Hex())
 	}
 }
 

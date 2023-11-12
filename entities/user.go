@@ -21,8 +21,8 @@ import (
 )
 
 var (
-	WETH_AMOUNT_TO_SELL  = big.NewInt(1e17)
-	UNI_AMOUNT_TO_BUY, _ = new(big.Int).SetString("40000000000000000000", 10)
+	WETH_AMOUNT_TO_SELL = big.NewInt(1e16)
+	UNI_AMOUNT_TO_BUY   = big.NewInt(3 * 1e15)
 )
 
 type User struct {
@@ -94,7 +94,7 @@ func (u *User) StartSwapIntent() {
 	u.getWethAndApproveAtlas(WETH_AMOUNT_TO_SELL)
 
 	// Submit the intent to the backend
-	u.log.Println("submits swap intent to the backend")
+	u.log.Println("Submits swap intent to the backend")
 	u.swapIntentOperationSubmitChan <- &SwapIntentOperation{
 		SwapIntent:           &swapIntent,
 		UserOperation:        &userOperation,
@@ -111,6 +111,7 @@ func (u *User) getWethAndApproveAtlas(amount *big.Int) {
 
 	wethNeeded := new(big.Int).Sub(amount, wethBalance)
 	if wethNeeded.Cmp(common.Big0) > 0 {
+		u.log.Println("Wrapping ETH")
 		u.signer.Value = wethNeeded
 		tx, err := u.weth.Deposit(u.signer)
 		if err != nil {
@@ -121,10 +122,18 @@ func (u *User) getWethAndApproveAtlas(amount *big.Int) {
 		if err != nil {
 			u.log.Fatalf("could not wait for deposit transaction to be mined: %s", err)
 		}
+		u.log.Printf("Wrapped ETH: %s", tx.Hash().Hex())
 	}
 
 	// Approve those WETH for Atlas
-	approve(WETH_ADDRESS, u.addresses["atlas"], wethNeeded, u.ethClient, u.signer)
+	allowance, err := u.weth.Allowance(nil, u.signer.From, u.addresses["atlas"])
+	if err != nil {
+		u.log.Fatalf("could not get user's WETH allowance: %s", err)
+	}
+
+	if allowance.Cmp(common.Big0) == 0 {
+		approve(WETH_ADDRESS, u.addresses["atlas"], MaxUint256, u.ethClient, u.signer)
+	}
 }
 
 func (u *User) getOrCreateExecutionEnvironment(dAppControl common.Address) common.Address {
@@ -134,6 +143,7 @@ func (u *User) getOrCreateExecutionEnvironment(dAppControl common.Address) commo
 	}
 
 	if !execEnvData.Exists {
+		u.log.Println("Creating execution environment")
 		u.signer.Value = new(big.Int).Set(common.Big0)
 		tx, err := u.atlas.CreateExecutionEnvironment(u.signer, dAppControl)
 		if err != nil {
@@ -144,6 +154,7 @@ func (u *User) getOrCreateExecutionEnvironment(dAppControl common.Address) commo
 		if err != nil {
 			u.log.Fatalf("could not wait for execution environment creation transaction to be mined: %s", err)
 		}
+		u.log.Printf("Created execution environment: %s", tx.Hash().Hex())
 	}
 
 	return execEnvData.ExecutionEnvironment
