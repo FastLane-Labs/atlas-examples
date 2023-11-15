@@ -9,6 +9,7 @@ import (
 	"github.com/FastLane-Labs/atlas-examples/contracts/AtlasFactory"
 	"github.com/FastLane-Labs/atlas-examples/contracts/AtlasVerification"
 	"github.com/FastLane-Labs/atlas-examples/contracts/ERC20"
+	"github.com/FastLane-Labs/atlas-examples/contracts/Permit2"
 	"github.com/FastLane-Labs/atlas-examples/contracts/SwapIntentController"
 	"github.com/FastLane-Labs/atlas-examples/contracts/TxBuilder"
 	"github.com/FastLane-Labs/atlas-examples/contracts/UniswapUniversalRouter"
@@ -43,6 +44,7 @@ type App struct {
 
 	Weth                   *WETH9.WETH9
 	Uni                    *ERC20.ERC20
+	Permit2                *Permit2.Permit2
 	UniswapUniversalRouter *UniswapUniversalRouter.UniswapUniversalRouter
 
 	EthClient *ethclient.Client
@@ -129,6 +131,12 @@ func setup() *App {
 	app.Uni, err = ERC20.NewERC20(entities.UNI_ADDRESS, app.EthClient)
 	if err != nil {
 		log.Fatal("could not initialize UNI contract")
+	}
+
+	// Load Permit2 contract
+	app.Permit2, err = Permit2.NewPermit2(entities.Permit2_ADDRESS, app.EthClient)
+	if err != nil {
+		log.Fatal("could not initialize Permit2 contract")
 	}
 
 	// Load Uniswap universal router contract

@@ -10,6 +10,7 @@ import (
 	"github.com/FastLane-Labs/atlas-examples/contracts/Atlas"
 	"github.com/FastLane-Labs/atlas-examples/contracts/AtlasVerification"
 	"github.com/FastLane-Labs/atlas-examples/contracts/ERC20"
+	"github.com/FastLane-Labs/atlas-examples/contracts/Permit2"
 	"github.com/FastLane-Labs/atlas-examples/contracts/SimpleRFQSolver"
 	"github.com/FastLane-Labs/atlas-examples/contracts/SwapIntentController"
 	"github.com/FastLane-Labs/atlas-examples/contracts/TxBuilder"
@@ -40,6 +41,7 @@ type Solver struct {
 	weth *WETH9.WETH9
 	uni  *ERC20.ERC20
 
+	permit2                *Permit2.Permit2
 	uniswapUniversalRouter *UniswapUniversalRouter.UniswapUniversalRouter
 
 	addresses map[string]common.Address
@@ -56,7 +58,7 @@ type Solver struct {
 }
 
 func NewSolver(pk string, ethClient *ethclient.Client, chainId int64, atlas *Atlas.Atlas, atlasVerification *AtlasVerification.AtlasVerification, dappController *SwapIntentController.SwapIntentController,
-	txBuilder *TxBuilder.TxBuilder, weth *WETH9.WETH9, uni *ERC20.ERC20, addresses map[string]common.Address, uniswapUniversalRouter *UniswapUniversalRouter.UniswapUniversalRouter,
+	txBuilder *TxBuilder.TxBuilder, weth *WETH9.WETH9, uni *ERC20.ERC20, addresses map[string]common.Address, permit2 *Permit2.Permit2, uniswapUniversalRouter *UniswapUniversalRouter.UniswapUniversalRouter,
 	newSwapIntentOperationChan chan *SwapIntentOperation, solverOperationSubmitChan chan *Atlas.SolverOperation, shutdownChan chan struct{}) *Solver {
 	logger := log.New(os.Stdout, "[SOLVER]\t", log.LstdFlags|log.Lmsgprefix|log.Lmicroseconds)
 
@@ -80,6 +82,7 @@ func NewSolver(pk string, ethClient *ethclient.Client, chainId int64, atlas *Atl
 		txBuilder:                  txBuilder,
 		weth:                       weth,
 		uni:                        uni,
+		permit2:                    permit2,
 		uniswapUniversalRouter:     uniswapUniversalRouter,
 		addresses:                  addresses,
 		newSwapIntentOperationChan: newSwapIntentOperationChan,
@@ -193,6 +196,25 @@ func (s *Solver) getUniForSolverContract(amount *big.Int) {
 				s.log.Fatalf("could not wait for WETH approval transaction to be mined: %s", err)
 			}
 			s.log.Printf("Approved WETH: %s", tx.Hash().Hex())
+		}
+
+		permit2Allowance, err := s.permit2.Allowance(nil, s.signer.From, WETH_ADDRESS, UniswapUniversalRouter_ADDRESS)
+		if err != nil {
+			s.log.Fatalf("could not get solver's Permit2 allowance: %s", err)
+		}
+
+		if permit2Allowance.Amount.Cmp(common.Big0) == 0 {
+			s.log.Println("Approving Permit2")
+			tx, err := s.permit2.Approve(s.signer, WETH_ADDRESS, UniswapUniversalRouter_ADDRESS, MaxUint160, MaxUint48)
+			if err != nil {
+				s.log.Fatalf("could not approve Permit2 for solver: %s", err)
+			}
+
+			_, err = bind.WaitMined(context.Background(), s.ethClient, tx)
+			if err != nil {
+				s.log.Fatalf("could not wait for Permit2 approval transaction to be mined: %s", err)
+			}
+			s.log.Printf("Approved Permit2: %s", tx.Hash().Hex())
 		}
 
 		path := common.LeftPadBytes(UNI_ADDRESS.Bytes(), 20)

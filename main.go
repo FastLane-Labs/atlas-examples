@@ -29,7 +29,7 @@ func main() {
 
 	// Launch the solver goroutine
 	entities.NewSolver(app.PrivateKeys["solver"], app.EthClient, app.ChainId, app.Atlas, app.AtlasVerification, app.DAppController, app.TxBuilder, app.Weth, app.Uni, app.Addresses,
-		app.UniswapUniversalRouter, swapIntentOperationBroadcastChan, solverOperationSubmitChan, shutdownChan)
+		app.Permit2, app.UniswapUniversalRouter, swapIntentOperationBroadcastChan, solverOperationSubmitChan, shutdownChan)
 
 	user := entities.NewUser(app.PrivateKeys["user"], app.EthClient, app.ChainId, app.Atlas, app.AtlasFactory, app.AtlasVerification, app.DAppController, app.TxBuilder, app.Weth, app.Addresses,
 		swapIntentOperationSubmitChan)

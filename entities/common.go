@@ -20,6 +20,8 @@ var (
 	Permit2_ADDRESS                = common.HexToAddress("0x000000000022D473030F116dDEE9F6B43aC78BA3")
 	UniswapUniversalRouter_ADDRESS = common.HexToAddress("0x3fC91A3afd70395Cd496C647d5a6CC9D4B2b7FAD")
 
+	MaxUint48, _  = new(big.Int).SetString("ffffffffffff", 16)
+	MaxUint160, _ = new(big.Int).SetString("ffffffffffffffffffffffffffffffffffffffff", 16)
 	MaxUint256, _ = new(big.Int).SetString("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 16)
 )
 

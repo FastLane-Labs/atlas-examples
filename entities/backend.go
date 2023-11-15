@@ -166,7 +166,7 @@ func (b *Backend) run() {
 func (b *Backend) metacall(userOperation Atlas.UserOperation, solverOperations []Atlas.SolverOperation, verification Atlas.DAppOperation) {
 	signer := b.bundlerSigner
 	signer.Value = common.Big0
-	signer.GasLimit = 1000000
+	signer.GasLimit = 2000000
 
 	tx, err := b.atlas.Metacall(
 		signer,
